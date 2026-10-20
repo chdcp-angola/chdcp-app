@@ -1,0 +1,158 @@
+<!doctype html><html lang="pt"><head>
+<script>(function(){var m=new URLSearchParams(location.search).get("mode");var to={toj:"toj.html",theory:"teorica.html",person:"resultados.html",area:"resultados.html",results:"resultados.html"}[m];if(to)location.replace(to+location.search);})();</script><script>window.CHDCP_PWA=true;(function(){var API="https://script.google.com/macros/s/AKfycbzpGaQurqsz762hytflYHtHjFEGJssKLa9Jc4Kr1cgMaI0QUZ_021xmZj7-T3l6kisF/exec";function post(fn,args){return fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({fn:fn,args:args}),redirect:"follow",cache:"no-store"}).then(function(r){if(!r.ok)throw new Error("NetworkError HTTP "+r.status);return r.json();});}function runner(ok,ko){return new Proxy({},{get:function(t,k){if(k==="withSuccessHandler")return function(f){return runner(f,ko);};if(k==="withFailureHandler")return function(f){return runner(ok,f);};if(k==="withUserObject")return function(){return runner(ok,ko);};return function(){var a=[].slice.call(arguments);post(k,a).then(function(res){if(res&&res.ok){if(ok)ok(res.v);}else{if(ko)ko(new Error(res?res.e:"Erro"));}}).catch(function(e){if(ko)ko(new Error("NetworkError: "+(e&&e.message||e)));});};}});}window.google=window.google||{};google.script={run:runner(null,null),host:{close:function(){}},url:{getLocation:function(cb){var o={};new URLSearchParams(location.search).forEach(function(v,k){o[k]=v;});cb({parameter:o,hash:location.hash});}}};if("serviceWorker" in navigator)window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){});});})();</script><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#7d1d1a"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Avaliação"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="favicon.png"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#7d1d1a"><title>CHDCP Learning & Assessment</title><style>
+:root{--brand:#7d1d1a;--brand-soft:#f6eceb;--brand-line:#e8cfcd;--ink:#1b2124;--muted:#65727a;--faint:#93a0a7;--line:#e2e7ea;--bg:#f2f4f5;--card:#fff;
+--ok:#11804a;--ok-soft:#e5f4ec;--warn:#a46a00;--warn-soft:#fff4d9;--bad:#b8322f;--bad-soft:#fbe7e5;--info:#235fb8;--info-soft:#eaf2fd;--r:14px}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--bg);color:var(--ink);font:15px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+button,input,select{font:inherit;color:inherit}button{cursor:pointer;border:0;background:none}
+.top{position:sticky;top:0;z-index:20;background:var(--brand);color:#fff;padding:calc(10px + env(safe-area-inset-top)) 14px 10px;display:flex;align-items:center;gap:10px;min-height:58px}
+.top .back{color:#fff;font-size:24px;font-weight:800;width:38px;height:38px;flex:none}
+.top .ttl{flex:1;min-width:0}.top .ttl b{display:block;font-size:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.top .ttl span{display:block;font-size:12px;opacity:.85;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chip{font-size:11.5px;font-weight:800;border:1.5px solid rgba(255,255,255,.55);border-radius:20px;padding:6px 11px;color:#fff;white-space:nowrap;flex:none}
+main{max-width:760px;margin:0 auto;padding:14px 14px 110px}
+.logo{display:block;max-width:240px;width:70%;margin:6px auto 14px}
+.sec{font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--brand);text-transform:uppercase;margin:18px 2px 9px}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tile{display:flex;flex-direction:column;align-items:flex-start;gap:3px;text-align:left;background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 13px;min-height:108px}
+.tile .ic{font-size:26px;margin-bottom:4px}.tile b{font-size:15.5px;font-weight:800;color:var(--brand)}.tile small{font-size:11.5px;color:var(--muted);line-height:1.35}
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:14px;margin-bottom:12px}
+.field{display:block;font-size:12px;font-weight:800;color:var(--muted);margin:10px 2px 4px}
+.inp,select.inp{width:100%;border:1px solid var(--line);border-radius:10px;padding:12px;background:#fff;font-size:16px}
+.btn{display:block;width:100%;text-align:center;background:var(--brand);color:#fff;font-weight:800;font-size:17px;border-radius:14px;padding:15px;margin-top:14px}
+.btn:disabled{opacity:.45}
+.err{color:var(--bad);font-weight:700;font-size:13.5px;margin-top:10px}
+.note{font-size:12.5px;color:var(--muted);line-height:1.5}
+.muted{color:var(--muted)}.small{font-size:12.5px}
+.hrow{display:block;width:100%;text-align:left;background:#fff;border:1px solid var(--line);border-left:5px solid var(--brand-line);border-radius:var(--r);padding:10px 12px;margin-bottom:8px}
+.hrow.test{border-left-color:var(--warn)}.hrow .t{font-size:14.5px;font-weight:700}.hrow .m{font-size:12px;color:var(--muted);margin-top:3px}
+.ctx{font-size:12.5px;color:var(--muted);background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:12px;line-height:1.5}.ctx b{color:var(--ink)}
+.two{display:grid;grid-template-columns:2fr 1fr;gap:8px}
+.prow{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:9px 10px;margin-bottom:7px;min-height:56px}
+.prow .nm{flex:1;min-width:0}.prow .nm a{display:block;font-size:14.5px;font-weight:700;color:var(--ink);text-decoration:none}.prow .nm a:after{content:' ›';color:var(--faint)}
+.prow .nm span{font-size:11.5px;color:var(--muted)}
+.score{width:74px;border:1px solid var(--line);border-radius:10px;padding:10px 6px;text-align:center;font-size:17px;font-weight:700;flex:none}
+.pct{width:56px;text-align:right;font-size:12px;font-weight:800;flex:none}.pct.ok{color:var(--ok)}.pct.ko{color:var(--bad)}
+.savebar{position:fixed;left:0;right:0;bottom:0;background:rgba(242,244,245,.96);border-top:1px solid var(--line);padding:10px 14px calc(10px + env(safe-area-inset-bottom));z-index:30}
+.savebar .btn{max-width:760px;margin:0 auto}
+.banner{font-size:12.5px;font-weight:700;border-radius:10px;padding:8px 11px;margin-bottom:10px}.banner.warn{background:var(--warn-soft);color:var(--warn)}.banner.ok{background:var(--ok-soft);color:var(--ok)}
+.banner button{color:inherit;text-decoration:underline;font-weight:800;margin-left:6px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:90px;background:var(--ink);color:#fff;padding:10px 16px;border-radius:12px;font-size:13.5px;font-weight:600;z-index:60;max-width:90%}
+.load{text-align:center;color:var(--muted);padding:40px 10px}
+.plist{display:block}
+@media (min-width:700px){.tiles{grid-template-columns:repeat(3,1fr)}.plist{display:grid;grid-template-columns:1fr 1fr;column-gap:10px}}
+@media (min-width:1024px){main{max-width:1100px}.plist{grid-template-columns:repeat(3,1fr)}}
+@media (hover:hover) and (pointer:fine){.tile:hover,.hrow:hover,.prow:hover{border-color:var(--brand-line);box-shadow:0 2px 8px rgba(27,33,36,.08)}}
+</style>
+<script>var LA_BOOT=(function(){var q=new URLSearchParams(location.search),p={};["mode","activityId","personId","area","date","title","tab"].forEach(function(k){p[k]=q.get(k)||"";});if(!p.mode)p.mode="";return{v:"36",t:q.get("t")||"",p:p,urls:{home:"index.html"}};})();</script><script>var LA = window.LA_BOOT || { p:{}, urls:{} };
+function laSess(){ try { return JSON.parse(localStorage.getItem('la_sess') || 'null'); } catch(e){ return null; } }
+function laSetSess(s){ try { if (s) localStorage.setItem('la_sess', JSON.stringify(s)); else localStorage.removeItem('la_sess'); } catch(e){} }
+function laQs(o){ var k = Object.keys(o||{}).filter(function(x){ return o[x]; }); return k.map(function(x){ return x+'='+encodeURIComponent(o[x]); }).join('&'); }
+/* mode: home | toj | theory | results | person | area — sessione già nel telefono, niente biglietto */
+function laNav(mode, params){
+  var q = laQs(Object.assign({ mode: mode === 'home' ? '' : mode }, params||{}));
+  var url;
+  if (window.CHDCP_PWA) {
+    var pg = { home:'index.html', toj:'toj.html', theory:'teorica.html', results:'resultados.html', person:'resultados.html', area:'resultados.html' }[mode] || 'index.html';
+    location.href = pg + (q ? '?' + q : ''); return;
+  }
+  url = (LA.urls && LA.urls.home) + (q ? '?' + q : '');
+  try { window.open(url, '_top'); } catch(e){ location.href = url; }
+}
+/* biglietto dell'Agenda → sessione (una volta), poi parte la pagina */
+function laReady(cb){
+  if (!LA.t) { cb(laSess()); return; }
+  var t = LA.t; LA.t = '';
+  try { history.replaceState(null, '', location.pathname + location.search.replace(/([?&])t=[^&]*&?/, '$1').replace(/[?&]$/, '')); } catch(e){}
+  google.script.run.withSuccessHandler(function(s){ laSetSess(s); cb(s); }).withFailureHandler(function(){ cb(laSess()); }).laRedeem(t);
+}
+document.addEventListener('click', function(e){
+  var b = e.target.closest ? e.target.closest('[data-lanav]') : null; if (!b) return;
+  e.preventDefault(); var x = String(b.getAttribute('data-lanav')).split(':');
+  laNav(x[0], x[0] === 'person' ? { personId: x[1] } : x[0] === 'area' ? { area: x[1] } : {});
+});</script></head><body>
+<header class="top"><div class="ttl"><b>Learning &amp; Assessment</b><span id="who">CHDCP · CCM</span></div><button class="chip" id="out" style="display:none">Sair</button></header>
+<main id="app"><div class="load">…</div></main>
+<script>
+function $(id){ return document.getElementById(id); }
+function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+function toast(t){ var d = document.createElement('div'); d.className = 'toast'; d.textContent = t; document.body.appendChild(d); setTimeout(function(){ d.remove(); }, 2800); }
+function dmy(s){ var m = String(s||'').match(/^(\d{4})-(\d{2})-(\d{2})$/); return m ? m[3]+'/'+m[2]+'/'+m[1] : ''; }
+function store(k, v){ try { if (v === undefined) return JSON.parse(localStorage.getItem(k) || 'null'); if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, JSON.stringify(v)); } catch(e){ return null; } }
+function call(fn, args, ms){
+  return new Promise(function(ok, ko){
+    var done = false, tm = setTimeout(function(){ if (!done){ done = true; ko(new Error('TIMEOUT')); } }, ms || 40000);
+    var r = google.script.run.withSuccessHandler(function(v){ if (!done){ done = true; clearTimeout(tm); ok(v); } })
+      .withFailureHandler(function(e){ if (!done){ done = true; clearTimeout(tm); ko(new Error(e && e.message ? e.message : String(e))); } });
+    r[fn].apply(r, args || []);
+  });
+}
+function isNet(m){ return /TIMEOUT|NetworkError|HTTP 0|Failed to fetch|network|Load failed/i.test(String(m||'')); }
+var ERR = { 'LA:SESSION':'A sessão expirou. Entre de novo.', 'LA:AREA':'Esta área não está entre as suas.', 'LA:NOACTIVITY':'Actividade não encontrada no Training Hub.',
+  'LA:FUTURE':'Data futura: só é possível registar a partir do dia da actividade.', 'LA:MAX':'Nota máxima inválida.', 'LA:EMPTY':'Introduza pelo menos uma nota.',
+  'LA:PERSON':'Pessoa desconhecida no Training Hub.', 'LA:SCORE':'Nota fora do intervalo para', 'LA:BUSY':'Sistema ocupado: tente de novo.', 'LA:DATA':'Pedido inválido.',
+  'LA:TICKET':'Ligação inválida: abra de novo a partir da Agenda.', 'LA:EXPIRED':'Ligação expirada: abra de novo a partir da Agenda.', 'LA:USED':'Ligação já usada.', 'LA:NOLINK':'Learning & Assessment ainda não ligado à Agenda.' };
+function errTxt(m){ m = String(m||''); var k = (m.match(/LA:[A-Z]+/) || [''])[0]; var x = m.split('|')[1]; return ERR[k] ? ERR[k] + (x ? ' ' + x : '') : (isNet(m) ? 'Sem ligação ao servidor. Tente de novo.' : m); }
+/* autenticação: sessão da Agenda ou nome + PIN (TOJ / Painel) */
+function authNow(){ var s = laSess(); if (s && s.sess) return { sess: s.sess, name: s.name }; return store('chdcp_toj_v2_auth') || store('rs_auth') || null; }
+
+var HOME = null;
+function render(m){
+  HOME = m; $('who').textContent = m.name || 'CHDCP · CCM'; $('out').style.display = '';
+  var h = '<img class="logo" src="logo.png" alt="Improving Cardiac Surgery in Angola">';
+  if (m.toj || m.theory) {
+    h += '<div class="sec">Avaliações</div><div class="tiles">' +
+      (m.toj ? '<button class="tile" data-go="toj"><span class="ic">🩺</span><b>Avaliação TOJ</b><small>No posto de trabalho, por skill</small></button>' : '') +
+      (m.theory ? '<button class="tile" data-go="theory"><span class="ic">📝</span><b>Avaliação teórica</b><small>Notas das provas escritas</small></button>' : '') + '</div>';
+  }
+  var r = m.results;
+  if (r && r.role !== 'SELF') {
+    h += '<div class="sec">Resultados</div><div class="tiles">' +
+      (r.role === 'SUPER' ? '<button class="tile" data-go="results"><span class="ic">🌍</span><b>Todas as áreas</b><small>Visão geral</small></button>' : '') +
+      '<button class="tile" data-go="area"><span class="ic">📊</span><b>' + (r.role === 'SUPER' ? 'Por área' : 'Minha área') + '</b><small>' + esc((r.areas || []).join(', ') || 'Competências e evolução') + '</small></button>' +
+      '<button class="tile" data-go="people"><span class="ic">👥</span><b>Formandos</b><small>Perfil individual</small></button></div>';
+  }
+  if (m.pid) h += '<div class="sec">Meu percurso</div><div class="tiles"><button class="tile" data-go="me"><span class="ic">🎓</span><b>Meu perfil</b><small>Os meus resultados</small></button></div>';
+  if (!m.toj && !(r && r.role !== 'SELF') && !m.pid) h += '<div class="card note" style="margin-top:14px">O seu utilizador ainda não tem funções em Learning &amp; Assessment. Fale com o administrador.</div>';
+  h += '<p class="note" style="text-align:center;margin-top:22px">CHDCP Learning &amp; Assessment · v' + esc(LA.v || '') + '</p>';
+  $('app').innerHTML = h;
+  Array.prototype.forEach.call(document.querySelectorAll('[data-go]'), function(b){
+    b.onclick = function(){
+      var g = b.getAttribute('data-go');
+      if (g === 'toj') laNav('toj'); else if (g === 'theory') laNav('theory');
+      else if (g === 'results') laNav('results'); else if (g === 'area') laNav('area'); else if (g === 'people') laNav('results', { tab: 'people' });
+      else if (g === 'me') laNav('person', { personId: m.pid });
+    };
+  });
+}
+function login(names, err){
+  $('who').textContent = 'CHDCP · CCM'; $('out').style.display = 'none';
+  $('app').innerHTML = '<img class="logo" src="logo.png" alt="Improving Cardiac Surgery in Angola"><div class="card"><b>Entrar</b>' +
+    '<label class="field">Nome</label><select class="inp" id="ln"><option value="">— escolha —</option>' + names.map(function(n){ return '<option>' + esc(n) + '</option>'; }).join('') + '</select>' +
+    '<label class="field">PIN</label><input class="inp" id="lp" type="password" inputmode="numeric" autocomplete="current-password">' +
+    '<div class="err" id="le">' + esc(err || '') + '</div><button class="btn" id="lb">Entrar</button></div>' +
+    '<p class="note" style="text-align:center">Formandos: abram a <b>CHDCP Agenda</b> → <b>Meu percurso</b>.</p>';
+  $('lb').onclick = function(){
+    var a = { name: $('ln').value, pin: $('lp').value.trim() };
+    if (!a.name || !a.pin) return;
+    $('lb').disabled = true;
+    call('laHome', [a]).then(function(m){
+      if (m.needLogin) { $('lb').disabled = false; $('le').textContent = 'PIN errado.'; return; }
+      store('chdcp_toj_v2_auth', { name: a.name, pin: a.pin }); store('rs_auth', { name: a.name, pin: a.pin }); laSetSess(null);
+      render(m);
+    }).catch(function(e){ $('lb').disabled = false; $('le').textContent = errTxt(e.message); });
+  };
+}
+function showLogin(err){ call('laLoginList', []).then(function(n){ login(n, err); }).catch(function(e){ $('app').innerHTML = '<div class="card err">' + esc(errTxt(e.message)) + '</div>'; }); }
+$('out').onclick = function(){ var a = authNow(); if (a && a.sess) call('laLogout', [a]).catch(function(){}); laSetSess(null); store('chdcp_toj_v2_auth', null); store('rs_auth', null); store('la_home', null); showLogin(''); };
+laReady(function(){
+  var a = authNow();
+  var cached = store('la_home');
+  if (cached && a) render(cached);
+  if (!a) { showLogin(''); return; }
+  call('laHome', [a]).then(function(m){
+    if (m.needLogin) { laSetSess(null); store('la_home', null); showLogin(m.expired ? 'A sessão expirou.' : ''); return; }
+    store('la_home', m); render(m);
+  }).catch(function(e){ if (!cached) $('app').innerHTML = '<div class="card err">' + esc(errTxt(e.message)) + '</div>'; });
+});
+</script></body></html>

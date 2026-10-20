@@ -1,0 +1,1506 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<script>window.CHDCP_PWA=true;(function(){var API="https://script.google.com/macros/s/AKfycbzpGaQurqsz762hytflYHtHjFEGJssKLa9Jc4Kr1cgMaI0QUZ_021xmZj7-T3l6kisF/exec";function post(fn,args){return fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({fn:fn,args:args}),redirect:"follow",cache:"no-store"}).then(function(r){if(!r.ok)throw new Error("NetworkError HTTP "+r.status);return r.json();});}function runner(ok,ko){return new Proxy({},{get:function(t,k){if(k==="withSuccessHandler")return function(f){return runner(f,ko);};if(k==="withFailureHandler")return function(f){return runner(ok,f);};if(k==="withUserObject")return function(){return runner(ok,ko);};return function(){var a=[].slice.call(arguments);post(k,a).then(function(res){if(res&&res.ok){if(ok)ok(res.v);}else{if(ko)ko(new Error(res?res.e:"Erro"));}}).catch(function(e){if(ko)ko(new Error("NetworkError: "+(e&&e.message||e)));});};}});}window.google=window.google||{};google.script={run:runner(null,null),host:{close:function(){}},url:{getLocation:function(cb){var o={};new URLSearchParams(location.search).forEach(function(v,k){o[k]=v;});cb({parameter:o,hash:location.hash});}}};if("serviceWorker" in navigator)window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){});});})();</script><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#7d1d1a"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Avaliação"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="favicon.png">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#7d1d1a">
+<style>
+:root{
+  --brand:#7d1d1a; --brand-soft:#f6eceb; --ink:#1b2124; --muted:#65727a; --faint:#93a0a7; --line:#e2e7ea;
+  --bg:#f2f4f5; --card:#ffffff; --ok:#11804a; --ok-soft:#e5f4ec; --warn:#a46a00; --warn-soft:#fff4d9; --bad:#b8322f; --bad-soft:#fbe7e5; --info:#235fb8; --info-soft:#eaf2fd;
+  --l1:#b8322f; --l2:#eda39e; --l3:#dcd9d2; --l4:#86b6ef; --l5:#256abf;
+  --r:14px; --tap:48px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
+:focus-visible{outline:3px solid #f0b64b;outline-offset:2px}
+
+.top{position:sticky;top:0;z-index:20;background:var(--brand);color:#fff;padding:calc(8px + env(safe-area-inset-top)) 12px 8px;display:flex;align-items:center;gap:8px;min-height:56px}
+.top .back{background:none;border:0;color:#fff;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;margin-left:-6px;font-size:1.6rem;line-height:1}
+.top .ttl{flex:1;min-width:0}
+.top .ttl b{display:block;font-size:1.02rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.top .ttl span{display:block;font-size:.78rem;opacity:.85;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lang{display:flex;border:1px solid rgba(255,255,255,.45);border-radius:999px;overflow:hidden;flex:none}
+.lang button{background:none;border:0;color:#fff;padding:5px 9px;font-size:.76rem;min-width:34px}
+.lang button[aria-pressed=true]{background:#fff;color:var(--brand);font-weight:700}
+
+main{max-width:760px;margin:0 auto;padding:12px 12px 120px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px;margin-bottom:12px}
+.sec{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin:18px 4px 8px}
+.sec h2{font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0}
+.sec span{font-size:.8rem;color:var(--faint)}
+
+.ctx{display:flex;gap:8px;align-items:center}
+.days{display:flex;flex:1;background:#e4e8ea;border-radius:999px;padding:3px;gap:2px;min-width:0}
+.days button,.days label{flex:1;border:0;background:none;border-radius:999px;padding:7px 6px;font-size:.88rem;color:var(--muted);font-weight:600;text-align:center;position:relative;white-space:nowrap;min-height:36px;display:flex;align-items:center;justify-content:center}
+.days [aria-pressed=true]{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.days input{position:absolute;inset:0;opacity:0;width:100%}
+.pill{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 14px;min-height:42px;font-size:.92rem;position:relative}
+.pill[aria-pressed=true]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.pill.sel{padding-right:30px}
+.pill.sel select{position:absolute;inset:0;opacity:0;width:100%}
+.pill.sel::after{content:"▾";position:absolute;right:12px;font-size:.8rem;color:var(--muted)}
+.pill.date input{position:absolute;inset:0;opacity:0;width:100%}
+.mode{margin-top:10px;display:flex;gap:10px;align-items:center;font-size:.82rem;background:var(--info-soft);border-radius:10px;padding:8px 12px;color:#183f78}
+.mode b{display:block;font-size:.92rem}
+.mode .link{margin-left:auto;flex:none}
+.link{background:none;border:0;color:var(--brand);font-weight:700;padding:6px 2px;text-decoration:underline;text-underline-offset:3px}
+
+.search{position:relative}
+.search input{width:100%;border:1px solid var(--line);border-radius:12px;padding:13px 44px 13px 42px;min-height:var(--tap);background:#fff;font-size:1rem;-webkit-appearance:none;appearance:none}
+.search input::-webkit-search-cancel-button{display:none}
+.search .ico{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:var(--faint);pointer-events:none}
+.search .clear{position:absolute;right:4px;top:50%;transform:translateY(-50%);width:40px;height:40px;border:0;background:none;color:var(--faint);font-size:1.1rem}
+
+.list{background:#fff;border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.prow{display:flex;align-items:center;gap:10px;padding:8px 12px;border-top:1px solid var(--line);min-height:62px}
+.prow:first-child{border-top:0}
+.prow .chk{flex:none;width:40px;height:40px;border-radius:50%;border:0;background:var(--av,#e7ecef);display:grid;place-items:center;color:#41505a;font-size:.8rem;font-weight:800;letter-spacing:.02em}
+.prow .chk[aria-pressed=true]{background:var(--brand);color:#fff;font-size:1.05rem}
+.prow .main{flex:1;min-width:0;background:none;border:0;text-align:left;padding:6px 0}
+.prow .main b{display:block;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prow .main span{display:block;font-size:.8rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tag{flex:none;font-size:.72rem;font-weight:700;border-radius:999px;padding:3px 8px;white-space:nowrap}
+.tag.due{background:var(--warn-soft);color:var(--warn)}
+.tag.done{background:var(--ok-soft);color:var(--ok)}
+.tag.last,.tag.never{display:none}
+mark{background:#ffe8a3;color:inherit;border-radius:3px;padding:0 1px}
+.more{display:block;width:100%;border:0;border-top:1px solid var(--line);background:#fafbfb;padding:12px;color:var(--brand);font-weight:700}
+.empty{color:var(--muted);padding:16px;text-align:center;font-size:.92rem}
+.recent{display:flex;gap:10px;overflow-x:auto;padding:2px 2px 4px;scrollbar-width:none}
+.recent::-webkit-scrollbar{display:none}
+.rc{flex:none;width:64px;border:0;background:none;text-align:center;font-size:.74rem;color:var(--ink);padding:0}
+.rc i{display:grid;place-items:center;width:52px;height:52px;margin:0 auto 4px;border-radius:50%;background:var(--av,#e7ecef);font-style:normal;font-weight:800;font-size:.95rem;color:#41505a;position:relative}
+.rc i.ok::after{content:'✓';position:absolute;right:-2px;bottom:-2px;width:20px;height:20px;border-radius:50%;background:var(--ok);color:#fff;font-size:.7rem;display:grid;place-items:center;border:2px solid var(--bg)}
+.rc span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hint{font-size:.8rem;color:var(--faint);text-align:center;margin:10px 0 0}
+
+.banner{border-radius:12px;padding:10px 12px;font-size:.88rem;margin-bottom:10px;display:flex;gap:10px;align-items:center}
+.banner.warn{background:var(--warn-soft);border:1px solid #efd58a}
+.banner.ok{background:var(--ok-soft);border:1px solid #b9e0c9}
+.banner.err{background:var(--bad-soft);border:1px solid #efbab4}
+.banner .link{margin-left:auto}
+
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:rgba(255,255,255,.97);border-top:1px solid var(--line);padding:10px 12px calc(10px + env(safe-area-inset-bottom))}
+.bar .in{max-width:760px;margin:0 auto;display:flex;align-items:center;gap:8px}
+.bar .info{flex:1;min-width:0;font-size:.8rem;color:var(--muted);line-height:1.3;white-space:nowrap}
+.bar .info b{color:var(--ink)}
+.btn{border:0;border-radius:12px;padding:12px 16px;min-height:var(--tap);font-weight:700;background:var(--brand);color:#fff;white-space:nowrap}
+.btn:disabled{opacity:.35}
+.btn.ghost{background:#fff;color:var(--brand);border:1.5px solid var(--brand)}
+
+.tabs{position:sticky;top:56px;z-index:15;background:var(--bg);padding:8px 0 8px;margin:-4px 0 4px}
+.segrow{display:flex;gap:6px;align-items:stretch}
+.segrow .seg{flex:1}
+.sbtn{flex:none;width:46px;border:0;border-radius:12px;background:#e4e8ea;color:var(--muted);display:grid;place-items:center;position:relative}
+.sbtn .ico{position:static;transform:none}
+.sbtn[aria-pressed=true]{background:var(--ink);color:#fff}
+.people{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;scrollbar-width:none}
+.people::-webkit-scrollbar{display:none}
+.pchip{flex:none;border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 10px 6px 12px;font-size:.85rem;display:flex;align-items:center;gap:6px;max-width:220px;min-height:38px}
+.pchip span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pchip i{font-style:normal;font-size:.72rem;font-weight:700;background:#eef1f3;color:var(--muted);border-radius:999px;padding:1px 7px}
+.pchip[aria-current=true]{background:var(--brand);border-color:var(--brand);color:#fff}
+.pchip[aria-current=true] i{background:rgba(255,255,255,.22);color:#fff}
+.seg{display:flex;background:#e4e8ea;border-radius:12px;padding:3px;gap:3px}
+.seg button{flex:1;border:0;background:none;border-radius:9px;padding:8px 4px;font-size:.86rem;min-height:40px;color:var(--muted);font-weight:600}
+.seg button[aria-pressed=true]{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.seg button i{font-style:normal;font-weight:700;opacity:.7;margin-left:3px}
+.prog{display:flex;align-items:center;gap:10px;margin-top:7px;font-size:.76rem;color:var(--muted)}
+.prog .track{flex:1;height:6px;background:#dde3e6;border-radius:3px;overflow:hidden}
+.prog .track i{display:block;height:100%;background:var(--ok);border-radius:3px;transition:width .25s}
+.ssearch{margin-top:8px}
+.ssearch input{min-height:42px;padding-top:9px;padding-bottom:9px}
+
+.group{background:#fff;border:1px solid var(--line);border-radius:var(--r);margin-bottom:10px;overflow:hidden}
+.ghead{display:flex;align-items:center;gap:10px;width:100%;border:0;background:#fff;padding:13px 14px;text-align:left}
+.ghead b{flex:1;font-size:.82rem;color:var(--brand);text-transform:uppercase;letter-spacing:.03em;line-height:1.25}
+.ghead span{font-size:.8rem;color:var(--muted);white-space:nowrap;font-weight:600}
+.ghead span.ok{color:var(--ok)}
+.ghead::after{content:"▾";color:var(--faint);transition:transform .2s}
+.group.closed .ghead::after{transform:rotate(-90deg)}
+.group.closed .gbody{display:none}
+
+.skill{border-top:1px solid var(--line);padding:12px 14px;scroll-margin-top:190px;transition:background .4s}
+.skill.flash{background:#fff7e0}
+.skill .row1{display:flex;gap:6px;align-items:flex-start}
+.skill .desc{flex:1;font-size:.98rem;line-height:1.3}
+.skill .meta{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center;margin-top:5px;font-size:.76rem;color:var(--muted)}
+.badge{font-size:.66rem;font-weight:800;border-radius:5px;padding:2px 6px;letter-spacing:.03em}
+.badge.plan{background:var(--info-soft);color:var(--info)}
+.badge.never{background:none;color:var(--faint);font-weight:600;letter-spacing:0;padding:0;font-size:.74rem}
+.lastv{display:inline-flex;align-items:center;gap:5px}
+.lastv i{font-style:normal;display:inline-grid;place-items:center;min-width:19px;height:19px;border-radius:5px;font-weight:800;font-size:.72rem}
+.nbtn{flex:none;border:0;background:none;width:40px;height:40px;border-radius:50%;color:var(--faint);margin:-8px -8px 0 0;display:grid;place-items:center}
+.nbtn svg{width:19px;height:19px}
+.nbtn.has{color:var(--brand)}
+.rate{display:grid;grid-template-columns:repeat(5,1fr) 1.2fr;gap:6px;margin-top:10px}
+.rate button{min-height:50px;border-radius:12px;border:1.5px solid var(--line);background:#fff;font-weight:800;font-size:1.1rem;position:relative}
+.rate button:active{transform:scale(.96)}
+.rate button.na{font-size:.7rem;font-weight:700;color:var(--muted);line-height:1.1;padding:0 2px}
+.rate button.was::after{content:"";position:absolute;left:50%;bottom:5px;width:14px;height:3px;margin-left:-7px;border-radius:2px;background:#b7c0c5}
+.rate button[aria-pressed=true].v1{background:var(--l1);border-color:var(--l1);color:#fff}
+.rate button[aria-pressed=true].v2{background:var(--l2);border-color:#d88882}
+.rate button[aria-pressed=true].v3{background:var(--l3);border-color:#b2ada3}
+.rate button[aria-pressed=true].v4{background:var(--l4);border-color:#5c97dd}
+.rate button[aria-pressed=true].v5{background:var(--l5);border-color:var(--l5);color:#fff}
+.rate button[aria-pressed=true].na{background:var(--ink);border-color:var(--ink);color:#fff}
+.rate button[aria-pressed=true].was::after{background:currentColor;opacity:.55}
+.picked{margin-top:7px;font-size:.8rem;color:var(--muted);min-height:1.15em}
+.picked b{color:var(--ink)}
+.up{color:var(--ok);font-weight:800}.down{color:var(--bad);font-weight:800}
+.skill textarea,.rcard textarea{width:100%;margin-top:8px;border:1px solid var(--line);border-radius:10px;padding:10px;min-height:60px;resize:vertical}
+.legend{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;margin-top:12px}
+.legend div{font-size:.66rem;line-height:1.15;text-align:center;color:var(--muted)}
+.legend i{display:block;height:5px;border-radius:3px;margin-bottom:3px}
+.opts{display:flex;align-items:center;justify-content:center;gap:8px;margin:16px 0 0;font-size:.85rem;color:var(--muted)}
+.opts input{width:20px;height:20px}
+
+.sheet{position:fixed;inset:0;background:rgba(18,22,24,.5);z-index:40;display:none;align-items:flex-end;justify-content:center}
+.sheet.open{display:flex}
+.sheet .panel{background:#fff;border-radius:18px 18px 0 0;max-width:760px;width:100%;max-height:90vh;overflow:auto;padding:8px 16px calc(16px + env(safe-area-inset-bottom))}
+.sheet .grab{width:40px;height:4px;border-radius:2px;background:#d3d9dc;margin:4px auto 12px}
+.sheet h3{margin:0 0 4px;font-size:1.15rem}
+.rcard{border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:12px}
+.rcard .rh{display:flex;align-items:center;gap:8px}
+.rcard .rh b{flex:1;min-width:0}
+.rcard .rh small{font-size:.78rem;color:var(--muted);white-space:nowrap}
+.rlist{display:grid;grid-template-columns:1fr auto;gap:7px 10px;font-size:.86rem;margin-top:10px;align-items:start}
+.rlist .lv{font-weight:800;text-align:center;border-radius:6px;padding:1px 8px;min-width:30px}
+.actions{display:flex;gap:10px;margin-top:16px}
+.actions .btn{flex:1}
+.done{text-align:center;padding:12px 0 4px}
+.done .big{width:68px;height:68px;border-radius:50%;background:var(--ok);color:#fff;display:grid;place-items:center;font-size:2rem;margin:6px auto 12px}
+.done .big.wait{background:var(--warn)}
+.spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.45);border-top-color:#fff;border-radius:50%;animation:sp 1s linear infinite;vertical-align:-3px;margin-right:8px}
+@keyframes sp{to{transform:rotate(360deg)}}
+.toast{position:fixed;left:50%;bottom:calc(86px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:999px;font-size:.88rem;z-index:50;opacity:0;transition:opacity .2s;pointer-events:none;max-width:90vw;text-align:center}
+.toast.on{opacity:1}
+.loading{text-align:center;color:var(--muted);padding:80px 20px}
+.crumb{flex:1;min-width:0;display:flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:4px 10px 4px 4px;min-height:46px}
+.crumb b{flex:1;min-width:0;font-size:.9rem;line-height:1.2;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.crumb.top0{padding-left:12px}
+.cback{flex:none;border:0;background:var(--brand-soft);color:var(--brand);font-weight:700;border-radius:9px;padding:8px 10px;font-size:.84rem;min-height:38px;white-space:nowrap}
+.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.tile{display:flex;flex-direction:column;align-items:stretch;gap:8px;text-align:left;background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:12px;min-height:118px;position:relative}
+.tile b{font-size:.93rem;line-height:1.22;flex:1}
+.tile .tp{display:flex;gap:6px;flex-wrap:wrap;min-height:18px}
+.tile .track{height:6px;background:#e4e9ec;border-radius:3px;overflow:hidden}
+.tile .track i{display:block;height:100%;background:var(--ok);border-radius:3px}
+.tile small{font-size:.76rem;color:var(--muted);font-weight:600}
+.tile.full{border-color:#b9e0c9;background:#f6fbf8}
+.tile.full::after{content:'✓';position:absolute;right:10px;top:10px;width:22px;height:22px;border-radius:50%;background:var(--ok);color:#fff;font-size:.75rem;display:grid;place-items:center}
+.tile.plan{grid-column:1/-1;background:var(--info-soft);border-color:#c5d9f5;min-height:0}
+.tile.plan b{color:#183f78;font-size:1rem;flex:none}
+.tile.plan small{color:#3a5f93}
+.tile:active{transform:scale(.98)}
+.ghead.static{cursor:default}
+.ghead.static::after{content:none}
+.nextg{width:100%;margin-top:4px;display:flex;justify-content:space-between;align-items:center;gap:10px;text-align:left;white-space:normal}
+.nextg span{font-size:.75rem;font-weight:600;opacity:.75;display:block}
+.nextg.flash{box-shadow:0 0 0 4px #f0b64b}
+.gdone{text-align:center;color:var(--ok);font-weight:700;font-size:.9rem;margin:6px 0 10px}
+.osec{margin-top:18px}
+.osec p{margin:-4px 4px 8px;font-size:.8rem;color:var(--faint)}
+.group.other .ghead b{color:var(--muted)}
+.pin{width:100%;font-size:1.6rem;letter-spacing:.5em;text-align:center;border:1.5px solid var(--line);border-radius:12px;padding:12px;margin-top:12px}
+.err{color:var(--bad);font-size:.88rem;margin-top:8px;min-height:1.2em}
+.foot{text-align:center;font-size:.82rem;color:var(--muted);margin-top:18px}
+.ibtn{flex:none;width:40px;height:40px;border:0;border-radius:50%;background:var(--brand-soft);color:var(--brand);display:grid;place-items:center}
+.ibtn svg{width:19px;height:19px}
+.ovbtn{display:flex;align-items:center;gap:10px;width:100%;border:1px solid var(--line);background:#fff;border-radius:var(--r);padding:12px 14px;margin-bottom:12px;text-align:left;font-weight:700;color:var(--brand)}
+.ovbtn svg{width:20px;height:20px;flex:none}
+.ovbtn span{display:block;font-weight:500;font-size:.8rem;color:var(--muted)}
+.kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:12px}
+.kpi b{display:block;font-size:1.4rem;line-height:1.15}
+.kpi b small{font-size:.85rem;color:var(--faint);font-weight:600}
+.kpi span{font-size:.76rem;color:var(--muted);font-weight:600}
+@media (min-width:560px){.kpis{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.dist{display:flex;height:10px;border-radius:5px;overflow:hidden;margin-top:12px;background:#e4e9ec}
+.dist i{display:block;height:100%}
+.distl{display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:6px;font-size:.78rem;color:var(--muted)}
+.distl span{display:inline-flex;align-items:center;gap:4px}
+.distl .lvb{min-width:20px;height:18px;font-size:.7rem}
+.nrow{display:flex;align-items:center;gap:10px;padding:11px 14px;border-top:1px solid var(--line);font-size:.92rem;width:100%;background:#fff;text-align:left}
+.list .nrow:first-child,.gbody .nrow:first-child{border-top:0}
+button.nrow{border-left:0;border-right:0;border-bottom:0}
+.list button.nrow:first-child{border-top:0}
+.nrow .d{flex:1;min-width:0;line-height:1.3}
+.nrow .d small{display:block;font-size:.76rem;color:var(--muted);margin-top:2px}
+.group .gbody{border-top:1px solid var(--line)}
+.why{flex:none;font-size:.7rem;font-weight:800;border-radius:999px;padding:3px 8px;white-space:nowrap}
+.why.plan{background:var(--info-soft);color:var(--info)}
+.why.low{background:var(--bad-soft);color:var(--bad)}
+.why.never{background:#eef1f3;color:var(--muted)}
+.why.old{background:var(--warn-soft);color:var(--warn)}
+.lvb{flex:none;display:inline-grid;place-items:center;min-width:26px;height:24px;border-radius:6px;font-weight:800;font-size:.8rem;padding:0 6px}
+.names{display:flex;flex-wrap:wrap;gap:6px;padding:4px 14px 12px;background:#fafbfb}
+.names button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 10px;font-size:.8rem;min-height:34px}
+.names button.low{border-color:#efbab4;background:var(--bad-soft)}
+.names button.plan{border-color:#c5d9f5;background:var(--info-soft)}
+.same{border:1.5px dashed #b7c0c5;background:#fff;border-radius:999px;padding:6px 12px;font-size:.82rem;font-weight:700;color:var(--muted);min-height:34px}
+.qn{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.qn button{border:1px solid var(--line);background:#f6f8f9;border-radius:999px;padding:5px 10px;font-size:.78rem;color:var(--muted);min-height:32px}
+.skill.multi .mrow{display:flex;align-items:center;gap:8px;margin-top:10px}
+.skill.multi .mn{width:92px;flex:none;line-height:1.15;min-width:0}
+.skill.multi .mn b{display:block;font-size:.84rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.skill.multi .mn small{font-size:.7rem;color:var(--faint)}
+.rate.mini{flex:1;margin-top:0;gap:4px;grid-template-columns:repeat(5,1fr) 1.1fr}
+.rate.mini button{min-height:42px;font-size:.98rem;border-radius:10px}
+.rate.mini button.na{font-size:.6rem}
+.sugg .rc small{display:block;font-size:.66rem;color:var(--bad);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fbl{display:grid;grid-template-columns:1fr auto;gap:10px 12px;margin-top:14px;font-size:1rem;align-items:center}
+.fbl small{display:block;font-size:.8rem;color:var(--muted)}
+.fbl .lvb{min-width:34px;height:32px;font-size:1rem}
+.bsw{margin-bottom:8px}
+.why.ok{background:var(--ok-soft);color:var(--ok)}
+.ibtn{width:auto!important;min-width:46px;height:46px!important;border-radius:12px!important;flex-direction:column;gap:1px;padding:0 6px}
+.ibtn span{font-size:.6rem;font-weight:700;line-height:1}
+.sbtn svg{width:20px;height:20px}
+.attbar{margin-top:6px;height:6px;background:#e4e9ec;border-radius:3px;overflow:hidden}
+.attbar i{display:block;height:100%;background:var(--ok)}
+.stv .kpis{margin-top:12px}
+.pin::placeholder{letter-spacing:normal;font-size:1rem;color:#93a0a7}
+.sync{font-size:.74rem;color:var(--muted);text-align:right;padding:3px 16px 0;min-height:1.1em}
+.sync.off{color:#a1260d}
+.sync .link{font-size:.74rem;margin-left:6px}
+@media (min-width:700px){.rate{max-width:540px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+<title>Avaliação TOJ</title></head>
+<body>
+<script>var LA_BOOT=(function(){var q=new URLSearchParams(location.search),p={};["mode","activityId","personId","area","date","title","tab"].forEach(function(k){p[k]=q.get(k)||"";});if(!p.mode)p.mode="toj";return{v:"36",t:q.get("t")||"",p:p,urls:{home:"index.html"}};})();</script><script>var LA = window.LA_BOOT || { p:{}, urls:{} };
+function laSess(){ try { return JSON.parse(localStorage.getItem('la_sess') || 'null'); } catch(e){ return null; } }
+function laSetSess(s){ try { if (s) localStorage.setItem('la_sess', JSON.stringify(s)); else localStorage.removeItem('la_sess'); } catch(e){} }
+function laQs(o){ var k = Object.keys(o||{}).filter(function(x){ return o[x]; }); return k.map(function(x){ return x+'='+encodeURIComponent(o[x]); }).join('&'); }
+/* mode: home | toj | theory | results | person | area — sessione già nel telefono, niente biglietto */
+function laNav(mode, params){
+  var q = laQs(Object.assign({ mode: mode === 'home' ? '' : mode }, params||{}));
+  var url;
+  if (window.CHDCP_PWA) {
+    var pg = { home:'index.html', toj:'toj.html', theory:'teorica.html', results:'resultados.html', person:'resultados.html', area:'resultados.html' }[mode] || 'index.html';
+    location.href = pg + (q ? '?' + q : ''); return;
+  }
+  url = (LA.urls && LA.urls.home) + (q ? '?' + q : '');
+  try { window.open(url, '_top'); } catch(e){ location.href = url; }
+}
+/* biglietto dell'Agenda → sessione (una volta), poi parte la pagina */
+function laReady(cb){
+  if (!LA.t) { cb(laSess()); return; }
+  var t = LA.t; LA.t = '';
+  try { history.replaceState(null, '', location.pathname + location.search.replace(/([?&])t=[^&]*&?/, '$1').replace(/[?&]$/, '')); } catch(e){}
+  google.script.run.withSuccessHandler(function(s){ laSetSess(s); cb(s); }).withFailureHandler(function(){ cb(laSess()); }).laRedeem(t);
+}
+document.addEventListener('click', function(e){
+  var b = e.target.closest ? e.target.closest('[data-lanav]') : null; if (!b) return;
+  e.preventDefault(); var x = String(b.getAttribute('data-lanav')).split(':');
+  laNav(x[0], x[0] === 'person' ? { personId: x[1] } : x[0] === 'area' ? { area: x[1] } : {});
+});</script>
+<header class="top">
+  <button class="back hidden" id="backBtn" type="button" aria-label="‹">‹</button>
+  <div class="ttl" id="ttl"><b>CHDCP · TOJ</b></div>
+  <div class="lang" role="group" aria-label="Idioma · Language · Lingua">
+    <button type="button" data-lang="PT" aria-pressed="true">PT</button>
+    <button type="button" data-lang="EN" aria-pressed="false">EN</button>
+    <button type="button" data-lang="IT" aria-pressed="false">IT</button>
+  </div>
+</header>
+<div class="sync" id="sync" role="status" aria-live="polite"></div>
+
+<main id="app"><div class="loading" id="loading">…</div></main>
+
+<div class="bar hidden" id="bar"><div class="in" id="barIn"></div></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true"><div class="panel" id="panel"></div></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ============================================================
+   TESTI
+   ============================================================ */
+var T = {
+  PT: {
+    loading:'A carregar…', hello:'Olá, {n}',
+    today:'Hoje', yesterday:'Ontem', other_day:'Outra data', future:'A data não pode ser no futuro.',
+    mode_week:'TOJ semanal', mode_spot:'TOJ pontual', mode_week_d:'Plano {s}–{e} · {n} competências planeadas',
+    mode_spot_d:'Uma atividade, um dia', mode_change:'Mudar',
+    search:'Nome ou ID do formando', due:'Por avaliar neste plano', due_np:'Há mais tempo sem TOJ', all:'Todos os formandos de {a}', results:'Resultados', other_areas:'De outras áreas',
+    no_results:'Nenhum formando encontrado.', show_more:'Mostrar mais {n}', multi_hint:'Toque no círculo para avaliar vários formandos seguidos.',
+    t_never:'nunca avaliado', t_due:'por avaliar', t_done:'✓ {d}', t_last:'última TOJ {d}', done_plan:'Já avaliados neste plano', sel_title:'Selecionados', recent_t:'Recentes',
+    start_n:'Avaliar {n} →', selected:'Selecionados: <b>{n}</b>', clear:'Limpar', s_search:'Procurar competência',
+    of_plan:'{d} de {n} do plano', of_all:'{d} de {n} competências',
+    never:'nunca avaliada', plan:'PLANO', last:'Última', na:'Não<br>observada', note:'Nota',
+    note_ph:'O que observou? (opcional)', lv1:'Não independente', lv2:'Compreensão básica', lv3:'Independente com supervisão', lv4:'Quase independente', lv5:'Totalmente independente',
+    ls1:'Não indep.', ls2:'Básica', ls3:'C/ supervisão', ls4:'Quase indep.', ls5:'Total. indep.', na_l:'Não observada',
+    vs_last:'antes {v}', next_p:'Seguinte', review:'Rever e enviar', rated:'<b>{r}</b> avaliadas<br><b>{n}</b> não obs.',
+    review_t:'Rever e enviar', review_d:'{p} formando(s) · {r} competência(s)', edit:'Editar', gnote:'Nota geral (opcional)',
+    empty_p:'Sem avaliações: não será enviado.', send:'Enviar', send_n:'Enviar {n} formandos', back:'Voltar', sending:'A enviar…',
+    sent:'Enviado', sent_d:'Avaliações enviadas: {n}. Entram no Hub na próxima importação.', queued:'O resto ficou guardado no telemóvel e será enviado quando houver rede.',
+    some_wait:'Ainda há envios pendentes', again:'Avaliar outro formando', outbox:'Avaliações à espera de rede: {n}.', retry:'Enviar agora',
+    draft:'Avaliação em curso recuperada.', discard:'Descartar', auto_adv:'Avançar automaticamente para a competência seguinte',
+    all_done:'Tudo avaliado aqui ✓', mark_rest:'Marcar as restantes como não observadas ({n})',
+    saved:'Guardado como rascunho', cohort:'Coorte', dup_w:'Atenção: estas competências já foram avaliadas em {d}. Enviar de novo cria um duplicado:', dup_go:'Enviar mesmo assim', dup_toast:'{p} já foi avaliado/a em {d}', card:'Ficha', over_btn:'Panorâmica {a}', over_hint:'Quem avaliar, competências nunca avaliadas, notas baixas', over_t:'Panorâmica {a}', over_d:'Notas baixas: 1-{l} · antigas: mais de {d} dias', by_p:'Por formando', by_s:'Por competência', f_all:'Tudo', f_low:'Notas baixas', f_never:'Nunca', f_old:'+{d} dias', c_never:'{n} nunca avaliadas', c_low:'{n} notas baixas', c_old:'{n} com mais de {d} dias', k_rated:'Competências avaliadas', k_avg:'Média', k_aut:'Autonomia (4-5)', k_last:'Última TOJ', todo_t:'O que convém avaliar', res_t:'Resultados até agora', r_plan:'No plano', r_low:'Nota {v} · {d}', r_never:'Nunca avaliada', r_old:'Última {d}', assess_p:'Avaliar {p}', nothing:'Nada urgente ✓', same:'= {v} como antes', same_rest:'Repetir as notas anteriores ({n})', grp_t:'{n} formandos', sugg_t:'Hoje convém avaliar', fb_btn:'Feedback para {p}', fb_t:'Resultado da avaliação', fb_new:'nova', np_t:'Escolha o seu PIN', np_d:'Para sua segurança, troque o PIN que recebeu por um só seu (4 a 8 algarismos).', np_1:'Novo PIN', np_2:'Repita o novo PIN', np_go:'Guardar', np_e1:'O PIN deve ter de 4 a 8 algarismos.', np_e2:'Os dois PIN não são iguais.', np_e3:'Escolha um PIN diferente do actual.', np_ok:'PIN alterado ✓', np_btn:'Mudar PIN', o_need:'Prioridade', o_most:'Mais avaliados', o_best:'Melhores', o_worst:'Piores', o_most_s:'Mais avaliadas', o_best_s:'Melhores', o_worst_s:'Piores', o_sub:'{r}/{n} avaliadas · média {a} · autonomia {u}%', o_sub_s:'{r} formandos avaliados · média {a} · autonomia {u}%', o_none:'Ainda sem avaliações', o_min:'Só quem tem pelo menos {n} competências avaliadas', o_min_s:'Só competências avaliadas em pelo menos {n} formandos', att_t:'Presenças', att_d:'{d} de {n} aulas · {h} h', th_t:'Provas teóricas', th_none:'Sem provas registadas', show_st:'Mostrar ao formando', try:'tentativa {n}', k_att:'Presença', qn:['Precisa de supervisão','Rever a técnica','Bom progresso','Muito bem','Falta prática','Melhorar a comunicação'],
+    pin_t:'Introduza o seu PIN', pin_go:'Entrar', pin_err:'PIN errado. Tente de novo.', not_you:'Não é {n}?', logout:'Sair', login_t:'Quem está a avaliar?', resume:'Avaliação em curso: {p}', resume_go:'Continuar',
+    groups:'Grupos', choose_g:'Escolha um grupo de competências', t_plan:'Competências do plano', t_plan_d:'{n} competências planeadas · {s}–{e}',
+    of_grp:'{d} de {n} neste grupo', next_g:'Próximo grupo', next_go:'Ver todos os grupos', grp_done:'Grupo completo ✓', n_plan:'{n} no plano',
+    others_go:'Outras competências de {a}', no_skills:'Esta área ainda não tem competências codificadas.', in_search:'Resultados em todos os grupos',
+    area:'Área', e_SESSION:'Sessão expirada: entre de novo com o seu PIN.', e_DATA:'Dados incompletos. Feche e abra a app.', e_FUTURE:'A data não pode ser no futuro.', e_AREA:'Não está autorizado a avaliar a área {x}.', e_PERSON:'Formando não encontrado ({x}).', e_EMPTY:'Nenhuma competência avaliada.', e_SKILL:'Competência não reconhecida ({x}): atualize a app.', e_LEVEL:'Nível inválido em {x}.', e_BUSY:'O sistema está ocupado: tente de novo dentro de alguns segundos.', e_OTHER:'Não foi possível concluir. Tente de novo; se continuar, contacte o coordenador da formação.', e_NET:'Sem ligação: tente mais tarde.', e_TIMEOUT:'A ligação está muito lenta. Tente de novo.', sy_ok:'Actualizado às {h}', sy_off:'Sem ligação — dados de {d}', sy_upd:'A actualizar…', retry2:'Tentar de novo'
+  },
+  EN: {
+    loading:'Loading…', hello:'Hello, {n}',
+    today:'Today', yesterday:'Yesterday', other_day:'Other date', future:'The date cannot be in the future.',
+    mode_week:'Weekly TOJ', mode_spot:'Spot TOJ', mode_week_d:'Plan {s}–{e} · {n} planned skills',
+    mode_spot_d:'One activity, one day', mode_change:'Change',
+    search:'Trainee name or ID', due:'To assess in this plan', due_np:'Longest time without a TOJ', all:'All {a} trainees', results:'Results', other_areas:'From other areas',
+    no_results:'No trainee found.', show_more:'Show {n} more', multi_hint:'Tap the circle to assess several trainees in a row.',
+    t_never:'never assessed', t_due:'to assess', t_done:'✓ {d}', t_last:'last TOJ {d}', done_plan:'Already assessed in this plan', sel_title:'Selected', recent_t:'Recent',
+    start_n:'Assess {n} →', selected:'Selected: <b>{n}</b>', clear:'Clear', s_search:'Search skill',
+    of_plan:'{d} of {n} plan skills', of_all:'{d} of {n} skills',
+    never:'never assessed', plan:'PLAN', last:'Last', na:'Not<br>observed', note:'Note',
+    note_ph:'What did you observe? (optional)', lv1:'Not independent', lv2:'Basic understanding', lv3:'Independent with supervisor', lv4:'Nearly independent', lv5:'Fully independent',
+    ls1:'Not indep.', ls2:'Basic', ls3:'Supervised', ls4:'Nearly indep.', ls5:'Fully indep.', na_l:'Not observed',
+    vs_last:'previously {v}', next_p:'Next', review:'Review and send', rated:'<b>{r}</b> rated<br><b>{n}</b> not obs.',
+    review_t:'Review and send', review_d:'{p} trainee(s) · {r} skill(s)', edit:'Edit', gnote:'General note (optional)',
+    empty_p:'No ratings: will not be sent.', send:'Send', send_n:'Send {n} trainees', back:'Back', sending:'Sending…',
+    sent:'Sent', sent_d:'Assessments sent: {n}. They reach the Hub at the next import.', queued:'The rest is saved on this phone and will be sent when there is a connection.',
+    some_wait:'Some not sent yet', again:'Assess another trainee', outbox:'Assessments waiting for a connection: {n}.', retry:'Send now',
+    draft:'Assessment in progress recovered.', discard:'Discard', auto_adv:'Move to the next skill automatically',
+    all_done:'All rated here ✓', mark_rest:'Mark the rest as not observed ({n})',
+    saved:'Saved as draft', cohort:'Cohort', dup_w:'Warning: these skills were already rated on {d}. Sending again creates a duplicate:', dup_go:'Send anyway', dup_toast:'{p} already assessed on {d}', card:'Profile', over_btn:'{a} overview', over_hint:'Who to assess, never-rated skills, low scores', over_t:'{a} overview', over_d:'Low: 1-{l} · old: more than {d} days', by_p:'By trainee', by_s:'By skill', f_all:'All', f_low:'Low scores', f_never:'Never', f_old:'+{d} days', c_never:'{n} never rated', c_low:'{n} low scores', c_old:'{n} older than {d} days', k_rated:'Skills rated', k_avg:'Average', k_aut:'Autonomy (4-5)', k_last:'Last TOJ', todo_t:'What to assess next', res_t:'Results so far', r_plan:'In plan', r_low:'Score {v} · {d}', r_never:'Never rated', r_old:'Last {d}', assess_p:'Assess {p}', nothing:'Nothing urgent ✓', same:'= {v} as before', same_rest:'Repeat previous scores ({n})', grp_t:'{n} trainees', sugg_t:'Worth assessing today', fb_btn:'Feedback for {p}', fb_t:'Assessment result', fb_new:'new', np_t:'Choose your PIN', np_d:'For your security, replace the PIN you received with your own (4 to 8 digits).', np_1:'New PIN', np_2:'Repeat the new PIN', np_go:'Save', np_e1:'The PIN must have 4 to 8 digits.', np_e2:'The two PINs do not match.', np_e3:'Choose a PIN different from the current one.', np_ok:'PIN changed ✓', np_btn:'Change PIN', o_need:'Priority', o_most:'Most assessed', o_best:'Best', o_worst:'Lowest', o_most_s:'Most assessed', o_best_s:'Best', o_worst_s:'Lowest', o_sub:'{r}/{n} rated · average {a} · autonomy {u}%', o_sub_s:'{r} trainees rated · average {a} · autonomy {u}%', o_none:'No assessments yet', o_min:'Only trainees with at least {n} rated skills', o_min_s:'Only skills rated for at least {n} trainees', att_t:'Attendance', att_d:'{d} of {n} lessons · {h} h', th_t:'Theory tests', th_none:'No tests recorded', show_st:'Show to trainee', try:'attempt {n}', k_att:'Attendance', qn:['Needs supervision','Review technique','Good progress','Very good','Needs more practice','Improve communication'],
+    pin_t:'Enter your PIN', pin_go:'Sign in', pin_err:'Wrong PIN. Try again.', not_you:'Not {n}?', logout:'Sign out', login_t:'Who is assessing?', resume:'Assessment in progress: {p}', resume_go:'Continue',
+    groups:'Groups', choose_g:'Choose a skill group', t_plan:'Plan skills', t_plan_d:'{n} planned skills · {s}–{e}',
+    of_grp:'{d} of {n} in this group', next_g:'Next group', next_go:'See all groups', grp_done:'Group complete ✓', n_plan:'{n} in plan',
+    others_go:'Other {a} skills', no_skills:'This area has no coded skills yet.', in_search:'Results across all groups',
+    area:'Area', e_SESSION:'Session expired: sign in again with your PIN.', e_DATA:'Incomplete data. Close and reopen the app.', e_FUTURE:'The date cannot be in the future.', e_AREA:'You are not authorised to assess the {x} area.', e_PERSON:'Trainee not found ({x}).', e_EMPTY:'No skill rated.', e_SKILL:'Skill not recognised ({x}): reload the app.', e_LEVEL:'Invalid level for {x}.', e_BUSY:'The system is busy: try again in a few seconds.', e_OTHER:'Could not complete. Try again; if it continues, contact the training coordinator.', e_NET:'No connection: try again later.', e_TIMEOUT:'The connection is very slow. Try again.', sy_ok:'Updated at {h}', sy_off:'Offline — data from {d}', sy_upd:'Updating…', retry2:'Try again'
+  },
+  IT: {
+    loading:'Caricamento…', hello:'Ciao, {n}',
+    today:'Oggi', yesterday:'Ieri', other_day:'Altra data', future:'La data non può essere nel futuro.',
+    mode_week:'TOJ settimanale', mode_spot:'TOJ puntuale', mode_week_d:'Piano {s}–{e} · {n} skill pianificate',
+    mode_spot_d:'Un\'attività, un giorno', mode_change:'Cambia',
+    search:'Nome o ID del trainee', due:'Da valutare in questo piano', due_np:'Da più tempo senza TOJ', all:'Tutti i trainee di {a}', results:'Risultati', other_areas:'Di altre aree',
+    no_results:'Nessun trainee trovato.', show_more:'Mostra altri {n}', multi_hint:'Tocca il cerchio per valutare più trainee di fila.',
+    t_never:'mai valutato', t_due:'da valutare', t_done:'✓ {d}', t_last:'ultima TOJ {d}', done_plan:'Già valutati in questo piano', sel_title:'Selezionati', recent_t:'Recenti',
+    start_n:'Valuta {n} →', selected:'Selezionati: <b>{n}</b>', clear:'Deseleziona', s_search:'Cerca skill',
+    of_plan:'{d} di {n} del piano', of_all:'{d} di {n} skill',
+    never:'mai valutata', plan:'PIANO', last:'Ultima', na:'Non<br>osservata', note:'Nota',
+    note_ph:'Cosa hai osservato? (facoltativo)', lv1:'Non indipendente', lv2:'Comprensione di base', lv3:'Indipendente con supervisione', lv4:'Quasi indipendente', lv5:'Completamente indipendente',
+    ls1:'Non indip.', ls2:'Base', ls3:'Con supervis.', ls4:'Quasi indip.', ls5:'Compl. indip.', na_l:'Non osservata',
+    vs_last:'prima {v}', next_p:'Successivo', review:'Rivedi e invia', rated:'<b>{r}</b> valutate<br><b>{n}</b> non oss.',
+    review_t:'Rivedi e invia', review_d:'{p} trainee · {r} skill', edit:'Modifica', gnote:'Nota generale (facoltativa)',
+    empty_p:'Nessuna valutazione: non verrà inviato.', send:'Invia', send_n:'Invia {n} trainee', back:'Indietro', sending:'Invio…',
+    sent:'Inviato', sent_d:'Valutazioni inviate: {n}. Entrano nel Hub al prossimo import.', queued:'Il resto è salvato sul telefono e verrà inviato appena c\'è rete.',
+    some_wait:'Alcuni invii in sospeso', again:'Valuta un altro trainee', outbox:'Valutazioni in attesa di rete: {n}.', retry:'Invia ora',
+    draft:'Valutazione in corso recuperata.', discard:'Scarta', auto_adv:'Passa automaticamente alla skill successiva',
+    all_done:'Tutto valutato qui ✓', mark_rest:'Segna le restanti come non osservate ({n})',
+    saved:'Salvato come bozza', cohort:'Coorte', dup_w:'Attenzione: queste skill sono già state valutate il {d}. Inviare di nuovo crea un doppione:', dup_go:'Invia comunque', dup_toast:'{p} già valutato il {d}', card:'Scheda', over_btn:'Panoramica {a}', over_hint:'Chi valutare, skill mai valutate, voti bassi', over_t:'Panoramica {a}', over_d:'Voti bassi: 1-{l} · vecchie: oltre {d} giorni', by_p:'Per trainee', by_s:'Per skill', f_all:'Tutto', f_low:'Voti bassi', f_never:'Mai', f_old:'+{d} giorni', c_never:'{n} mai valutate', c_low:'{n} voti bassi', c_old:'{n} oltre {d} giorni', k_rated:'Skill valutate', k_avg:'Media', k_aut:'Autonomia (4-5)', k_last:'Ultima TOJ', todo_t:'Cosa conviene valutare', res_t:'Risultati finora', r_plan:'Nel piano', r_low:'Voto {v} · {d}', r_never:'Mai valutata', r_old:'Ultima {d}', assess_p:'Valuta {p}', nothing:'Niente di urgente ✓', same:'= {v} come prima', same_rest:'Ripeti i voti precedenti ({n})', grp_t:'{n} trainee', sugg_t:'Oggi conviene valutare', fb_btn:'Feedback a {p}', fb_t:'Esito della valutazione', fb_new:'nuova', np_t:'Scegli il tuo PIN', np_d:'Per sicurezza, sostituisci il PIN ricevuto con uno tuo (da 4 a 8 cifre).', np_1:'Nuovo PIN', np_2:'Ripeti il nuovo PIN', np_go:'Salva', np_e1:'Il PIN deve avere da 4 a 8 cifre.', np_e2:'I due PIN non coincidono.', np_e3:'Scegli un PIN diverso da quello attuale.', np_ok:'PIN cambiato ✓', np_btn:'Cambia PIN', o_need:'Priorità', o_most:'Più valutati', o_best:'Migliori', o_worst:'Peggiori', o_most_s:'Più valutate', o_best_s:'Migliori', o_worst_s:'Peggiori', o_sub:'{r}/{n} valutate · media {a} · autonomia {u}%', o_sub_s:'{r} trainee valutati · media {a} · autonomia {u}%', o_none:'Ancora nessuna valutazione', o_min:'Solo chi ha almeno {n} skill valutate', o_min_s:'Solo skill valutate in almeno {n} trainee', att_t:'Presenze', att_d:'{d} di {n} lezioni · {h} h', th_t:'Prove teoriche', th_none:'Nessuna prova registrata', show_st:'Mostra al trainee', try:'tentativo {n}', k_att:'Presenza', qn:['Serve supervisione','Rivedere la tecnica','Buoni progressi','Molto bene','Serve più pratica','Migliorare la comunicazione'],
+    pin_t:'Inserisci il tuo PIN', pin_go:'Accedi', pin_err:'PIN errato. Riprova.', not_you:'Non sei {n}?', logout:'Esci', login_t:'Chi sta valutando?', resume:'Valutazione in corso: {p}', resume_go:'Continua',
+    groups:'Gruppi', choose_g:'Scegli un gruppo di skill', t_plan:'Skill del piano', t_plan_d:'{n} skill pianificate · {s}–{e}',
+    of_grp:'{d} di {n} in questo gruppo', next_g:'Gruppo successivo', next_go:'Vedi tutti i gruppi', grp_done:'Gruppo completato ✓', n_plan:'{n} nel piano',
+    others_go:'Altre skill di {a}', no_skills:'Quest\'area non ha ancora skill codificate.', in_search:'Risultati in tutti i gruppi',
+    area:'Area', e_SESSION:'Sessione scaduta: accedi di nuovo con il tuo PIN.', e_DATA:'Dati incompleti. Chiudi e riapri l\'app.', e_FUTURE:'La data non può essere nel futuro.', e_AREA:'Non sei autorizzato a valutare l\'area {x}.', e_PERSON:'Trainee non trovato ({x}).', e_EMPTY:'Nessuna skill valutata.', e_SKILL:'Skill non riconosciuta ({x}): ricarica l\'app.', e_LEVEL:'Livello non valido per {x}.', e_BUSY:'Il sistema è occupato: riprova tra qualche secondo.', e_OTHER:'Operazione non riuscita. Riprova; se continua, contatta il coordinatore della formazione.', e_NET:'Nessuna connessione: riprova più tardi.', e_TIMEOUT:'La connessione è molto lenta. Riprova.', sy_ok:'Aggiornato alle {h}', sy_off:'Offline — dati delle {d}', sy_upd:'Aggiornamento…', retry2:'Riprova'
+  }
+};
+var LANG = 'PT';
+function errMsg(e){
+  var m = String(e && e.message ? e.message : e).match(/TOJ:([A-Z]+)(?:\|(.*))?/);
+  if (m && T.PT['e_'+m[1]]) return t('e_'+m[1], {x: m[2] || ''});
+  if (/network|NetworkError|Failed to fetch|timed out/i.test(String(e))) return t('e_NET');
+  try { console.log('TOJ error:', e); } catch(x){}
+  return t('e_OTHER');
+}
+function t(k, v){ var s = (T[LANG][k] != null ? T[LANG][k] : (T.PT[k] != null ? T.PT[k] : k)); for (var x in (v||{})) s = s.split('{'+x+'}').join(v[x]); return s; }
+function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+function $(id){ return document.getElementById(id); }
+function each(sel, fn, root){ Array.prototype.forEach.call((root||document).querySelectorAll(sel), fn); }
+function dm(iso){ if(!iso) return ''; var p = iso.split('-'); return p[2]+'/'+p[1]; }
+function dmy(iso){ if(!iso) return ''; var p = iso.split('-'); return p[2]+'/'+p[1]+'/'+p[0]; }
+function isoShift(iso, days){ var p = iso.split('-').map(Number); return new Date(Date.UTC(p[0], p[1]-1, p[2] + days)).toISOString().slice(0,10); }
+function buzz(){ try { if (navigator.vibrate) navigator.vibrate(8); } catch(e){} }
+function toast(msg){ var el=$('toast'); el.textContent=msg; el.classList.add('on'); clearTimeout(toast.t); toast.t=setTimeout(function(){ el.classList.remove('on'); }, 1700); }
+var AV = ['#f3dcd9','#dbe7f6','#e2efdf','#f4ead2','#e6e0f2','#dcefee','#f1dfe9'];
+function ini(name){ var w = String(name||'').trim().split(/\s+/); return ((w[0]||'')[0]||'') + (w.length > 1 ? (w[w.length-1][0]||'') : ''); }
+function avc(id){ var h = 0; for (var i=0;i<id.length;i++) h = (h*31 + id.charCodeAt(i)) >>> 0; return AV[h % AV.length]; }
+var ICON_SEARCH = '<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M20 20l-4.6-4.6"/></svg>';
+var ICON_NOTE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/></svg>';
+
+/* ---- ricerca: senza accenti, parole in qualsiasi ordine, pezzi di ID, iniziali ---- */
+function norm(s){ return String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,' ').trim(); }
+function scorePerson(p, q){
+  var words = p._w, idDigits = p.id.replace(/\D/g,'').replace(/^0+/,''), toks = q.split(' '), score = 0;
+  for (var i=0;i<toks.length;i++){
+    var tk = toks[i]; if (!tk) continue;
+    if (/^\d+$/.test(tk)) { if (idDigits.indexOf(tk.replace(/^0+/,'')) >= 0) { score += 4; continue; } return 0; }
+    var w = words.findIndex(function(x){ return x.indexOf(tk) === 0; });
+    if (w === 0) { score += 5; continue; }
+    if (w > 0) { score += 3; continue; }
+    if (p._n.indexOf(tk) >= 0 && tk.length >= 3) { score += 1; continue; }
+    if (toks.length === 1 && tk.length >= 2 && p._i.indexOf(tk) === 0) { score += 2; continue; }
+    return 0;
+  }
+  return score;
+}
+function hl(text, q){
+  var src = String(text || '');
+  if (!q) return esc(src);
+  var low = src.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+  if (low.length !== src.length) return esc(src);
+  var marks = []; q.split(' ').filter(function(x){ return x && !/^\d+$/.test(x); }).forEach(function(tk){
+    var re = new RegExp('(^|[^a-z0-9])(' + tk.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + ')', 'g'), m;
+    while ((m = re.exec(low))) { var st = m.index + m[1].length; for (var k = st; k < st + tk.length; k++) marks[k] = 1; }
+  });
+  var out = ''; for (var i=0;i<src.length;i++){ if (marks[i] && !marks[i-1]) out += '<mark>'; out += esc(src[i]); if (marks[i] && !marks[i+1]) out += '</mark>'; }
+  return out;
+}
+
+/* ============================================================
+   STATO
+   ============================================================ */
+var DATA = null, HIST = {}, HIST_OK = {}, VIEW = 'home', SENDING = false, LIMIT = 40, DRAFT_FOUND = false;
+var S = { assessor:'', area:'', date:'', modeManual:'', q:'', sel:[], session:[], cur:'', r:{}, n:{}, gn:{}, openNote:{}, macro:'', sq:'', auto:true };
+var KEY = { draft:'chdcp_toj_v2_draft', out:'chdcp_toj_v2_outbox', prefs:'chdcp_toj_v2_prefs', auth:'chdcp_toj_v2_auth', boot:'chdcp_toj_v2_boot', area:'chdcp_toj_v2_area', hist:'chdcp_toj_v2_hist' };
+var AUTH = null, LOGIN = null;
+var store = {
+  get:function(k,d){ try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch(e){ return d; } },
+  set:function(k,v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} },
+  del:function(k){ try { localStorage.removeItem(k); } catch(e){} }
+};
+function save(){
+  store.set(KEY.prefs, { lang:LANG, assessor:S.assessor, area:S.area, auto:S.auto });
+  if (S.session.length) store.set(KEY.draft, { area:S.area, date:S.date, modeManual:S.modeManual, session:S.session, cur:S.cur, r:S.r, n:S.n, gn:S.gn, macro:S.macro, bs:!!S.bs });
+}
+/* v35: timeout (google.script.run non ne ha): la pagina non resta mai appesa */
+var TMO = { tojAppBootstrap:40000, tojAppSubmit:50000, tojAppPersonExtra:45000, tojAppAreaStatus:40000, tojAppSetPin:30000 };
+function call(fn, args, ms){
+  return new Promise(function(res, rej){
+    var done = false, tm = setTimeout(function(){ if (!done) { done = true; rej('TOJ:TIMEOUT'); } }, ms || TMO[fn] || 25000);
+    var r = google.script.run
+      .withSuccessHandler(function(v){ if (done) return; done = true; clearTimeout(tm); res(v); })
+      .withFailureHandler(function(e){ if (done) return; done = true; clearTimeout(tm); rej(e && e.message ? e.message : String(e)); });
+    r[fn].apply(r, args || []);
+  });
+}
+
+/* ============================================================
+   DATI DERIVATI
+   ============================================================ */
+function plan(){
+  if (!DATA || !S.area || !S.date) return null;
+  var best = null;
+  DATA.plans.forEach(function(p){ if (p.area === S.area && S.date >= p.start && S.date <= isoShift(p.end, 14) && (!best || p.start > best.start)) best = p; });
+  return best;
+}
+function mode(){ return S.modeManual || (plan() ? 'WEEK' : 'SPOT'); }
+function personById(id){ return DATA._pid[id]; }
+function lastOf(pid){ return ((DATA.last||{})[S.area]||{})[pid] || ''; }
+function statusOf(pid){
+  var last = lastOf(pid), p = plan();
+  if (p) return last >= p.start ? { k:'done', txt:t('t_done',{d:dm(last)}) } : { k:'due', txt:t('t_due') };
+  return last ? { k:'last', txt:t('t_last',{d:dm(last)}) } : { k:'never', txt:t('t_never') };
+}
+function skillsOfArea(){ return DATA._skills[S.area] || []; }
+function planCodes(){ var pl = plan(); if (!pl) return []; var ok = {}; skillsOfArea().forEach(function(s){ ok[s.code]=1; }); return pl.codes.filter(function(c){ return ok[c]; }); }
+function counts(pid){ var r=0,n=0,m=S.r[pid]||{}; for (var c in m){ if (m[c]==='NA') n++; else if (m[c]) r++; } return {r:r,n:n,t:r+n}; }
+
+/* ============================================================
+   AVVIO
+   ============================================================ */
+function start(){
+  /* v36: sessione di Learning & Assessment (arrivo dall'Agenda, niente PIN) */
+  var ls = (typeof laSess === 'function') ? laSess() : null;
+  if (ls && ls.sess) { var cur = store.get(KEY.auth, null); if (!cur || cur.sess !== ls.sess) { store.set(KEY.auth, { sess: ls.sess, name: ls.name }); store.del(KEY.boot); } }
+  var prefs = store.get(KEY.prefs, {});
+  if (prefs.lang) LANG = prefs.lang;
+  if (prefs.auto === false) S.auto = false;
+  AUTH = store.get(KEY.auth, null);
+  setLang(LANG, true);
+  /* v35: dati dell'ultimo accesso riuscito -> app subito utilizzabile */
+  var c = store.get(KEY.boot, null);
+  if (c && c.d && c.d.user && ((AUTH && c.n === AUTH.name) || (!AUTH && c.g))) {
+    c.d.today = localIso(); SYNC.t = c.t || 0; SYNC.off = false;
+    init(c.d, true);
+    refreshBoot(false);
+    return;
+  }
+  $('app').innerHTML = '<div class="loading">'+t('loading')+'</div>';
+  call('tojAppBootstrap',[AUTH]).then(function(d){
+    if (d.needLogin) { LOGIN = d; DATA = null; store.del(KEY.boot); if (AUTH) { store.del(KEY.auth); AUTH = null; } return renderLogin(); }
+    keepBoot(d); init(d);
+  }).catch(function(e){
+    $('app').innerHTML = '<div class="banner err"><span>'+esc(errMsg(e))+'</span><button class="link" id="again0" type="button">'+t('retry2')+'</button></div>';
+    $('again0').onclick = start;
+  });
+}
+/* ---- v35: sincronizzazione ---- */
+var SYNC = { t:0, off:false, busy:false };
+function localIso(){ var d = new Date(); return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2); }
+function stamp(ts){
+  if (!ts) return '—';
+  var d = new Date(ts), hm = ('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2);
+  return (new Date().toDateString() === d.toDateString()) ? hm : ('0'+d.getDate()).slice(-2)+'/'+('0'+(d.getMonth()+1)).slice(-2)+' '+hm;
+}
+function who(){ return AUTH ? AUTH.name : (DATA && DATA.user ? (DATA.user.name || DATA.user.email || '') : ''); }
+function keepBoot(d){ SYNC.t = Date.now(); SYNC.off = false; store.set(KEY.boot, { t:SYNC.t, n:AUTH ? AUTH.name : '', g:!AUTH, d:d }); }
+function renderSync(){
+  var el = $('sync'); if (!el) return;
+  if (!DATA || LOGIN) { el.className = 'sync'; el.innerHTML = ''; return; }
+  el.className = 'sync' + (SYNC.off && !SYNC.busy ? ' off' : '');
+  el.innerHTML = SYNC.busy ? t('sy_upd') : SYNC.off
+    ? esc(t('sy_off',{d:stamp(SYNC.t)}))+'<button class="link" id="syncRetry" type="button">'+t('retry2')+'</button>'
+    : esc(t('sy_ok',{h:stamp(SYNC.t)}));
+  if ($('syncRetry')) $('syncRetry').onclick = function(){ refreshBoot(true); };
+}
+function refreshBoot(manual){
+  if (SYNC.busy) return;
+  SYNC.busy = true; renderSync();
+  call('tojAppBootstrap',[AUTH]).then(function(d){
+    SYNC.busy = false;
+    if (d.needLogin) { store.del(KEY.auth); store.del(KEY.boot); AUTH = null; DATA = null; LOGIN = d; renderSync(); return renderLogin(); }
+    keepBoot(d);
+    prep(d);
+    /* durante una valutazione non si tolgono persone in uso */
+    if (VIEW === 'assess' && S.session.some(function(id){ return !d._pid[id]; })) { renderSync(); return; }
+    DATA = d;
+    if (d.areas.indexOf(S.area) < 0) S.area = d.areas[0] || '';
+    renderSync();
+    if (VIEW !== 'assess') go(VIEW, true);
+    if (AUTH && d.user && d.user.mustChange) askNewPin(true);
+    flushOutbox();
+  }).catch(function(e){ SYNC.busy = false; SYNC.off = true; renderSync(); if (manual) toast(errMsg(e)); });
+}
+function prep(d){
+  d._pid = {}; d._skills = {};
+  d.people.forEach(function(p){ d._pid[p.id] = p; p._n = norm(p.name); p._w = p._n.split(' '); p._i = p._w.map(function(w){ return w[0]; }).join(''); });
+  d.skills = d.skills.filter(function(s){ return s.code; });
+  d.skills.forEach(function(s){
+    var mg = s.mg || {};
+    s.mo = mg.o == null ? 999 : mg.o;
+    s.ml = mg.m || (s.domain ? [s.domain, s.domain, s.domain] : null);
+    s.mk = s.ml ? s.ml[0] : '—';
+    s.sl = mg.s || (!mg.m && s.group && s.group !== s.domain ? [s.group, s.group, s.group] : null);
+    (d._skills[s.area] = d._skills[s.area] || []).push(s);
+  });
+}
+function init(d, cached){
+  var prefs = store.get(KEY.prefs, {});
+  LOGIN = null;
+  prep(d);
+  DATA = d;
+  S.date = d.today;
+  S.assessor = d.user.name;
+  S.area = d.areas.length === 1 ? d.areas[0] : (prefs.area && d.areas.indexOf(prefs.area) >= 0 ? prefs.area : (d.areas[0] || ''));
+  var dr = store.get(KEY.draft, null);
+  if (dr && dr.session && dr.session.length && d.areas.indexOf(dr.area) >= 0) {
+    S.area = dr.area; S.date = dr.date; S.modeManual = dr.modeManual || '';
+    S.session = dr.session.filter(personById); S.cur = S.session.indexOf(dr.cur) >= 0 ? dr.cur : S.session[0];
+    S.r = dr.r || {}; S.n = dr.n || {}; S.gn = dr.gn || {}; S.macro = dr.macro || ''; S.bs = !!dr.bs;
+    if (S.session.length) { DRAFT_FOUND = true; S.session.forEach(loadHist); try { history.pushState({v:'assess'}, ''); } catch(e){} }
+  }
+  /* v36: arrivo da un'attività dell'Agenda: area, data e attività già scelte */
+  var PR = (window.LA && LA.p) || {};
+  if (PR.mode === 'toj' && !DRAFT_FOUND) {
+    if (PR.area && d.areas.indexOf(PR.area) >= 0) S.area = PR.area;
+    if (PR.date && PR.date <= d.today) S.date = PR.date;
+    S.modeManual = '';
+    S.act = PR.activityId ? { id: PR.activityId, t: PR.title || '', area: S.area, date: S.date } : null;
+    LA.p = {};
+  }
+  go(DRAFT_FOUND ? 'assess' : 'home');
+  if (!cached && AUTH && d.user && d.user.mustChange) setTimeout(function(){ askNewPin(true); }, 300);
+  renderSync();
+  flushOutbox();
+}
+
+/* ---- accesso con nome + PIN (app pubblicata senza account Google) ---- */
+function renderLogin(){
+  if ($('sync')) $('sync').innerHTML = '';
+  header('CHDCP · TOJ', '', false);
+  $('bar').classList.add('hidden');
+  /* v30: nomi raggruppati per area, ADMIN per primo */
+  var groups = {}, row = function(n){ return '<div class="prow"><button class="chk" type="button" tabindex="-1" style="--av:'+avc(n)+'">'+esc(ini(n))+'</button><button class="main" type="button" data-who="'+esc(n)+'"><b>'+esc(n)+'</b></button></div>'; };
+  (LOGIN.pick||[]).forEach(function(x){ var o = typeof x === 'string' ? { n:x, g:['—'] } : x; (o.g && o.g.length ? o.g : ['—']).forEach(function(g){ (groups[g] = groups[g] || []).push(o.n); }); });
+  var keys = Object.keys(groups).sort(function(a, b){ return (a === 'ADMIN' ? -1 : b === 'ADMIN' ? 1 : a.localeCompare(b)); });
+  $('app').innerHTML = '<div class="sec" style="margin-top:6px"><h2 style="font-size:1rem;text-transform:none;letter-spacing:0;color:var(--ink)">'+t('login_t')+'</h2></div>'+
+    keys.map(function(k){ return sec(k, groups[k].length) + '<div class="list">'+groups[k].sort(function(a, b){ return a.localeCompare(b); }).map(row).join('')+'</div>'; }).join('');
+  each('[data-who]', function(b){ b.onclick = function(){ askPin(b.dataset.who); }; });
+}
+function askPin(name){
+  showSheet('<div class="grab"></div><h3>'+esc(name)+'</h3><div style="color:var(--muted);font-size:.9rem">'+t('pin_t')+'</div>'+
+    '<input class="pin" id="pin" type="password" inputmode="numeric" autocomplete="off" maxlength="8">'+
+    '<div class="err" id="pinErr"></div><div class="actions"><button class="btn ghost" type="button" id="pinBack">'+t('back')+'</button><button class="btn" type="button" id="pinGo">'+t('pin_go')+'</button></div>');
+  var go2 = function(){
+    var pin = $('pin').value.trim(); if (!pin) return;
+    var b = $('pinGo'); b.disabled = true; b.innerHTML = '<span class="spinner"></span>';
+    var auth = { name:name, pin:pin };
+    call('tojAppBootstrap',[auth]).then(function(d){
+      if (d.needLogin) { b.disabled = false; b.textContent = t('pin_go'); $('pinErr').textContent = t('pin_err'); $('pin').value=''; $('pin').focus(); return; }
+      AUTH = auth; store.set(KEY.auth, AUTH); keepBoot(d); hideSheet(); init(d);
+    }).catch(function(e){ b.disabled = false; b.textContent = t('pin_go'); $('pinErr').textContent = errMsg(e); });
+  };
+  $('pinGo').onclick = go2;
+  $('pin').onkeydown = function(e){ if (e.key === 'Enter') go2(); };
+  $('pinBack').onclick = hideSheet;
+  setTimeout(function(){ $('pin').focus(); }, 100);
+}
+/* v29: il trainer sceglie il proprio PIN (obbligatorio al primo accesso con il PIN dato dall'admin) */
+var PINLOCK = false;
+function askNewPin(forced){
+  PINLOCK = !!forced;
+  showSheet('<div class="grab"></div><h3>'+t('np_t')+'</h3><div style="color:var(--muted);font-size:.9rem">'+t('np_d')+'</div>'+
+    '<input class="pin" id="np1" type="password" inputmode="numeric" autocomplete="new-password" maxlength="8" placeholder="'+t('np_1')+'" style="letter-spacing:.3em;font-size:1.3rem">'+
+    '<input class="pin" id="np2" type="password" inputmode="numeric" autocomplete="new-password" maxlength="8" placeholder="'+t('np_2')+'" style="letter-spacing:.3em;font-size:1.3rem">'+
+    '<div class="err" id="npErr"></div><div class="actions">'+(forced ? '' : '<button class="btn ghost" type="button" id="npBack">'+t('back')+'</button>')+'<button class="btn" type="button" id="npGo">'+t('np_go')+'</button></div>');
+  var go2 = function(){
+    var a = $('np1').value.trim(), b = $('np2').value.trim(), e = $('npErr');
+    if (!/^\d{4,8}$/.test(a)) { e.textContent = t('np_e1'); return; }
+    if (a !== b) { e.textContent = t('np_e2'); return; }
+    if (AUTH && a === String(AUTH.pin)) { e.textContent = t('np_e3'); return; }
+    var bt = $('npGo'); bt.disabled = true; bt.innerHTML = '<span class="spinner"></span>';
+    call('tojAppSetPin',[AUTH, a]).then(function(){
+      AUTH.pin = a; store.set(KEY.auth, AUTH); if (DATA && DATA.user) DATA.user.mustChange = false;
+      PINLOCK = false; hideSheet(); toast(t('np_ok'));
+    }).catch(function(err){ bt.disabled = false; bt.textContent = t('np_go'); e.textContent = errMsg(err); });
+  };
+  $('npGo').onclick = go2;
+  $('np2').onkeydown = function(ev){ if (ev.key === 'Enter') go2(); };
+  if ($('npBack')) $('npBack').onclick = function(){ PINLOCK = false; hideSheet(); };
+  setTimeout(function(){ $('np1').focus(); }, 100);
+}
+function logout(){ if (typeof laSetSess === 'function') laSetSess(null); store.del(KEY.auth); store.del(KEY.boot); store.del(KEY.area); store.del(KEY.hist); AUTH = null; DATA = null; AREA = {}; HIST = {}; HIST_OK = {}; EXTRA = {}; SYNC.t = 0; S.session = []; store.del(KEY.draft); start(); }
+
+function setLang(l, silent){
+  LANG = T[l] ? l : 'PT'; document.documentElement.lang = LANG.toLowerCase();
+  each('.lang button', function(b){ b.setAttribute('aria-pressed', String(b.dataset.lang === LANG)); });
+  if (!silent) { save(); if (LOGIN) renderLogin(); else go(VIEW, true); }
+}
+function histAll(){ var x = store.get(KEY.hist, null); return (x && x.n === who()) ? (x.p || {}) : {}; }
+function histSave(pid, h){ var x = store.get(KEY.hist, null); if (!x || x.n !== who()) x = { n:who(), p:{} }; x.p[pid] = h; store.set(KEY.hist, x); }
+function loadHist(pid){
+  if (HIST[pid]) return;
+  var st = histAll()[pid];
+  if (st) { HIST[pid] = st; HIST_OK[pid] = true; } else HIST[pid] = {};
+  call('tojAppHistory',[pid, AUTH]).then(function(h){ HIST[pid] = h || {}; HIST_OK[pid] = true; histSave(pid, HIST[pid]); if (VIEW === 'assess' && S.cur === pid) { var y = scrollY; renderSkills(); scrollTo(0, y); } }).catch(function(){ HIST_OK[pid] = true; });
+}
+
+/* ============================================================
+   NAVIGAZIONE
+   ============================================================ */
+function go(view, keep){
+  VIEW = view;
+  if (!DATA) return;
+  if (view === 'home') renderHome(); else if (view === 'card') renderCard(); else if (view === 'over') renderOver(); else renderAssess();
+  if (!keep) window.scrollTo(0,0);
+  save();
+}
+window.addEventListener('popstate', function(){ if (VIEW === 'card' || VIEW === 'over') { navBack(); return; } if (VIEW !== 'assess') return; hideSheet(); if (MACRO_PUSHED) { MACRO_PUSHED = false; toTiles(); return; } leaveAssess(); });
+$('backBtn').onclick = function(){ if (VIEW === 'card' || VIEW === 'over') { try { if (history.state && (history.state.v === 'card' || history.state.v === 'over')) { history.back(); return; } } catch(e){} navBack(); return; } if (VIEW === 'assess') { try { if (MACRO_PUSHED) { MACRO_PUSHED = false; history.go(-2); return; } if (history.state && history.state.v === 'assess') { history.back(); return; } } catch(e){} leaveAssess(); } };
+function leaveAssess(){ if (S.session.some(function(id){ return counts(id).t; })) toast(t('saved')); go('home'); }
+function header(title, sub, back){
+  $('ttl').innerHTML = '<b>'+esc(title)+'</b>'+(sub?'<span>'+esc(sub)+'</span>':'');
+  $('backBtn').classList.toggle('hidden', !back);
+}
+
+/* ============================================================
+   HOME
+   ============================================================ */
+function renderHome(){
+  header(t('hello',{n:(S.assessor||'').split(' ')[0] || 'CHDCP'}), 'CHDCP · TOJ', false);
+  var out = store.get(KEY.out, []), p = plan(), m = mode();
+  var yest = isoShift(DATA.today, -1), other = S.date !== DATA.today && S.date !== yest;
+  var h = '<p style="margin:0 2px 8px"><button class="link" type="button" data-lanav="home">☰ Learning & Assessment</button></p>';
+  if (S.act && S.act.area === S.area && S.act.date === S.date) h += '<div class="banner ok"><span>📅 '+esc(S.act.t || S.act.id)+' · '+esc(S.act.id)+'</span><button class="link" id="actX" type="button">✕</button></div>';
+  if (out.length) h += '<div class="banner warn"><span>'+t('outbox',{n:out.length})+'</span><button class="link" id="retry" type="button">'+t('retry')+'</button></div>';
+  if (S.session.length && S.session.some(function(id){ return counts(id).t; })) h += '<div class="banner ok"><span>'+t('resume',{p:S.session.map(function(id){ return esc(personById(id).name.split(' ')[0]); }).join(', ')})+'</span><button class="link" id="resume" type="button">'+t('resume_go')+'</button></div>';
+  h += '<div class="card"><div class="ctx">';
+  h += DATA.areas.length > 1
+    ? '<label class="pill sel"><b>'+esc(S.area)+'</b><select id="area" aria-label="'+t('area')+'">'+DATA.areas.map(function(a){ return '<option'+(a===S.area?' selected':'')+'>'+esc(a)+'</option>'; }).join('')+'</select></label>'
+    : '<span class="pill"><b>'+esc(S.area)+'</b></span>';
+  h += '<div class="days" role="group">'+
+       '<button type="button" data-day="'+DATA.today+'" aria-pressed="'+(S.date===DATA.today)+'">'+t('today')+'</button>'+
+       '<button type="button" data-day="'+yest+'" aria-pressed="'+(S.date===yest)+'">'+t('yesterday')+'</button>'+
+       '<label aria-pressed="'+other+'">'+(other ? dm(S.date) : '📅')+'<input type="date" id="date" max="'+DATA.today+'" value="'+S.date+'" aria-label="'+t('other_day')+'"></label></div>';
+  h += '</div><div class="mode"><div><b>'+(m==='WEEK'?t('mode_week'):t('mode_spot'))+'</b>'+(m==='WEEK'&&p?t('mode_week_d',{s:dm(p.start),e:dm(p.end),n:planCodes().length}):t('mode_spot_d'))+'</div>'+
+       '<button class="link" type="button" id="modeBtn">'+t('mode_change')+'</button></div></div>';
+  h += '<button class="ovbtn" type="button" id="overBtn">'+ICON_CARD+'<div>'+t('over_btn',{a:S.area})+'<span>'+t('over_hint')+'</span></div></button><div id="sugg"></div>';
+  var rec = (DATA.mine||[]).map(personById).filter(Boolean).slice(0, 10);
+  if (rec.length) h += sec(t('recent_t'), '') + '<div class="recent">'+rec.map(function(x){ var st = statusOf(x.id); return '<button class="rc" type="button" data-rc="'+esc(x.id)+'"><i class="'+(st.k==='done'?'ok':'')+'" style="--av:'+avc(x.id)+'">'+esc(ini(x.name))+'</i><span>'+esc(x.name.split(' ')[0])+'</span></button>'; }).join('')+'</div>';
+  h += '<div class="search">'+ICON_SEARCH+'<input type="search" id="q" value="'+esc(S.q)+'" placeholder="'+t('search')+'" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="search"><button class="clear'+(S.q?'':' hidden')+'" id="qx" type="button" aria-label="×">✕</button></div>';
+  h += '<div id="plists"></div><p class="hint">'+t('multi_hint')+'</p>';
+  if (AUTH) h += '<p class="foot">'+t('not_you',{n:esc(S.assessor)})+' <button class="link" type="button" id="logout">'+t('logout')+'</button>'+(AUTH.sess ? '' : ' · <button class="link" type="button" id="chgPin">'+t('np_btn')+'</button>')+'</p>';
+  $('app').innerHTML = h;
+  if ($('actX')) $('actX').onclick = function(){ S.act = null; renderHome(); };
+  each('[data-rc]', function(b){ b.onclick = function(){ startSession([b.dataset.rc]); }; });
+
+  if ($('area')) $('area').onchange = function(e){ S.area = e.target.value; S.sel = []; S.modeManual = ''; save(); renderHome(); };
+  each('[data-day]', function(b){ b.onclick = function(){ S.date = b.dataset.day; S.modeManual=''; save(); renderHome(); }; });
+  $('date').onchange = function(e){ var v = e.target.value; if (!v) return; if (v > DATA.today){ toast(t('future')); e.target.value = S.date; return; } S.date = v; S.modeManual=''; save(); renderHome(); };
+  $('modeBtn').onclick = function(){ S.modeManual = mode() === 'WEEK' ? 'SPOT' : 'WEEK'; save(); renderHome(); };
+  $('q').oninput = function(e){ S.q = e.target.value; LIMIT = 40; $('qx').classList.toggle('hidden', !S.q); renderPeople(); };
+  $('qx').onclick = function(){ S.q = ''; $('q').value = ''; $('qx').classList.add('hidden'); renderPeople(); $('q').focus(); };
+  if ($('retry')) $('retry').onclick = function(){ flushOutbox(true); };
+  if ($('logout')) $('logout').onclick = logout;
+  if ($('chgPin')) $('chgPin').onclick = function(){ askNewPin(false); };
+  $('overBtn').onclick = openOver;
+  fillSugg();
+  if ($('resume')) $('resume').onclick = function(){ try { history.pushState({v:'assess'}, ''); } catch(e){} go('assess'); };
+  renderPeople(); homeBar();
+}
+
+function prow(p, q){
+  var st = statusOf(p.id), on = S.sel.indexOf(p.id) >= 0, last = lastOf(p.id);
+  var sub = [p.areas.length ? esc(p.areas.join('/')) : '', p.cohort ? t('cohort')+' '+esc(p.cohort) : ''].filter(Boolean).join(' · ') +
+    (st.k !== 'done' ? (p.areas.length || p.cohort ? ' · ' : '')+(last ? t('t_last',{d:dm(last)}) : t('t_never')) : '');
+  return '<div class="prow"><button class="chk" type="button" data-sel="'+esc(p.id)+'" data-ini="'+esc(ini(p.name))+'" aria-pressed="'+on+'" aria-label="'+esc(p.name)+'" style="--av:'+avc(p.id)+'">'+(on?'✓':esc(ini(p.name)))+'</button>'+
+    '<button class="main" type="button" data-open="'+esc(p.id)+'"><b>'+hl(p.name, q)+'</b><span>'+sub+'</span></button>'+
+    (st.k === 'done' ? '<span class="tag done">'+esc(st.txt)+'</span>' : '')+'<button class="ibtn" type="button" data-card="'+esc(p.id)+'" aria-label="'+t('card')+'">'+ICON_CARD+'<span>'+t('card')+'</span></button></div>';
+}
+function sec(title, n){ return '<div class="sec"><h2>'+esc(title)+'</h2><span>'+(n===''?'':n)+'</span></div>'; }
+
+function renderPeople(){
+  var box = $('plists'); if (!box) return;
+  var q = norm(S.q), inArea = function(p){ return p.areas.indexOf(S.area) >= 0; }, h = '';
+  if (q) {
+    var res = DATA.people.map(function(p){ return { p:p, s:scorePerson(p, q) }; }).filter(function(x){ return x.s > 0; })
+      .sort(function(a,b){ return b.s - a.s || a.p.name.localeCompare(b.p.name); });
+    var mineA = res.filter(function(x){ return inArea(x.p); }), others = res.filter(function(x){ return !inArea(x.p); });
+    h += sec(t('results'), mineA.length);
+    h += '<div class="list">' + (mineA.length ? mineA.slice(0, LIMIT).map(function(x){ return prow(x.p, q); }).join('') : '<div class="empty">'+t('no_results')+'</div>') + '</div>';
+    if (others.length) h += sec(t('other_areas'), others.length) + '<div class="list">'+others.slice(0, 12).map(function(x){ return prow(x.p, q); }).join('')+'</div>';
+  } else {
+    var area = DATA.people.filter(inArea), p = plan();
+    var byOld = function(a,b){ return (lastOf(a.id)||'0').localeCompare(lastOf(b.id)||'0') || a.name.localeCompare(b.name); };
+    var byName = function(a,b){ return a.name.localeCompare(b.name); };
+    var selP = S.sel.map(personById).filter(Boolean);
+    if (selP.length) h += sec(t('sel_title'), selP.length) + '<div class="list">'+selP.map(function(x){ return prow(x); }).join('')+'</div>';
+    var rest = area.filter(function(x){ return S.sel.indexOf(x.id) < 0; });
+    if (p) {
+      var due = rest.filter(function(x){ return statusOf(x.id).k === 'due'; }).sort(byName);
+      var done = rest.filter(function(x){ return statusOf(x.id).k === 'done'; }).sort(byName);
+      h += sec(t('due'), due.length) + '<div class="list">'+(due.length ? due.slice(0, LIMIT).map(function(x){ return prow(x); }).join('') : '<div class="empty">✓</div>')+
+        (due.length > LIMIT ? '<button class="more" type="button" id="more">'+t('show_more',{n:Math.min(40, due.length-LIMIT)})+'</button>' : '')+'</div>';
+      if (done.length) h += sec(t('done_plan'), done.length) + '<div class="list">'+done.map(function(x){ return prow(x); }).join('')+'</div>';
+    } else {
+      var old = rest.slice().sort(byOld).slice(0, 6);
+      if (old.length) h += sec(t('due_np'), '') + '<div class="list">'+old.map(function(x){ return prow(x); }).join('')+'</div>';
+      var others = rest.filter(function(x){ return old.indexOf(x) < 0; }).sort(byName);
+      if (others.length) h += sec(t('all',{a:S.area}), area.length) + '<div class="list">'+others.slice(0, LIMIT).map(function(x){ return prow(x); }).join('')+
+        (others.length > LIMIT ? '<button class="more" type="button" id="more">'+t('show_more',{n:Math.min(40, others.length-LIMIT)})+'</button>' : '')+'</div>';
+    }
+  }
+  box.innerHTML = h;
+  each('[data-sel]', function(b){ b.onclick = function(){ buzz(); toggleSel(b.dataset.sel); var on = S.sel.indexOf(b.dataset.sel) >= 0; each('[data-sel="'+b.dataset.sel+'"]', function(x){ x.setAttribute('aria-pressed', String(on)); x.textContent = on ? '✓' : x.dataset.ini; }); homeBar(); }; }, box);
+  each('[data-open]', function(b){ b.onclick = function(){ var id = b.dataset.open; if (S.sel.length) { toggleSel(id); renderPeople(); homeBar(); return; } startSession([id]); }; }, box);
+  each('[data-card]', function(b){ b.onclick = function(){ openCard(b.dataset.card); }; }, box);
+  if ($('more')) $('more').onclick = function(){ LIMIT += 40; renderPeople(); };
+}
+function toggleSel(id){ var i = S.sel.indexOf(id); if (i >= 0) S.sel.splice(i,1); else S.sel.push(id); }
+function homeBar(){
+  var bar = $('bar');
+  if (!S.sel.length) { bar.classList.add('hidden'); return; }
+  bar.classList.remove('hidden');
+  $('barIn').innerHTML = '<div class="info">'+t('selected',{n:S.sel.length})+'<br><button class="link" type="button" id="selClear" style="padding:2px 0">'+t('clear')+'</button></div>'+
+    '<button class="btn" type="button" id="selGo">'+t('start_n',{n:S.sel.length})+'</button>';
+  $('selClear').onclick = function(){ S.sel = []; renderPeople(); homeBar(); };
+  $('selGo').onclick = function(){ startSession(S.sel.slice()); };
+}
+/* v25: skill già valutate (1-5) per lo stesso trainee nella stessa data: Hub, invii, coda sul telefono */
+function dupSkills(id){
+  var m = S.r[id] || {}, h = HIST[id] || {}, out = store.get(KEY.out, []), res = [];
+  skillsOfArea().forEach(function(s){
+    var v = m[s.code]; if (!v || v === 'NA') return;
+    var seen = h[s.code] && (h[s.code].ds || []).indexOf(S.date) >= 0;
+    if (!seen) seen = out.some(function(o){ return o.personId === id && o.date === S.date && (o.ratings||[]).some(function(r){ return r.code === s.code && r.score !== ''; }); });
+    if (seen) res.push(s);
+  });
+  return res;
+}
+/* v27: mappa dei voti per la vista corrente (per skill = skill valutate da tutti i trainee della sessione) */
+function multiOn(){ return !!S.bs && S.session.length > 1; }
+function curMap(){
+  if (!multiOn()) return S.r[S.cur] || {};
+  var o = {};
+  skillsOfArea().forEach(function(s){ if (S.session.every(function(id){ return (S.r[id]||{})[s.code]; })) o[s.code] = 1; });
+  return o;
+}
+function qnHtml(){ return '<div class="qn">'+(T[LANG].qn||T.PT.qn).map(function(x){ return '<button type="button" data-qn="'+esc(x)+'">'+esc(x)+'</button>'; }).join('')+'</div>'; }
+function addQn(ta, txt){ var b = ta.value.replace(/\s+$/,''); ta.value = (b ? b+'; ' : '') + txt; if (ta.oninput) ta.oninput(); }
+function startSession(ids){
+  NAV = []; S.bs = false; S.session = ids; S.cur = ids[0]; S.sel = []; S.sq = ''; S.searchOpen = false; DRAFT_FOUND = false; MACRO_PUSHED = false;
+  S.macro = planCodes().length ? PLANK : '';
+  ids.forEach(function(id){ S.r[id] = S.r[id] || {}; S.n[id] = S.n[id] || {}; loadHist(id); });
+  try { history.pushState({v:'assess'}, ''); } catch(e){}
+  go('assess');
+}
+
+/* ============================================================
+   VALUTAZIONE
+   ============================================================ */
+function renderAssess(){
+  var p = personById(S.cur), m = mode();
+  header(multiOn() ? t('grp_t',{n:S.session.length}) : p.name, S.area+' · '+dmy(S.date)+' · '+(m==='WEEK'?t('mode_week'):t('mode_spot')), true);
+  if (S.macro === PLANK && !planCodes().length) S.macro = '';
+  var ms = macrosOfArea();
+  if (S.macro && S.macro !== PLANK && !ms.some(function(g){ return g.key === S.macro; })) S.macro = '';
+  if (!S.macro && ms.length === 1 && !planCodes().length) S.macro = ms[0].key;
+  var h = '';
+  if (DRAFT_FOUND) h += '<div class="banner ok"><span>'+t('draft')+'</span><button class="link" id="discard" type="button">'+t('discard')+'</button></div>';
+  h += '<div class="tabs" id="tabs"></div><div id="skills"></div>';
+  $('app').innerHTML = h;
+  if ($('discard')) $('discard').onclick = function(){ resetSession(); };
+  renderTabs(); renderSkills(); assessBar();
+}
+
+/* ---- macro skill ---- */
+var PLANK = '__plan', MACRO_PUSHED = false;
+function LI(){ return LANG === 'EN' ? 0 : LANG === 'IT' ? 2 : 1; }
+function mLabel(s){ return s.ml ? s.ml[LI()] : s.mk; }
+function sDesc(s){ return (s.dl && s.dl[LI()]) || s.desc; }
+function sLabel(s){ return s.sl ? s.sl[LI()] : ''; }
+function planSet(){ var o = {}; planCodes().forEach(function(c){ o[c] = 1; }); return o; }
+function groupBy(list, keyFn, labFn){
+  var out = [], ix = {};
+  list.forEach(function(s){ var k = keyFn(s); if (ix[k] == null) { ix[k] = out.length; out.push({ key:k, name:labFn(s), items:[] }); } out[ix[k]].items.push(s); });
+  return out;
+}
+function byMacro(list){ var g = groupBy(list, function(s){ return s.mk; }, mLabel); g.forEach(function(x, i){ x.o = x.items[0].mo; x.i = i; }); return g.sort(function(a, b){ return a.o - b.o || a.i - b.i; }); }
+function macrosOfArea(){ return byMacro(skillsOfArea()); }
+function macroName(key){ if (key === PLANK) return t('t_plan'); var g = macrosOfArea().filter(function(x){ return x.key === key; })[0]; return g ? g.name : key; }
+function doneIn(items, m){ return items.filter(function(s){ return m[s.code]; }).length; }
+
+/* lista mostrata, nello stesso ordine del rendering (serve all'avanzamento automatico) */
+function viewGroups(){
+  var all = skillsOfArea(), q = norm(S.sq);
+  if (q) {
+    var hit = all.filter(function(s){ var hay = norm(s.code+' '+(s.dl ? s.dl.join(' ') : s.desc)+' '+sLabel(s)); return q.split(' ').every(function(tk){ return hay.indexOf(tk) >= 0; }); });
+    return byMacro(hit);
+  }
+  if (S.macro === PLANK) { var ps = planSet(); return byMacro(all.filter(function(s){ return ps[s.code]; })); }
+  if (S.macro) return groupBy(all.filter(function(s){ return s.mk === S.macro; }), function(s){ return s.sl ? s.sl[0] : ''; }, sLabel);
+  return [];
+}
+function visibleSkills(){ var out = []; viewGroups().forEach(function(g){ out = out.concat(g.items); }); return out; }
+
+function renderTabs(){
+  var all = skillsOfArea(), m = S.r[S.cur] || {}, h = '';
+  if (S.session.length > 1) h += '<div class="seg bsw"><button type="button" data-bs="0" aria-pressed="'+!S.bs+'">'+t('by_p')+'</button><button type="button" data-bs="1" aria-pressed="'+!!S.bs+'">'+t('by_s')+'</button></div>';
+  if (S.session.length > 1 && !S.bs) h += '<div class="people" role="tablist">'+S.session.map(function(id){
+    var pp = personById(id), cc = counts(id);
+    return '<button class="pchip" role="tab" type="button" data-p="'+esc(id)+'" aria-current="'+(id===S.cur)+'"><span>'+esc(pp.name.split(' ').slice(0,2).join(' '))+'</span><i>'+cc.t+'</i></button>';
+  }).join('')+'</div>';
+  var searching = S.searchOpen || !!S.sq, multi = macrosOfArea().length > 1 || planCodes().length;
+  h += '<div class="segrow">'+
+    (S.macro && multi ? '<div class="crumb"><button class="cback" type="button" id="toTiles">‹ '+t('groups')+'</button><b>'+esc(macroName(S.macro))+'</b></div>'
+                      : '<div class="crumb top0"><b>'+esc(S.macro ? macroName(S.macro) : t('choose_g'))+'</b></div>')+
+    (multiOn() ? '' : '<button class="sbtn" type="button" id="cardOpen" aria-label="'+t('card')+'">'+ICON_CARD+'</button>')+
+    '<button class="sbtn" type="button" id="sOpen" aria-pressed="'+searching+'" aria-label="'+t('s_search')+'">'+ICON_SEARCH.replace('class="ico"','class="ico" style="width:20px;height:20px"')+'</button></div>';
+  h += '<div class="prog"><div class="track"><i></i></div><span></span></div>';
+  h += '<div class="search ssearch'+(searching?'':' hidden')+'">'+ICON_SEARCH+'<input type="search" id="sq" value="'+esc(S.sq)+'" placeholder="'+t('s_search')+'" autocomplete="off" enterkeyhint="search"><button class="clear" id="sqx" type="button" aria-label="×">✕</button></div>';
+  $('tabs').innerHTML = h;
+  progress();
+  each('[data-p]', function(b){ b.onclick = function(){ S.cur = b.dataset.p; S.sq = ''; save(); renderAssess(); window.scrollTo(0,0); }; });
+  each('[data-bs]', function(b){ b.onclick = function(){ S.bs = b.dataset.bs === '1'; save(); renderAssess(); window.scrollTo(0,0); }; });
+  if ($('toTiles')) $('toTiles').onclick = function(){ if (MACRO_PUSHED) { history.back(); } else toTiles(); };
+  $('sq').oninput = function(e){ S.sq = e.target.value; renderSkills(); progress(); };
+  $('sqx').onclick = function(){ S.sq = ''; S.searchOpen = false; renderTabs(); renderSkills(); };
+  $('sOpen').onclick = function(){ if (S.searchOpen || S.sq) { S.sq = ''; S.searchOpen = false; renderTabs(); renderSkills(); } else { S.searchOpen = true; renderTabs(); $('sq').focus(); } };
+  if ($('cardOpen')) $('cardOpen').onclick = function(){ openCard(S.cur); };
+  var cur = document.querySelector('.pchip[aria-current=true]'); if (cur && cur.scrollIntoView) cur.scrollIntoView({ inline:'center', block:'nearest' });
+}
+function progress(){
+  var m = curMap(), base, dn, lab;
+  if (S.macro && !S.sq) { var v = visibleSkills(); base = v.length; dn = doneIn(v, m); lab = t('of_grp',{d:dn,n:base}); }
+  else if (planCodes().length) { var pc = planCodes(); base = pc.length; dn = pc.filter(function(c){ return m[c]; }).length; lab = t('of_plan',{d:dn,n:base}); }
+  else { base = skillsOfArea().length; dn = doneIn(skillsOfArea(), m); lab = t('of_all',{d:dn,n:base}); }
+  var bar = document.querySelector('.prog .track i'); if (bar) bar.style.width = (base ? Math.round(dn/base*100) : 0)+'%';
+  var sp = document.querySelector('.prog span'); if (sp) sp.textContent = lab;
+}
+function toTiles(){ S.macro = ''; S.sq = ''; S.searchOpen = false; save(); renderTabs(); renderSkills(); window.scrollTo(0,0); }
+function openMacro(key, push){
+  S.macro = key; S.sq = ''; S.searchOpen = false; save();
+  if (push && !MACRO_PUSHED) { try { history.pushState({v:'macro'}, ''); MACRO_PUSHED = true; } catch(e){} }
+  renderTabs(); renderSkills(); window.scrollTo(0,0);
+}
+/* prossimo macro-gruppo con skill ancora da valutare (dopo quello corrente, poi dall'inizio) */
+function nextMacro(){
+  var ms = macrosOfArea(), m = curMap(), i = -1;
+  ms.forEach(function(g, k){ if (g.key === S.macro) i = k; });
+  for (var k = 1; k <= ms.length; k++) { var g = ms[(i + k) % ms.length]; if (g.key !== S.macro && doneIn(g.items, m) < g.items.length) return g; }
+  return null;
+}
+
+function renderSkills(){
+  var box = $('skills'); if (!box) return;
+  var m = curMap(), notes = S.n[S.cur] || {}, hist = HIST[S.cur] || {}, ps = planSet(), h = '';
+  if (!skillsOfArea().length) { box.innerHTML = '<div class="card empty">'+t('no_skills')+'</div>'; return; }
+
+  /* riquadri */
+  if (!S.macro && !S.sq) {
+    var tile = function(key, name, items, isPlan, sub){
+      var d = doneIn(items, m), n = items.length, pn = isPlan ? 0 : items.filter(function(s){ return ps[s.code]; }).length;
+      return '<button class="tile'+(isPlan?' plan':'')+(d===n?' full':'')+'" type="button" data-m="'+esc(key)+'"><b>'+esc(name)+'</b>'+
+        (sub ? '<small>'+esc(sub)+'</small>' : '')+
+        '<span class="tp">'+(pn ? '<i class="badge plan">'+t('n_plan',{n:pn})+'</i>' : '')+'</span>'+
+        '<div class="track"><i style="width:'+(n ? Math.round(d/n*100) : 0)+'%"></i></div><small>'+d+' / '+n+'</small></button>';
+    };
+    h += '<div class="tiles">';
+    var pc = planCodes(), pl = plan();
+    if (pc.length) h += tile(PLANK, t('t_plan'), skillsOfArea().filter(function(s){ return ps[s.code]; }), true, t('t_plan_d',{n:pc.length,s:dm(pl.start),e:dm(pl.end)}));
+    macrosOfArea().forEach(function(g){ h += tile(g.key, g.name, g.items, false); });
+    h += '</div>';
+    h += '<div class="legend" aria-hidden="true">'+[1,2,3,4,5].map(function(i){ return '<div><i style="background:var(--l'+i+')"></i><b>'+i+'</b> '+t('ls'+i)+'</div>'; }).join('')+'</div>';
+    box.innerHTML = h;
+    each('[data-m]', function(b){ b.onclick = function(){ buzz(); openMacro(b.dataset.m, true); }; }, box);
+    return;
+  }
+
+  /* lista del gruppo (o risultati della ricerca) */
+  var groups = viewGroups(), list = visibleSkills();
+  if (S.sq) h += '<div class="sec"><h2>'+t('in_search')+'</h2><span>'+list.length+'</span></div>';
+  if (!list.length) h += '<div class="card empty">'+(S.sq ? '—' : t('all_done'))+'</div>';
+  groups.forEach(function(g){
+    var d = doneIn(g.items, m), named = !!g.name && (groups.length > 1 || S.sq || S.macro === PLANK);
+    h += '<section class="group" data-g="'+esc(g.key)+'">'+(named ? '<div class="ghead static"><b>'+esc(g.name)+'</b><span class="'+(d===g.items.length?'ok':'')+'">'+d+'/'+g.items.length+'</span></div>' : '')+'<div class="gbody">';
+    g.items.forEach(function(s){ h += multiOn() ? skillMultiHtml(s, ps[s.code]) : skillHtml(s, m[s.code], notes[s.code], hist[s.code], ps[s.code]); });
+    h += '</div></section>';
+  });
+  if (!S.sq) {
+    var pending = list.filter(function(s){ return !m[s.code]; }).length;
+    if (!pending && list.length) h += '<div class="gdone">'+t('grp_done')+'</div>';
+    if (pending) h += '<button class="btn ghost" type="button" id="markRest" style="width:100%;margin-bottom:10px;white-space:normal">'+t('mark_rest',{n:pending})+'</button>';
+    var sameN = 0; list.forEach(function(s){ (multiOn() ? S.session : [S.cur]).forEach(function(id){ if (!(S.r[id]||{})[s.code] && (HIST[id]||{})[s.code]) sameN++; }); });
+    if (sameN) h += '<button class="btn ghost" type="button" id="sameRest" style="width:100%;margin-bottom:10px;white-space:normal">'+t('same_rest',{n:sameN})+'</button>';
+    if (S.macro === PLANK) {
+      h += '<button class="btn nextg" type="button" id="nextG"><div>'+t('others_go',{a:S.area})+'<span>'+t('next_go')+'</span></div><b>→</b></button>';
+    } else if (macrosOfArea().length > 1) {
+      var nx = nextMacro();
+      h += nx ? '<button class="btn nextg" type="button" id="nextG" data-nx="'+esc(nx.key)+'"><div><span>'+t('next_g')+'</span>'+esc(nx.name)+'</div><b>→</b></button>'
+              : '<button class="btn nextg" type="button" id="nextG"><div>'+t('next_go')+'</div><b>→</b></button>';
+    }
+  }
+  h += '<label class="opts"><input type="checkbox" id="auto" '+(S.auto?'checked':'')+'> '+t('auto_adv')+'</label>';
+  h += '<div class="legend" aria-hidden="true">'+[1,2,3,4,5].map(function(i){ return '<div><i style="background:var(--l'+i+')"></i><b>'+i+'</b> '+t('ls'+i)+'</div>'; }).join('')+'</div>';
+  box.innerHTML = h;
+  bindSkills(box);
+}
+
+function skillHtml(s, v, note, last, inPlan){
+  var meta = '';
+  if (inPlan && S.macro !== PLANK) meta += '<span class="badge plan">'+t('plan')+'</span>';
+  if (S.sq && sLabel(s)) meta += '<span>'+esc(sLabel(s))+'</span>';
+  if (last) meta += '<span class="lastv">'+t('last')+' <i style="background:var(--l'+last.s+');color:'+(last.s===1||last.s===5?'#fff':'#1b2124')+'">'+last.s+'</i>'+esc(last.d.slice(0,5))+'</span>';
+  else if (HIST_OK[S.cur]) meta += '<span class="badge never">'+t('never')+'</span>';
+  var btns = [1,2,3,4,5].map(function(i){
+    return '<button type="button" role="radio" class="v'+i+(last && last.s===i?' was':'')+'" data-v="'+i+'" aria-checked="'+(v===i)+'" aria-pressed="'+(v===i)+'" aria-label="'+i+' – '+esc(t('lv'+i))+'">'+i+'</button>';
+  }).join('') + '<button type="button" role="radio" class="na" data-v="NA" aria-checked="'+(v==='NA')+'" aria-pressed="'+(v==='NA')+'">'+t('na')+'</button>';
+  return '<div class="skill" id="sk-'+esc(s.code)+'" data-code="'+esc(s.code)+'">'+
+    '<div class="row1"><div class="desc">'+hl(sDesc(s), norm(S.sq))+'</div><button class="nbtn'+(note?' has':'')+'" type="button" data-note="1" aria-label="'+t('note')+'">'+ICON_NOTE+'</button></div>'+
+    '<div class="meta">'+meta+'</div>'+
+    '<div class="rate" role="radiogroup" aria-label="'+esc(sDesc(s))+'">'+btns+'</div>'+
+    '<div class="picked">'+picked(v, last)+'</div>'+
+    (S.openNote[S.cur+'|'+s.code] || note ? '<textarea data-nt="1" placeholder="'+t('note_ph')+'">'+esc(note||'')+'</textarea>'+qnHtml() : '')+
+    '</div>';
+}
+function picked(v, last){
+  if (!v) return last ? '<button class="same" type="button" data-same="1">'+t('same',{v:last.s})+'</button>' : '';
+  if (v === 'NA') return '<b>'+t('na_l')+'</b>';
+  var s = '<b>'+v+' · '+t('lv'+v)+'</b>';
+  if (last) { var d = v - last.s; s += ' · '+t('vs_last',{v:last.s}) + (d>0?' <span class="up">▲ +'+d+'</span>':d<0?' <span class="down">▼ '+d+'</span>':' ='); }
+  return s;
+}
+
+function bindSkills(box){
+  each('.skill', function(row){
+    if (row.classList.contains('multi')) return;
+    var code = row.dataset.code;
+    each('[data-v]', function(b){ b.onclick = function(){ rate(row, code, b.dataset.v === 'NA' ? 'NA' : Number(b.dataset.v)); }; }, row);
+    row.querySelector('[data-note]').onclick = function(){
+      S.openNote[S.cur+'|'+code] = true;
+      var ta = row.querySelector('textarea');
+      if (!ta) { row.insertAdjacentHTML('beforeend', '<textarea data-nt="1" placeholder="'+t('note_ph')+'"></textarea>'+qnHtml()); ta = row.querySelector('textarea'); bindNote(row, code); }
+      ta.focus();
+    };
+    bindNote(row, code);
+    row.addEventListener('click', function(e){
+      var sb = e.target.closest('[data-same]'); if (sb) { var l = (HIST[S.cur]||{})[code]; if (l) rate(row, code, l.s); return; }
+      var qb = e.target.closest('[data-qn]'); if (qb) { var ta = row.querySelector('textarea'); if (ta) addQn(ta, qb.dataset.qn); }
+    });
+  }, box);
+  bindMulti(box);
+  if ($('sameRest')) $('sameRest').onclick = function(){
+    visibleSkills().forEach(function(s){ (multiOn() ? S.session : [S.cur]).forEach(function(id){ var m = S.r[id] = S.r[id] || {}, l = (HIST[id]||{})[s.code]; if (!m[s.code] && l) m[s.code] = l.s; }); });
+    buzz(); save(); renderTabs(); renderSkills(); assessBar();
+  };
+  if ($('markRest')) $('markRest').onclick = function(){
+    (multiOn() ? S.session : [S.cur]).forEach(function(id){ var m = S.r[id] = S.r[id] || {}; visibleSkills().forEach(function(s){ if (!m[s.code]) m[s.code] = 'NA'; }); });
+    save(); renderTabs(); renderSkills(); assessBar();
+  };
+  if ($('nextG')) $('nextG').onclick = function(){ var k = $('nextG').dataset.nx; if (k) openMacro(k, true); else if (MACRO_PUSHED) history.back(); else toTiles(); };
+  $('auto').onchange = function(e){ S.auto = e.target.checked; save(); };
+}
+function bindNote(row, code){
+  var ta = row.querySelector('textarea'); if (!ta) return;
+  ta.oninput = function(){ S.n[S.cur][code] = ta.value; row.querySelector('[data-note]').classList.toggle('has', !!ta.value); save(); };
+}
+
+function rate(row, code, v){
+  buzz();
+  var m = S.r[S.cur], first = !m[code];
+  if (m[code] === v) delete m[code]; else m[code] = v;
+  each('[data-v]', function(x){ var xv = x.dataset.v === 'NA' ? 'NA' : Number(x.dataset.v), on = m[code] === xv; x.setAttribute('aria-pressed', String(on)); x.setAttribute('aria-checked', String(on)); }, row);
+  row.querySelector('.picked').innerHTML = picked(m[code], (HIST[S.cur]||{})[code]);
+  save(); refreshCounts(row); assessBar();
+  if (S.auto && first && m[code]) advance(code);
+}
+/* v27: una skill, tutti i trainee della sessione */
+function rbtns(v, last){
+  return [1,2,3,4,5].map(function(i){ return '<button type="button" role="radio" class="v'+i+(last && last.s===i?' was':'')+'" data-v="'+i+'" aria-pressed="'+(v===i)+'" aria-checked="'+(v===i)+'" aria-label="'+i+' – '+esc(t('lv'+i))+'">'+i+'</button>'; }).join('')+
+    '<button type="button" role="radio" class="na" data-v="NA" aria-pressed="'+(v==='NA')+'" aria-checked="'+(v==='NA')+'">'+t('na')+'</button>';
+}
+function skillMultiHtml(s, inPlan){
+  var h = '<div class="skill multi" id="sk-'+esc(s.code)+'" data-code="'+esc(s.code)+'"><div class="row1"><div class="desc">'+hl(sDesc(s), norm(S.sq))+'</div></div>';
+  if (inPlan && S.macro !== PLANK) h += '<div class="meta"><span class="badge plan">'+t('plan')+'</span></div>';
+  S.session.forEach(function(id){
+    var p = personById(id), v = (S.r[id]||{})[s.code], last = (HIST[id]||{})[s.code];
+    h += '<div class="mrow" data-pid="'+esc(id)+'"><div class="mn"><b>'+esc(p.name.split(' ').slice(0,2).join(' '))+'</b><small>'+(last ? t('last')+' '+last.s+' · '+esc(last.d.slice(0,5)) : (HIST_OK[id] ? t('never') : ''))+'</small></div><div class="rate mini" role="radiogroup">'+rbtns(v, last)+'</div></div>';
+  });
+  return h + '</div>';
+}
+function bindMulti(box){
+  each('.skill.multi', function(row){
+    var code = row.dataset.code;
+    each('.mrow', function(mr){
+      var pid = mr.dataset.pid;
+      each('[data-v]', function(b){ b.onclick = function(){
+        buzz();
+        var all = function(){ return S.session.every(function(id){ return (S.r[id]||{})[code]; }); };
+        var m = S.r[pid] = S.r[pid] || {}, v = b.dataset.v === 'NA' ? 'NA' : Number(b.dataset.v), before = all();
+        if (m[code] === v) delete m[code]; else m[code] = v;
+        each('[data-v]', function(x){ var xv = x.dataset.v === 'NA' ? 'NA' : Number(x.dataset.v), on = m[code] === xv; x.setAttribute('aria-pressed', String(on)); x.setAttribute('aria-checked', String(on)); }, mr);
+        save(); refreshMulti(row); assessBar();
+        if (S.auto && !before && all()) advance(code);
+      }; }, mr);
+    }, row);
+  }, box);
+}
+function refreshMulti(row){
+  var g = row.closest('.group'), cm = curMap();
+  if (g) { var sp = g.querySelector('.ghead span'); if (sp) { var d = 0, n = 0; each('.skill', function(s){ n++; if (cm[s.dataset.code]) d++; }, g); sp.textContent = d+'/'+n; sp.className = d === n ? 'ok' : ''; } }
+  progress();
+}
+function refreshCounts(row){
+  var g = row.closest('.group');
+  if (g) { var sp = g.querySelector('.ghead span'); if (sp) { var d = 0, n = 0; each('.skill', function(s){ n++; if ((S.r[S.cur]||{})[s.dataset.code]) d++; }, g); sp.textContent = d+'/'+n; sp.className = d === n ? 'ok' : ''; } }
+  var chip = document.querySelector('.pchip[aria-current=true] i'); if (chip) chip.textContent = counts(S.cur).t;
+  progress();
+}
+/* avanti nella lista del gruppo; finito il gruppo si porta al pulsante "Próximo grupo" */
+function advance(code){
+  var m = curMap(), list = visibleSkills().map(function(s){ return s.code; }), i = list.indexOf(code);
+  for (var k = i + 1; k < list.length; k++) if (!m[list[k]]) return focusSkill(list[k]);
+  for (k = 0; k < i; k++) if (!m[list[k]]) return focusSkill(list[k]);
+  if (S.sq) return;
+  var y = scrollY; renderSkills(); scrollTo(0, y);
+  var nb = $('nextG'); if (nb) setTimeout(function(){ nb.scrollIntoView({ behavior:'smooth', block:'center' }); nb.classList.add('flash'); setTimeout(function(){ nb.classList.remove('flash'); }, 900); }, 220);
+}
+function focusSkill(code){
+  var el = $('sk-'+code); if (!el) return;
+  setTimeout(function(){ el.scrollIntoView({ behavior:'smooth', block:'center' }); el.classList.add('flash'); setTimeout(function(){ el.classList.remove('flash'); }, 800); }, 220);
+}
+
+function assessBar(){
+  var bar = $('bar'); bar.classList.remove('hidden');
+  var c = counts(S.cur), idx = S.session.indexOf(S.cur), tot = 0;
+  S.session.forEach(function(id){ tot += counts(id).t; });
+  var next = !multiOn() && idx < S.session.length - 1;
+  $('barIn').innerHTML = '<div class="info">'+(multiOn() ? (function(){ var r = 0, n = 0; S.session.forEach(function(id){ var k = counts(id); r += k.r; n += k.n; }); return t('rated',{r:r,n:n}); })() : t('rated',{r:c.r,n:c.n}))+'</div>'+
+    (next ? '<button class="btn ghost" type="button" id="nextP">'+t('next_p')+' →</button>' : '')+
+    '<button class="btn" type="button" id="revBtn"'+(tot?'':' disabled')+'>'+t('review')+'</button>';
+  if ($('nextP')) $('nextP').onclick = function(){ S.cur = S.session[idx+1]; S.sq = ''; save(); renderAssess(); window.scrollTo(0,0); };
+  $('revBtn').onclick = openReview;
+}
+
+/* ============================================================
+   REVISIONE E INVIO
+   ============================================================ */
+function lvBadge(v){ return v === 'NA' ? '<span class="lv" style="background:#e9edef;color:#65727a">–</span>' : '<span class="lv" style="background:var(--l'+v+');color:'+(v===1||v===5?'#fff':'#1b2124')+'">'+v+'</span>'; }
+function openReview(){
+  var by = {}; skillsOfArea().forEach(function(s){ by[s.code] = s; });
+  var tp = 0, tr = 0;
+  var cards = S.session.map(function(id){
+    var p = personById(id), m = S.r[id] || {}, c = counts(id), hist = HIST[id] || {};
+    if (c.t) { tp++; tr += c.t; }
+    var rows = skillsOfArea().filter(function(s){ return m[s.code]; }).map(function(s){
+      var v = m[s.code], last = hist[s.code], d = (v !== 'NA' && last) ? v - last.s : 0;
+      return '<span>'+esc(sDesc(s))+(d ? ' <span class="'+(d>0?'up':'down')+'">'+(d>0?'▲ +'+d:'▼ '+d)+'</span>' : '')+'</span>'+lvBadge(v);
+    }).join('');
+    return '<div class="rcard"><div class="rh"><b>'+esc(p.name)+'</b><small>'+t('rated',{r:c.r,n:c.n}).replace('<br>',' · ')+'</small><button class="link" type="button" data-edit="'+esc(id)+'">'+t('edit')+'</button></div>'+
+      (c.t ? '<div class="rlist">'+rows+'</div><textarea data-gn="'+esc(id)+'" placeholder="'+t('gnote')+'">'+esc(S.gn[id]||'')+'</textarea>'+qnHtml().replace('class="qn"','class="qn" data-qg="'+esc(id)+'"') : '<div class="empty" style="padding:8px 0 0;text-align:left">'+t('empty_p')+'</div>')+'</div>';
+  }).join('');
+  var dl = S.session.map(function(id){ var x = dupSkills(id); return x.length ? '<b>'+esc(personById(id).name)+'</b>: '+x.map(function(s){ return esc(sDesc(s)); }).join(', ') : ''; }).filter(Boolean);
+  S.dupOk = !dl.length;
+  var dupBox = dl.length ? '<div class="banner warn" id="dupW" style="margin-top:10px;display:block">⚠ '+esc(t('dup_w',{d:dmy(S.date)}))+'<br>'+dl.join('<br>')+'</div>' : '';
+  showSheet('<div class="grab"></div><h3>'+t('review_t')+'</h3><div style="color:var(--muted);font-size:.9rem">'+esc(S.area)+' · '+dmy(S.date)+' · '+(mode()==='WEEK'?t('mode_week'):t('mode_spot'))+' · '+t('review_d',{p:tp,r:tr})+'</div>'+dupBox+cards+
+    '<div class="actions"><button class="btn ghost" type="button" id="rBack">'+t('back')+'</button><button class="btn" type="button" id="rSend">'+(tp>1?t('send_n',{n:tp}):t('send'))+'</button></div>');
+  each('[data-gn]', function(ta){ ta.oninput = function(){ S.gn[ta.dataset.gn] = ta.value; save(); }; });
+  each('[data-qg]', function(box){ box.onclick = function(e){ var b = e.target.closest('[data-qn]'); if (!b) return; var ta = document.querySelector('[data-gn="'+box.dataset.qg+'"]'); if (ta) addQn(ta, b.dataset.qn); }; });
+  each('[data-edit]', function(b){ b.onclick = function(){ hideSheet(); S.cur = b.dataset.edit; renderAssess(); window.scrollTo(0,0); }; });
+  $('rBack').onclick = hideSheet;
+  $('rSend').onclick = function(){ if (!S.dupOk) { S.dupOk = true; buzz(); $('rSend').textContent = t('dup_go'); $('rSend').style.background = 'var(--warn)'; var w = $('dupW'); if (w) w.scrollIntoView({block:'center'}); return; } sendAll(); };
+}
+function showSheet(h){ $('panel').innerHTML = h; $('sheet').classList.add('open'); }
+function hideSheet(){ $('sheet').classList.remove('open'); }
+$('sheet').addEventListener('click', function(e){ if (e.target.id === 'sheet' && !SENDING && !PINLOCK) hideSheet(); });
+
+function payloadFor(id){
+  var m = S.r[id] || {}, notes = S.n[id] || {}, ratings = [];
+  skillsOfArea().forEach(function(s){ var v = m[s.code]; if (v) ratings.push({ code:s.code, score: v === 'NA' ? '' : v, note: notes[s.code] || '' }); });
+  var actId = (S.act && S.act.area === S.area && S.act.date === S.date) ? S.act.id : '';
+  return { clientId:'APP-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,8), area:S.area, date:S.date, mode:mode(), personId:id, assessorName:S.assessor, note:S.gn[id]||'', ratings:ratings, auth:AUTH, activityId:actId };
+}
+function sendAll(){
+  if (SENDING) return;
+  var payloads = S.session.filter(function(id){ return counts(id).t; }).map(payloadFor);
+  var FB = payloads.map(function(pl){ return { pl:pl, hist: HIST[pl.personId] || {}, ok:false }; });
+  if (!payloads.length) return;
+  store.set(KEY.out, store.get(KEY.out, []).concat(payloads));
+  store.del(KEY.draft);
+  SENDING = true;
+  var b = $('rSend'); b.disabled = true; b.innerHTML = '<span class="spinner"></span>'+t('sending');
+  var ok = 0, failed = 0, firstErr = null;
+  payloads.reduce(function(pr, pl){
+    return pr.then(function(){ return call('tojAppSubmit',[pl]).then(function(){ ok++; FB.forEach(function(f){ if (f.pl === pl) f.ok = true; }); dropOut(pl.clientId); markDone(pl); }).catch(function(e){ failed++; if (!firstErr) firstErr = e; }); });
+  }, Promise.resolve()).then(function(){
+    SENDING = false;
+    var names = payloads.map(function(pl){ return personById(pl.personId).name; });
+    var showDone = function(){
+      showSheet('<div class="done"><div class="big'+(failed?' wait':'')+'">'+(failed?'⏳':'✓')+'</div><h3>'+(failed?t('some_wait'):t('sent'))+'</h3>'+
+      '<p style="color:var(--muted);margin:6px 0 0">'+(ok?t('sent_d',{n:ok}):'')+(failed?' '+t('queued'):'')+'</p>'+(firstErr?'<p class="err">'+esc(errMsg(firstErr))+'</p>':'')+
+      '<p style="font-size:.88rem;margin:10px 0 0">'+names.map(esc).join(' · ')+'</p></div>'+
+      FB.filter(function(f){ return f.ok; }).map(function(f){ return '<button class="btn ghost" type="button" data-fb="'+FB.indexOf(f)+'" style="width:100%;margin-top:10px">'+t('fb_btn',{p:personById(f.pl.personId).name.split(' ')[0]})+'</button>'; }).join('')+
+      '<div class="actions"><button class="btn" type="button" id="again">'+t('again')+'</button></div>');
+      $('again').onclick = function(){ hideSheet(); finishSession(); };
+      each('[data-fb]', function(x){ x.onclick = function(){ showFeedback(FB[Number(x.dataset.fb)], showDone); }; });
+    };
+    showDone();
+  });
+}
+/* v27: esito da mostrare al trainee (niente codici, niente altri nomi) */
+function showFeedback(f, back){
+  var by = {}; skillsOfArea().forEach(function(s){ by[s.code] = s; });
+  var p = personById(f.pl.personId);
+  var rows = f.pl.ratings.filter(function(r){ return r.score !== '' && by[r.code]; }).map(function(r){
+    var v = Number(r.score), last = f.hist[r.code], d = last ? v - last.s : 0;
+    return '<div>'+esc(sDesc(by[r.code]))+'<small>'+esc(t('lv'+v))+(last ? (d ? ' · <span class="'+(d>0?'up':'down')+'">'+(d>0?'▲ +'+d:'▼ '+d)+'</span>' : ' · =') : ' · '+t('fb_new'))+(r.note ? ' · '+esc(r.note) : '')+'</small></div>'+lvb(v);
+  }).join('');
+  showSheet('<div class="grab"></div><h3>'+esc(p.name)+'</h3><div style="color:var(--muted);font-size:.9rem">'+t('fb_t')+' · '+esc(f.pl.area)+' · '+dmy(f.pl.date)+'</div>'+
+    '<div class="fbl">'+rows+'</div>'+(f.pl.note ? '<p style="margin:14px 0 0;font-size:.95rem">'+esc(f.pl.note)+'</p>' : '')+
+    '<div class="legend" aria-hidden="true">'+[1,2,3,4,5].map(function(i){ return '<div><i style="background:var(--l'+i+')"></i><b>'+i+'</b> '+t('ls'+i)+'</div>'; }).join('')+'</div>'+
+    '<div class="actions"><button class="btn" type="button" id="fbBack">'+t('back')+'</button></div>');
+  $('fbBack').onclick = back;
+}
+function markDone(pl){
+  DATA.last = DATA.last || {}; var a = DATA.last[pl.area] = DATA.last[pl.area] || {};
+  if (!a[pl.personId] || a[pl.personId] < pl.date) a[pl.personId] = pl.date;
+  DATA.mine = DATA.mine || []; var i = DATA.mine.indexOf(pl.personId); if (i >= 0) DATA.mine.splice(i,1); DATA.mine.unshift(pl.personId);
+  applyLocal(pl);
+}
+function dropOut(id){ store.set(KEY.out, store.get(KEY.out, []).filter(function(x){ return x.clientId !== id; })); }
+/* v35: il voto appena inviato aggiorna scheda, panoramica e storia sul telefono */
+function applyLocal(pl){
+  var pid = pl.personId, iso = pl.date, ar = AREA[pl.area], h = HIST[pid], dd = iso.split('-').reverse().join('/');
+  (pl.ratings || []).forEach(function(x){
+    var s = Number(x.score), code = String(x.code || '').toUpperCase();
+    if (!(s >= 1 && s <= 5) || !code) return;
+    if (ar && ar.p) {
+      var pp = ar.p[pid] = ar.p[pid] || {}, cur = pp[code];
+      if (!cur) pp[code] = [s, iso, '', 1];
+      else if (iso > cur[1]) pp[code] = [s, iso, cur[0], cur[3] + 1];
+      else if (iso === cur[1]) pp[code] = [s, iso, cur[2], cur[3]];
+    }
+    if (h) {
+      var o = h[code], ds = o && o.ds ? o.ds.slice() : [];
+      if (ds.indexOf(iso) < 0) ds.push(iso);
+      var oIso = o && o.d ? o.d.split('/').reverse().join('-') : '';
+      if (!o || iso >= oIso) h[code] = { s:s, t:new Date(iso + 'T12:00:00').getTime(), d:dd, ds:ds }; else o.ds = ds;
+    }
+  });
+  if (ar) areaSave(pl.area, ar);
+  if (h && HIST_OK[pid]) histSave(pid, h);
+}
+function flushOutbox(manual){
+  var out = store.get(KEY.out, []); if (!out.length || SENDING) return;
+  var nx = out[0];
+  call('tojAppSubmit',[nx]).then(function(){ dropOut(nx.clientId); markDone(nx); if (VIEW === 'home') renderHome(); flushOutbox(manual); })
+    .catch(function(e){ if (manual) toast(errMsg(e)); });
+}
+function finishSession(){
+  S.session.forEach(function(id){ delete S.r[id]; delete S.n[id]; delete S.gn[id]; });
+  S.session = []; S.cur = ''; S.sel = []; S.q = ''; S.sq = ''; S.openNote = {}; DRAFT_FOUND = false;
+  store.del(KEY.draft);
+  try { if (MACRO_PUSHED) { MACRO_PUSHED = false; history.go(-2); } else if (history.state && history.state.v === 'assess') history.back(); } catch(e){}
+  go('home');
+}
+function resetSession(){ finishSession(); }
+
+/* ============================================================
+   v25 - SCHEDA TRAINEE E PANORAMICA AREA
+   ============================================================ */
+var AREA = {}, AREA_LOADING = {}, CARD = '', NAV = [], LOW = 2, OLD = 90, OV = { by:'p', f:'all', open:'', o:'need' };
+var ICON_CARD = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 20V11M12 20V5M19 20v-6"/></svg>';
+function areaAll(){ var x = store.get(KEY.area, null); return (x && x.n === who()) ? (x.a || {}) : {}; }
+function areaSave(a, d){ var x = store.get(KEY.area, null); if (!x || x.n !== who()) x = { n:who(), a:{} }; x.a[a] = d; store.set(KEY.area, x); }
+function loadArea(cb){
+  var a = S.area;
+  if (AREA[a] && AREA[a]._fresh) { cb(); return; }
+  if (!AREA[a]) { var st = areaAll()[a]; if (st) { st._fresh = false; AREA[a] = st; } }
+  var had = !!AREA[a];
+  if (had) cb();
+  if (AREA_LOADING[a]) { if (!had) AREA_LOADING[a].push(cb); return; }
+  AREA_LOADING[a] = had ? [] : [cb];
+  call('tojAppAreaStatus',[a, AUTH]).then(function(d){
+    d = d || { p:{} }; d._fresh = true; AREA[a] = d; areaSave(a, d);
+    var l = AREA_LOADING[a]; delete AREA_LOADING[a]; l.forEach(function(f){ f(); });
+    if (had && S.area === a) { if (VIEW === 'card' || VIEW === 'over') go(VIEW, true); else if (VIEW === 'home') fillSugg(); }
+  }).catch(function(e){
+    delete AREA_LOADING[a];
+    if (had) { SYNC.off = true; renderSync(); return; }
+    if (VIEW === 'card' || VIEW === 'over') $('app').innerHTML = '<div class="banner err">'+esc(errMsg(e))+'</div>';
+  });
+}
+function ageDays(iso){ var a = iso.split('-').map(Number), b = DATA.today.split('-').map(Number); return Math.round((Date.UTC(b[0],b[1]-1,b[2]) - Date.UTC(a[0],a[1]-1,a[2])) / 864e5); }
+function stOf(pid){ return ((AREA[S.area]||{}).p||{})[pid] || {}; }
+function needsOf(pid){
+  var r = stOf(pid), pl = plan(), pc = {}, out = [];
+  planCodes().forEach(function(c){ pc[c] = 1; });
+  skillsOfArea().forEach(function(s){
+    var x = r[s.code];
+    if (pc[s.code] && (!x || x[1] < pl.start)) out.push({ s:s, k:'plan', x:x, o:0 });
+    else if (x && x[0] <= LOW) out.push({ s:s, k:'low', x:x, o:1 });
+    else if (!x) out.push({ s:s, k:'never', o:2 });
+    else if (ageDays(x[1]) > OLD) out.push({ s:s, k:'old', x:x, o:3 });
+  });
+  return out.sort(function(a, b){ return a.o - b.o || (a.x && b.x ? (a.x[0] - b.x[0]) || a.x[1].localeCompare(b.x[1]) : 0) || a.s.mo - b.s.mo; });
+}
+function needCount(list){ var c = { plan:0, low:0, never:0, old:0 }; list.forEach(function(x){ c[x.k]++; }); return c; }
+function whyChip(n){
+  var txt = n.k === 'plan' ? t('r_plan') : n.k === 'low' ? t('r_low',{v:n.x[0], d:dm(n.x[1])}) : n.k === 'never' ? t('r_never') : t('r_old',{d:dmy(n.x[1])});
+  return '<span class="why '+n.k+'">'+esc(txt)+'</span>';
+}
+function lvb(v){ return '<span class="lvb" style="background:var(--l'+v+');color:'+(v===1||v===5?'#fff':'#1b2124')+'">'+v+'</span>'; }
+function openCard(id){
+  NAV.push({ v:VIEW, id:CARD }); CARD = id;
+  try { history.pushState({v:'card'}, ''); } catch(e){}
+  go('card');
+}
+function openOver(){
+  NAV.push({ v:VIEW, id:CARD });
+  try { history.pushState({v:'over'}, ''); } catch(e){}
+  go('over');
+}
+function navBack(){
+  hideSheet();
+  var p = NAV.pop() || { v:'home' };
+  CARD = p.id || CARD;
+  go(p.v || 'home');
+}
+function fillSugg(){
+  var box = $('sugg'); if (!box) return;
+  if (!AREA[S.area]) { loadArea(function(){ if (VIEW === 'home') fillSugg(); }); return; }
+  var rows = DATA.people.filter(function(p){ return p.areas.indexOf(S.area) >= 0; }).map(function(p){
+    var c = needCount(needsOf(p.id)); return { p:p, c:c, w:c.plan*3 + c.low*3 };
+  }).filter(function(x){ return x.w; }).sort(function(a, b){ return b.w - a.w || a.p.name.localeCompare(b.p.name); }).slice(0, 6);
+  if (!rows.length) { box.innerHTML = ''; return; }
+  box.innerHTML = sec(t('sugg_t'), '') + '<div class="recent sugg">'+rows.map(function(x){
+    var why = x.c.plan ? t('r_plan') : t('c_low',{n:x.c.low});
+    return '<button class="rc" type="button" data-sg="'+esc(x.p.id)+'"><i style="--av:'+avc(x.p.id)+'">'+esc(ini(x.p.name))+'</i><span>'+esc(x.p.name.split(' ')[0])+'</span><small>'+esc(why)+'</small></button>';
+  }).join('')+'</div>';
+  each('[data-sg]', function(b){ b.onclick = function(){ startSession([b.dataset.sg]); }; }, box);
+}
+function renderCard(){
+  var p = personById(CARD);
+  if (!p) { navBack(); return; }
+  header(p.name, [S.area, p.cohort ? t('cohort')+' '+p.cohort : ''].filter(Boolean).join(' · '), true);
+  $('bar').classList.remove('hidden');
+  $('barIn').innerHTML = '<button class="btn" type="button" id="cardGo" style="flex:1">'+esc(t('assess_p',{p:p.name.split(' ')[0]}))+' →</button>';
+  $('cardGo').onclick = function(){ startSession([CARD]); };
+  if (!AREA[S.area]) { $('app').innerHTML = '<div class="loading">'+t('loading')+'</div>'; loadArea(function(){ if (VIEW === 'card') renderCard(); }); return; }
+  var r = stOf(CARD), sk = skillsOfArea(), rated = sk.filter(function(s){ return r[s.code]; });
+  var dist = [0,0,0,0,0], sum = 0, last = '';
+  rated.forEach(function(s){ var x = r[s.code]; dist[x[0]-1]++; sum += x[0]; if (x[1] > last) last = x[1]; });
+  var n = rated.length, h = '<p style="margin:0 2px 10px"><button class="link" type="button" data-lanav="person:'+esc(CARD)+'">📊 Perfil completo (resultados)</button></p>';
+  h += '<div class="kpis">'+
+    '<div class="kpi"><b>'+n+'<small>/'+sk.length+'</small></b><span>'+t('k_rated')+'</span></div>'+
+    '<div class="kpi"><b>'+(n ? (sum/n).toFixed(1) : '–')+'</b><span>'+t('k_avg')+'</span></div>'+
+    '<div class="kpi"><b>'+(n ? Math.round((dist[3]+dist[4])*100/n)+'%' : '–')+'</b><span>'+t('k_aut')+'</span></div>'+
+    '<div class="kpi"><b>'+(last ? dm(last) : '–')+'</b><span>'+t('k_last')+'</span></div></div>';
+  if (n) h += '<div class="dist" aria-hidden="true">'+dist.map(function(c, i){ return c ? '<i style="flex:'+c+';background:var(--l'+(i+1)+')"></i>' : ''; }).join('')+'</div>'+
+    '<div class="distl">'+dist.map(function(c, i){ return c ? '<span>'+lvb(i+1)+' '+c+'</span>' : ''; }).join('')+'</div>';
+  h += '<button class="btn ghost" type="button" id="showSt" style="width:100%;margin-top:12px">'+t('show_st')+'</button>';
+  var need = needsOf(CARD), c = needCount(need);
+  h += sec(t('todo_t'), need.length || '');
+  if (!need.length) h += '<div class="list"><div class="empty">'+t('nothing')+'</div></div>';
+  else {
+    var lim = OV.all ? need.length : 8;
+    h += '<div class="list">'+need.slice(0, lim).map(function(x){
+      return '<div class="nrow"><div class="d">'+esc(sDesc(x.s))+'<small>'+esc(mLabel(x.s))+'</small></div>'+whyChip(x)+'</div>';
+    }).join('')+(need.length > lim ? '<button class="more" type="button" id="needMore">'+t('show_more',{n:need.length-lim})+'</button>' : '')+'</div>';
+    h += '<p class="hint">'+[c.plan?t('r_plan')+' '+c.plan:'', c.low?t('c_low',{n:c.low}):'', c.never?t('c_never',{n:c.never}):'', c.old?t('c_old',{n:c.old,d:OLD}):''].filter(Boolean).join(' · ')+'</p>';
+  }
+  h += sec(t('res_t'), '');
+  byMacro(sk).forEach(function(g){
+    var done = g.items.filter(function(s){ return r[s.code]; }).length;
+    h += '<div class="group"><div class="ghead static"><b>'+esc(g.name)+'</b><span>'+done+'/'+g.items.length+'</span></div><div class="gbody">'+
+      g.items.map(function(s){
+        var x = r[s.code], tr = x && x[2] !== '' ? x[0] - x[2] : 0;
+        return '<div class="nrow"><div class="d">'+esc(sDesc(s))+'<small>'+(x ? dmy(x[1])+(x[3] > 1 ? ' · '+x[3]+'×' : '')+(tr ? ' <span class="'+(tr>0?'up':'down')+'">'+(tr>0?'▲ +'+tr:'▼ '+tr)+'</span>' : '') : t('r_never'))+'</small></div>'+
+          (x ? lvb(x[0]) : '<span class="lvb" style="background:#eef1f3;color:var(--faint)">–</span>')+'</div>';
+      }).join('')+'</div></div>';
+  });
+  h += '<div id="extra"></div>';
+  $('app').innerHTML = h;
+  if ($('needMore')) $('needMore').onclick = function(){ OV.all = true; renderCard(); OV.all = false; };
+  $('showSt').onclick = showStudent;
+  fillExtra();
+}
+/* v27: presenze e prove teoriche (stesso calcolo della scheda DASH_PERSONA) */
+var EXTRA = {};
+function fillExtra(){
+  var box = $('extra'); if (!box) return;
+  var k = S.area+'|'+CARD, x = EXTRA[k], pid = CARD;
+  if (!x) {
+    box.innerHTML = sec(t('att_t'), '')+'<div class="list"><div class="empty">'+t('loading')+'</div></div>';
+    call('tojAppPersonExtra',[pid, S.area, AUTH]).then(function(d){ EXTRA[k] = d || {}; if (VIEW === 'card' && CARD === pid) fillExtra(); })
+      .catch(function(e){ if ($('extra')) $('extra').innerHTML = '<div class="banner err">'+esc(errMsg(e))+'</div>'; });
+    return;
+  }
+  box.innerHTML = extraHtml(x, false);
+}
+function extraHtml(x, st){
+  var a = x.att || { done:0, total:0, h:0 }, pc = a.total ? Math.round(a.done*100/a.total) : 0, h = '';
+  h += sec(t('att_t'), a.total ? pc+'%' : '');
+  h += '<div class="list"><div class="nrow"><div class="d">'+t('att_d',{d:a.done,n:a.total,h:a.h})+'<div class="attbar"><i style="width:'+pc+'%"></i></div></div></div>';
+  (x.recent || []).slice(0, st ? 4 : 6).forEach(function(r){ h += '<div class="nrow"><div class="d">'+esc(r.t)+'<small>'+dmy(r.d)+(r.h ? ' · '+r.h+' h' : '')+'</small></div></div>'; });
+  h += '</div>';
+  var ts = x.tests || [];
+  h += sec(t('th_t'), ts.length || '');
+  h += '<div class="list">'+(ts.length ? ts.slice(0, st ? 6 : 12).map(function(r){
+    var ch = (r.ch === '' || r.ch == null || r.ch === 0) ? '' : ' · <span class="'+(r.ch>0?'up':'down')+'">'+(r.ch>0?'▲ +':'▼ ')+r.ch+'</span>';
+    return '<div class="nrow"><div class="d">'+esc(r.t)+'<small>'+dmy(r.d)+(r.n > 1 ? ' · '+t('try',{n:r.n}) : '')+ch+'</small></div><span class="why '+(r.ok?'ok':'low')+'">'+r.s+'%'+(r.ok?' ✓':'')+'</span></div>';
+  }).join('') : '<div class="empty">'+t('th_none')+'</div>')+'</div>';
+  return h;
+}
+/* v27: vista da mostrare al trainee: solo i suoi risultati, niente "da valutare", niente altri nomi */
+function showStudent(){
+  var p = personById(CARD), r = stOf(CARD), sk = skillsOfArea(), rated = sk.filter(function(s){ return r[s.code]; });
+  var sum = 0, aut = 0; rated.forEach(function(s){ sum += r[s.code][0]; if (r[s.code][0] >= 4) aut++; });
+  var x = EXTRA[S.area+'|'+CARD], a = x && x.att, h = '<div class="grab"></div><div class="stv"><h3>'+esc(p.name)+'</h3><div style="color:var(--muted);font-size:.9rem">'+esc(S.area)+' · '+dmy(DATA.today)+'</div>';
+  h += '<div class="kpis"><div class="kpi"><b>'+rated.length+'<small>/'+sk.length+'</small></b><span>'+t('k_rated')+'</span></div>'+
+    '<div class="kpi"><b>'+(rated.length ? (sum/rated.length).toFixed(1) : '–')+'</b><span>'+t('k_avg')+'</span></div>'+
+    '<div class="kpi"><b>'+(rated.length ? Math.round(aut*100/rated.length)+'%' : '–')+'</b><span>'+t('k_aut')+'</span></div>'+
+    '<div class="kpi"><b>'+(a && a.total ? Math.round(a.done*100/a.total)+'%' : '–')+'</b><span>'+t('k_att')+'</span></div></div>';
+  byMacro(rated).forEach(function(g){
+    h += sec(g.name, '') + '<div class="list">'+g.items.map(function(s){
+      var v = r[s.code], d = v[2] !== '' ? v[0] - v[2] : 0;
+      return '<div class="nrow"><div class="d">'+esc(sDesc(s))+'<small>'+esc(t('lv'+v[0]))+' · '+dmy(v[1])+(d ? ' · <span class="'+(d>0?'up':'down')+'">'+(d>0?'▲ +'+d:'▼ '+d)+'</span>' : '')+'</small></div>'+lvb(v[0])+'</div>';
+    }).join('')+'</div>';
+  });
+  if (x) h += extraHtml(x, true);
+  h += '<div class="legend" aria-hidden="true">'+[1,2,3,4,5].map(function(i){ return '<div><i style="background:var(--l'+i+')"></i><b>'+i+'</b> '+t('ls'+i)+'</div>'; }).join('')+'</div>';
+  h += '<div class="actions"><button class="btn" type="button" id="stBack">'+t('back')+'</button></div></div>';
+  showSheet(h);
+  $('stBack').onclick = hideSheet;
+}
+/* v28: classifiche (più valutati, migliori, peggiori) per trainee o per skill */
+var RANK_MIN = 3;
+function statsOf(vals){ var n = vals.length, s = 0, u = 0; vals.forEach(function(v){ s += v; if (v >= 4) u++; }); return { n:n, avg: n ? s/n : 0, aut: n ? Math.round(u*100/n) : 0 }; }
+function rankHtml(people){
+  var sk = skillsOfArea(), h = '', rows;
+  var cmp = function(a, b){
+    if (OV.o === 'most') return b.st.n - a.st.n || b.st.avg - a.st.avg;
+    if (OV.o === 'best') return b.st.avg - a.st.avg || b.st.aut - a.st.aut || b.st.n - a.st.n;
+    return a.st.avg - b.st.avg || a.st.aut - b.st.aut || b.st.n - a.st.n;
+  };
+  var min = OV.o === 'most' ? 1 : RANK_MIN;
+  if (OV.by === 'p') {
+    rows = people.map(function(p){ var r = stOf(p.id); return { p:p, st: statsOf(sk.filter(function(s){ return r[s.code]; }).map(function(s){ return r[s.code][0]; })) }; })
+      .filter(function(x){ return x.st.n >= min; }).sort(cmp);
+    h += sec(t('o_'+OV.o), rows.length+'/'+people.length);
+    if (OV.o !== 'most') h += '<p class="hint" style="margin:-4px 4px 8px;text-align:left">'+t('o_min',{n:RANK_MIN})+'</p>';
+    h += '<div class="list">'+(rows.length ? rows.slice(0, 60).map(function(x, i){
+      return '<div class="prow"><span class="chk" style="--av:'+avc(x.p.id)+'">'+(i+1)+'</span>'+
+        '<button class="main" type="button" data-card="'+esc(x.p.id)+'"><b>'+esc(x.p.name)+'</b><span style="white-space:normal">'+t('o_sub',{r:x.st.n,n:sk.length,a:x.st.avg.toFixed(1),u:x.st.aut})+'</span></button>'+
+        lvb(Math.max(1, Math.min(5, Math.round(x.st.avg))))+'</div>';
+    }).join('') : '<div class="empty">'+t('o_none')+'</div>')+'</div>';
+  } else {
+    var ids = people.map(function(p){ return p.id; });
+    rows = sk.map(function(s){ var v = []; ids.forEach(function(id){ var x = stOf(id)[s.code]; if (x) v.push(x[0]); }); return { s:s, st: statsOf(v) }; })
+      .filter(function(x){ return x.st.n >= min; }).sort(cmp);
+    h += sec(t('o_'+OV.o+'_s'), rows.length+'/'+sk.length);
+    if (OV.o !== 'most') h += '<p class="hint" style="margin:-4px 4px 8px;text-align:left">'+t('o_min_s',{n:RANK_MIN})+'</p>';
+    h += '<div class="list">'+(rows.length ? rows.map(function(x){
+      return '<div class="nrow"><div class="d">'+esc(sDesc(x.s))+'<small>'+t('o_sub_s',{r:x.st.n,a:x.st.avg.toFixed(1),u:x.st.aut})+'</small></div>'+lvb(Math.max(1, Math.min(5, Math.round(x.st.avg))))+'</div>';
+    }).join('') : '<div class="empty">'+t('o_none')+'</div>')+'</div>';
+  }
+  return h;
+}
+function renderOver(){
+  header(t('over_t',{a:S.area}), t('over_d',{d:OLD,l:LOW}), true);
+  $('bar').classList.add('hidden');
+  if (!AREA[S.area]) { $('app').innerHTML = '<div class="loading">'+t('loading')+'</div>'; loadArea(function(){ if (VIEW === 'over') renderOver(); }); return; }
+  var people = DATA.people.filter(function(p){ return p.areas.indexOf(S.area) >= 0; });
+  var segBtn = function(k, v, lab){ return '<button type="button" data-'+k+'="'+v+'" aria-pressed="'+(OV[k]===v)+'">'+lab+'</button>'; };
+  var sfx = OV.by === 's' ? '_s' : '';
+  var h = '<div class="seg">'+segBtn('by','p',t('by_p'))+segBtn('by','s',t('by_s'))+'</div>'+
+    '<div class="seg" style="margin-top:8px">'+segBtn('o','need',t('o_need'))+segBtn('o','most',t('o_most'+sfx))+segBtn('o','best',t('o_best'+sfx))+segBtn('o','worst',t('o_worst'+sfx))+'</div>'+
+    (OV.o !== 'need' ? '' : '<div class="seg" style="margin-top:8px">'+segBtn('f','all',t('f_all'))+segBtn('f','low',t('f_low'))+segBtn('f','never',t('f_never'))+segBtn('f','old',t('f_old',{d:OLD}))+'</div>');
+  var keep = function(x){ return OV.f === 'all' || x.k === OV.f || (OV.f === 'never' && x.k === 'plan' && !x.x); };
+  var all = people.map(function(p){ return { p:p, n:needsOf(p.id).filter(keep) }; });
+  if (OV.o !== 'need') { h += rankHtml(people); }
+  else if (OV.by === 'p') {
+    var rows = all.filter(function(x){ return x.n.length; }).map(function(x){ x.c = needCount(x.n); x.w = x.c.plan*3 + x.c.low*3 + x.c.never + x.c.old; return x; })
+      .sort(function(a, b){ return b.w - a.w || a.p.name.localeCompare(b.p.name); });
+    h += sec(t('f_'+OV.f,{d:OLD}), rows.length+'/'+people.length);
+    h += '<div class="list">'+(rows.length ? rows.map(function(x){
+      var c = x.c, last = '', r = stOf(x.p.id);
+      for (var k in r) if (r[k][1] > last) last = r[k][1];
+      var sub = [c.plan?t('r_plan')+' '+c.plan:'', c.low?t('c_low',{n:c.low}):'', c.never?t('c_never',{n:c.never}):'', c.old?t('c_old',{n:c.old,d:OLD}):''].filter(Boolean).join(' · ');
+      return '<div class="prow"><span class="chk" style="--av:'+avc(x.p.id)+'">'+esc(ini(x.p.name))+'</span>'+
+        '<button class="main" type="button" data-card="'+esc(x.p.id)+'"><b>'+esc(x.p.name)+'</b><span style="white-space:normal">'+sub+'</span></button>'+
+        (c.low ? '<span class="tag due" style="background:var(--bad-soft);color:var(--bad)">'+c.low+'</span>' : '')+
+        '<span class="tag" style="color:var(--muted)">'+(last ? dm(last) : '–')+'</span></div>';
+    }).join('') : '<div class="empty">'+t('nothing')+'</div>')+'</div>';
+  } else {
+    var bys = skillsOfArea().map(function(s){
+      var who = [];
+      all.forEach(function(x){ x.n.forEach(function(y){ if (y.s.code === s.code) who.push({ p:x.p, k:y.k, x:y.x }); }); });
+      return { s:s, who:who, low:who.filter(function(w){ return w.k === 'low'; }).length };
+    }).filter(function(x){ return x.who.length; }).sort(function(a, b){ return b.low - a.low || b.who.length - a.who.length || a.s.mo - b.s.mo; });
+    h += sec(t('f_'+OV.f,{d:OLD}), bys.length+'/'+skillsOfArea().length);
+    h += '<div class="list">'+(bys.length ? bys.map(function(x){
+      var c = needCount(x.who), open = OV.open === x.s.code;
+      var sub = [c.plan?t('r_plan')+' '+c.plan:'', c.low?t('c_low',{n:c.low}):'', c.never?t('c_never',{n:c.never}):'', c.old?t('c_old',{n:c.old,d:OLD}):''].filter(Boolean).join(' · ');
+      return '<button class="nrow sk" type="button" data-sk="'+esc(x.s.code)+'" aria-expanded="'+open+'"><div class="d">'+esc(sDesc(x.s))+'<small>'+sub+'</small></div><span class="tag" style="color:var(--muted)">'+x.who.length+'/'+people.length+' '+(open?'▴':'▾')+'</span></button>'+
+        (open ? '<div class="names">'+x.who.sort(function(a, b){ return (a.k==='low'?0:1) - (b.k==='low'?0:1) || a.p.name.localeCompare(b.p.name); }).map(function(w){
+          return '<button type="button" class="'+w.k+'" data-card="'+esc(w.p.id)+'">'+esc(w.p.name)+(w.x ? ' · '+w.x[0] : '')+'</button>';
+        }).join('')+'</div>' : '');
+    }).join('') : '<div class="empty">'+t('nothing')+'</div>')+'</div>';
+  }
+  $('app').innerHTML = h;
+  each('[data-by]', function(b){ b.onclick = function(){ OV.by = b.dataset.by; OV.open = ''; renderOver(); }; });
+  each('[data-f]', function(b){ b.onclick = function(){ OV.f = b.dataset.f; OV.open = ''; renderOver(); }; });
+  each('[data-o]', function(b){ b.onclick = function(){ OV.o = b.dataset.o; OV.open = ''; renderOver(); }; });
+  each('[data-sk]', function(b){ b.onclick = function(){ OV.open = OV.open === b.dataset.sk ? '' : b.dataset.sk; var y = scrollY; renderOver(); scrollTo(0, y); }; });
+  each('[data-card]', function(b){ b.onclick = function(){ openCard(b.dataset.card); }; });
+}
+
+each('.lang button', function(b){ b.onclick = function(){ setLang(b.dataset.lang); }; });
+window.addEventListener('online', function(){ flushOutbox(); });
+setInterval(function(){ flushOutbox(); }, 60000);
+if (typeof laReady === 'function') laReady(start); else start();
+</script>
+</body>
+</html>

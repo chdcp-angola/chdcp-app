@@ -1,0 +1,184 @@
+<!doctype html><html lang="pt"><head>
+<script>window.CHDCP_PWA=true;(function(){var API="https://script.google.com/macros/s/AKfycbzpGaQurqsz762hytflYHtHjFEGJssKLa9Jc4Kr1cgMaI0QUZ_021xmZj7-T3l6kisF/exec";function post(fn,args){return fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({fn:fn,args:args}),redirect:"follow",cache:"no-store"}).then(function(r){if(!r.ok)throw new Error("NetworkError HTTP "+r.status);return r.json();});}function runner(ok,ko){return new Proxy({},{get:function(t,k){if(k==="withSuccessHandler")return function(f){return runner(f,ko);};if(k==="withFailureHandler")return function(f){return runner(ok,f);};if(k==="withUserObject")return function(){return runner(ok,ko);};return function(){var a=[].slice.call(arguments);post(k,a).then(function(res){if(res&&res.ok){if(ok)ok(res.v);}else{if(ko)ko(new Error(res?res.e:"Erro"));}}).catch(function(e){if(ko)ko(new Error("NetworkError: "+(e&&e.message||e)));});};}});}window.google=window.google||{};google.script={run:runner(null,null),host:{close:function(){}},url:{getLocation:function(cb){var o={};new URLSearchParams(location.search).forEach(function(v,k){o[k]=v;});cb({parameter:o,hash:location.hash});}}};if("serviceWorker" in navigator)window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){});});})();</script><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#7d1d1a"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Avaliação"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="favicon.png"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#7d1d1a"><title>Avaliação teórica · CHDCP</title><style>
+:root{--brand:#7d1d1a;--brand-soft:#f6eceb;--brand-line:#e8cfcd;--ink:#1b2124;--muted:#65727a;--faint:#93a0a7;--line:#e2e7ea;--bg:#f2f4f5;--card:#fff;
+--ok:#11804a;--ok-soft:#e5f4ec;--warn:#a46a00;--warn-soft:#fff4d9;--bad:#b8322f;--bad-soft:#fbe7e5;--info:#235fb8;--info-soft:#eaf2fd;--r:14px}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--bg);color:var(--ink);font:15px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+button,input,select{font:inherit;color:inherit}button{cursor:pointer;border:0;background:none}
+.top{position:sticky;top:0;z-index:20;background:var(--brand);color:#fff;padding:calc(10px + env(safe-area-inset-top)) 14px 10px;display:flex;align-items:center;gap:10px;min-height:58px}
+.top .back{color:#fff;font-size:24px;font-weight:800;width:38px;height:38px;flex:none}
+.top .ttl{flex:1;min-width:0}.top .ttl b{display:block;font-size:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.top .ttl span{display:block;font-size:12px;opacity:.85;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chip{font-size:11.5px;font-weight:800;border:1.5px solid rgba(255,255,255,.55);border-radius:20px;padding:6px 11px;color:#fff;white-space:nowrap;flex:none}
+main{max-width:760px;margin:0 auto;padding:14px 14px 110px}
+.logo{display:block;max-width:240px;width:70%;margin:6px auto 14px}
+.sec{font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--brand);text-transform:uppercase;margin:18px 2px 9px}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tile{display:flex;flex-direction:column;align-items:flex-start;gap:3px;text-align:left;background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 13px;min-height:108px}
+.tile .ic{font-size:26px;margin-bottom:4px}.tile b{font-size:15.5px;font-weight:800;color:var(--brand)}.tile small{font-size:11.5px;color:var(--muted);line-height:1.35}
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:14px;margin-bottom:12px}
+.field{display:block;font-size:12px;font-weight:800;color:var(--muted);margin:10px 2px 4px}
+.inp,select.inp{width:100%;border:1px solid var(--line);border-radius:10px;padding:12px;background:#fff;font-size:16px}
+.btn{display:block;width:100%;text-align:center;background:var(--brand);color:#fff;font-weight:800;font-size:17px;border-radius:14px;padding:15px;margin-top:14px}
+.btn:disabled{opacity:.45}
+.err{color:var(--bad);font-weight:700;font-size:13.5px;margin-top:10px}
+.note{font-size:12.5px;color:var(--muted);line-height:1.5}
+.muted{color:var(--muted)}.small{font-size:12.5px}
+.hrow{display:block;width:100%;text-align:left;background:#fff;border:1px solid var(--line);border-left:5px solid var(--brand-line);border-radius:var(--r);padding:10px 12px;margin-bottom:8px}
+.hrow.test{border-left-color:var(--warn)}.hrow .t{font-size:14.5px;font-weight:700}.hrow .m{font-size:12px;color:var(--muted);margin-top:3px}
+.ctx{font-size:12.5px;color:var(--muted);background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:12px;line-height:1.5}.ctx b{color:var(--ink)}
+.two{display:grid;grid-template-columns:2fr 1fr;gap:8px}
+.prow{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:9px 10px;margin-bottom:7px;min-height:56px}
+.prow .nm{flex:1;min-width:0}.prow .nm a{display:block;font-size:14.5px;font-weight:700;color:var(--ink);text-decoration:none}.prow .nm a:after{content:' ›';color:var(--faint)}
+.prow .nm span{font-size:11.5px;color:var(--muted)}
+.score{width:74px;border:1px solid var(--line);border-radius:10px;padding:10px 6px;text-align:center;font-size:17px;font-weight:700;flex:none}
+.pct{width:56px;text-align:right;font-size:12px;font-weight:800;flex:none}.pct.ok{color:var(--ok)}.pct.ko{color:var(--bad)}
+.savebar{position:fixed;left:0;right:0;bottom:0;background:rgba(242,244,245,.96);border-top:1px solid var(--line);padding:10px 14px calc(10px + env(safe-area-inset-bottom));z-index:30}
+.savebar .btn{max-width:760px;margin:0 auto}
+.banner{font-size:12.5px;font-weight:700;border-radius:10px;padding:8px 11px;margin-bottom:10px}.banner.warn{background:var(--warn-soft);color:var(--warn)}.banner.ok{background:var(--ok-soft);color:var(--ok)}
+.banner button{color:inherit;text-decoration:underline;font-weight:800;margin-left:6px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:90px;background:var(--ink);color:#fff;padding:10px 16px;border-radius:12px;font-size:13.5px;font-weight:600;z-index:60;max-width:90%}
+.load{text-align:center;color:var(--muted);padding:40px 10px}
+.plist{display:block}
+@media (min-width:700px){.tiles{grid-template-columns:repeat(3,1fr)}.plist{display:grid;grid-template-columns:1fr 1fr;column-gap:10px}}
+@media (min-width:1024px){main{max-width:1100px}.plist{grid-template-columns:repeat(3,1fr)}}
+@media (hover:hover) and (pointer:fine){.tile:hover,.hrow:hover,.prow:hover{border-color:var(--brand-line);box-shadow:0 2px 8px rgba(27,33,36,.08)}}
+</style>
+<script>var LA_BOOT=(function(){var q=new URLSearchParams(location.search),p={};["mode","activityId","personId","area","date","title","tab"].forEach(function(k){p[k]=q.get(k)||"";});if(!p.mode)p.mode="theory";return{v:"36",t:q.get("t")||"",p:p,urls:{home:"index.html"}};})();</script><script>var LA = window.LA_BOOT || { p:{}, urls:{} };
+function laSess(){ try { return JSON.parse(localStorage.getItem('la_sess') || 'null'); } catch(e){ return null; } }
+function laSetSess(s){ try { if (s) localStorage.setItem('la_sess', JSON.stringify(s)); else localStorage.removeItem('la_sess'); } catch(e){} }
+function laQs(o){ var k = Object.keys(o||{}).filter(function(x){ return o[x]; }); return k.map(function(x){ return x+'='+encodeURIComponent(o[x]); }).join('&'); }
+/* mode: home | toj | theory | results | person | area — sessione già nel telefono, niente biglietto */
+function laNav(mode, params){
+  var q = laQs(Object.assign({ mode: mode === 'home' ? '' : mode }, params||{}));
+  var url;
+  if (window.CHDCP_PWA) {
+    var pg = { home:'index.html', toj:'toj.html', theory:'teorica.html', results:'resultados.html', person:'resultados.html', area:'resultados.html' }[mode] || 'index.html';
+    location.href = pg + (q ? '?' + q : ''); return;
+  }
+  url = (LA.urls && LA.urls.home) + (q ? '?' + q : '');
+  try { window.open(url, '_top'); } catch(e){ location.href = url; }
+}
+/* biglietto dell'Agenda → sessione (una volta), poi parte la pagina */
+function laReady(cb){
+  if (!LA.t) { cb(laSess()); return; }
+  var t = LA.t; LA.t = '';
+  try { history.replaceState(null, '', location.pathname + location.search.replace(/([?&])t=[^&]*&?/, '$1').replace(/[?&]$/, '')); } catch(e){}
+  google.script.run.withSuccessHandler(function(s){ laSetSess(s); cb(s); }).withFailureHandler(function(){ cb(laSess()); }).laRedeem(t);
+}
+document.addEventListener('click', function(e){
+  var b = e.target.closest ? e.target.closest('[data-lanav]') : null; if (!b) return;
+  e.preventDefault(); var x = String(b.getAttribute('data-lanav')).split(':');
+  laNav(x[0], x[0] === 'person' ? { personId: x[1] } : x[0] === 'area' ? { area: x[1] } : {});
+});</script></head><body>
+<header class="top"><button class="back" id="bk" aria-label="Menu">‹</button><div class="ttl"><b id="tt">Avaliação teórica</b><span id="ts">Learning &amp; Assessment</span></div></header>
+<main id="app"><div class="load">…</div></main><div id="bar"></div>
+<script>
+function $(id){ return document.getElementById(id); }
+function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+function toast(t){ var d = document.createElement('div'); d.className = 'toast'; d.textContent = t; document.body.appendChild(d); setTimeout(function(){ d.remove(); }, 2800); }
+function dmy(s){ var m = String(s||'').match(/^(\d{4})-(\d{2})-(\d{2})$/); return m ? m[3]+'/'+m[2]+'/'+m[1] : ''; }
+function store(k, v){ try { if (v === undefined) return JSON.parse(localStorage.getItem(k) || 'null'); if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, JSON.stringify(v)); } catch(e){ return null; } }
+function call(fn, args, ms){
+  return new Promise(function(ok, ko){
+    var done = false, tm = setTimeout(function(){ if (!done){ done = true; ko(new Error('TIMEOUT')); } }, ms || 40000);
+    var r = google.script.run.withSuccessHandler(function(v){ if (!done){ done = true; clearTimeout(tm); ok(v); } })
+      .withFailureHandler(function(e){ if (!done){ done = true; clearTimeout(tm); ko(new Error(e && e.message ? e.message : String(e))); } });
+    r[fn].apply(r, args || []);
+  });
+}
+function isNet(m){ return /TIMEOUT|NetworkError|HTTP 0|Failed to fetch|network|Load failed/i.test(String(m||'')); }
+var ERR = { 'LA:SESSION':'A sessão expirou. Entre de novo.', 'LA:AREA':'Esta área não está entre as suas.', 'LA:NOACTIVITY':'Actividade não encontrada no Training Hub.',
+  'LA:FUTURE':'Data futura: só é possível registar a partir do dia da actividade.', 'LA:MAX':'Nota máxima inválida.', 'LA:EMPTY':'Introduza pelo menos uma nota.',
+  'LA:PERSON':'Pessoa desconhecida no Training Hub.', 'LA:SCORE':'Nota fora do intervalo para', 'LA:BUSY':'Sistema ocupado: tente de novo.', 'LA:DATA':'Pedido inválido.',
+  'LA:TICKET':'Ligação inválida: abra de novo a partir da Agenda.', 'LA:EXPIRED':'Ligação expirada: abra de novo a partir da Agenda.', 'LA:USED':'Ligação já usada.', 'LA:NOLINK':'Learning & Assessment ainda não ligado à Agenda.' };
+function errTxt(m){ m = String(m||''); var k = (m.match(/LA:[A-Z]+/) || [''])[0]; var x = m.split('|')[1]; return ERR[k] ? ERR[k] + (x ? ' ' + x : '') : (isNet(m) ? 'Sem ligação ao servidor. Tente de novo.' : m); }
+/* autenticação: sessão da Agenda ou nome + PIN (TOJ / Painel) */
+function authNow(){ var s = laSess(); if (s && s.sess) return { sess: s.sess, name: s.name }; return store('chdcp_toj_v2_auth') || store('rs_auth') || null; }
+
+var AUTH = null, CTX = null, D = null, OUTK = 'la_theory_outbox';
+function head(t, s){ $('tt').textContent = t; $('ts').textContent = s || 'Learning & Assessment'; }
+function num(v){ var s = String(v == null ? '' : v).trim().replace(',', '.'); if (s === '') return null; var n = Number(s); return isNaN(n) ? null : n; }
+function uid(){ return 'TH-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 8); }
+function outbox(){ return store(OUTK) || []; }
+function flush(){
+  var o = outbox(); if (!o.length || !AUTH) return;
+  var it = o[0];
+  call('laSaveTheory', [AUTH, it.p], 60000).then(function(){ store(OUTK, outbox().filter(function(x){ return x.p.clientId !== it.p.clientId; })); toast('Enviado: ' + it.l); flush(); })
+    .catch(function(e){ if (!isNet(e.message)) { store(OUTK, outbox().filter(function(x){ return x.p.clientId !== it.p.clientId; })); toast('Não enviado (' + it.l + '): ' + errTxt(e.message)); } });
+}
+window.addEventListener('online', function(){ setTimeout(flush, 1500); });
+$('bk').onclick = function(){ if (CTX && !LA.p.activityId) { CTX = null; $('bar').innerHTML = ''; pick(); } else laNav('home'); };
+
+function pick(){
+  head('Avaliação teórica', 'Escolha a actividade');
+  $('app').innerHTML = '<div class="load">A carregar…</div>';
+  call('laTheoryActivities', [AUTH]).then(function(list){
+    var h = outbox().length ? '<div class="banner warn">' + outbox().length + ' registo(s) por enviar<button id="fl">Enviar agora</button></div>' : '';
+    h += list.length ? list.map(function(a){ return '<button class="hrow' + (a.test ? ' test' : '') + '" data-id="' + esc(a.id) + '"><div class="t">' + (a.test ? '📝 ' : '') + esc(a.t) + '</div><div class="m">' + esc(dmy(a.d)) + ' · ' + esc(a.area) + ' · ' + esc(a.id) + '</div></button>'; }).join('')
+      : '<div class="card note">Sem actividades nos últimos dias nas suas áreas.</div>';
+    $('app').innerHTML = h;
+    if ($('fl')) $('fl').onclick = flush;
+    Array.prototype.forEach.call(document.querySelectorAll('.hrow'), function(b){ b.onclick = function(){ load(b.getAttribute('data-id'), null); }; });
+  }).catch(fail);
+}
+function fail(e){ var m = errTxt(e.message); if (/sessão/.test(m)) { laNav('home'); return; } $('app').innerHTML = '<div class="card"><div class="err">' + esc(m) + '</div><button class="btn" id="rt">Tentar de novo</button></div>'; $('rt').onclick = start; }
+function load(id, fb){
+  $('app').innerHTML = '<div class="load">A carregar…</div>';
+  call('laTheoryContext', [AUTH, id, fb]).then(function(c){
+    CTX = c; D = { raw: {}, max: c.max, assessment: c.assessment, cid: uid(), fb: fb };
+    Object.keys(c.saved || {}).forEach(function(pid){ D.raw[pid] = c.saved[pid].raw; });
+    draw();
+  }).catch(fail);
+}
+function draw(){
+  var c = CTX, a = c.act;
+  head('Avaliação teórica', a.area + ' · ' + dmy(a.date));
+  var h = '<div class="ctx"><b>' + esc(a.title) + '</b><br>' + esc(dmy(a.date)) + ' · ' + esc(a.area) + ' · ' + esc(a.id) + (a.provisional ? ' · <i>ainda não no Hub</i>' : '') + '<br>Avaliador: ' + esc(c.assessor) + '</div>';
+  if (Object.keys(c.saved || {}).length) h += '<div class="banner ok">Notas já registadas: pode corrigir e guardar de novo.</div>';
+  h += '<div class="two"><div><label class="field">Prova</label><input class="inp" id="tas" value="' + esc(D.assessment) + '"></div><div><label class="field">Nota máxima</label><input class="inp" id="tmx" inputmode="decimal" value="' + esc(D.max) + '"></div></div>' +
+    '<p class="note" style="margin:8px 2px 10px">Aprovado com ≥ ' + esc(c.passMark) + '% (regra do Training Hub). Deixe vazio quem não fez a prova. Toque no nome para ver o perfil.</p>';
+  h += '<div class="plist">' + (c.people.length ? c.people.map(function(p){
+    var sub = [p.cohort, p.att === 'PRESENT' ? 'presente' : (p.att === 'ABSENT' ? 'ausente' : '')].filter(Boolean).join(' · ');
+    return '<div class="prow"><div class="nm"><a href="#" data-lanav="person:' + esc(p.id) + '">' + esc(p.name) + '</a><span>' + esc(sub) + '</span></div>' +
+      '<input class="score" data-p="' + esc(p.id) + '" inputmode="decimal" placeholder="—" value="' + esc(D.raw[p.id] == null ? '' : D.raw[p.id]) + '"><span class="pct" id="pc_' + esc(p.id) + '"></span></div>';
+  }).join('') : '<div class="card note">Sem formandos da área ' + esc(a.area) + '.</div>') + '</div>';
+  $('app').innerHTML = h;
+  $('bar').innerHTML = '<div class="savebar"><button class="btn" id="save">Guardar notas</button></div>';
+  var paint = function(){
+    var max = num(D.max), n = 0, bad = false;
+    c.people.forEach(function(p){
+      var el = $('pc_' + p.id), v = num(D.raw[p.id]); if (!el) return;
+      if (v == null) { el.textContent = ''; el.className = 'pct'; return; }
+      n++;
+      if (!max || v < 0 || v > max) { el.textContent = '!'; el.className = 'pct ko'; bad = true; return; }
+      var pc = Math.round(v / max * 1000) / 10; el.textContent = pc + '%'; el.className = 'pct ' + (pc >= c.passMark ? 'ok' : 'ko');
+    });
+    $('save').disabled = !n || bad || !max; $('save').textContent = bad ? 'Nota fora de 0–' + (max || '?') : 'Guardar notas (' + n + ')';
+  };
+  Array.prototype.forEach.call(document.querySelectorAll('.score'), function(el){ el.oninput = function(){ D.raw[el.getAttribute('data-p')] = el.value; paint(); }; });
+  $('tmx').oninput = function(){ D.max = this.value; paint(); };
+  $('tas').oninput = function(){ D.assessment = this.value; };
+  $('save').onclick = function(){
+    var items = Object.keys(D.raw).filter(function(k){ return num(D.raw[k]) != null; }).map(function(k){ return { pid: k, raw: num(D.raw[k]) }; });
+    var p = { clientId: D.cid, activityId: c.act.id, max: num(D.max), assessment: D.assessment, items: items, fallback: D.fb };
+    $('save').disabled = true;
+    call('laSaveTheory', [AUTH, p], 60000).then(function(r){
+      toast(r.duplicate ? 'Já estava guardado.' : 'Notas guardadas: ' + r.passed + ' de ' + r.total + ' aprovados.');
+      D.cid = uid(); load(c.act.id, D.fb);
+    }).catch(function(e){
+      if (isNet(e.message)) { var o = outbox(); o.push({ p: p, l: c.act.title }); store(OUTK, o); toast('Sem ligação: guardado no telefone, será enviado.'); D.cid = uid(); $('save').disabled = false; return; }
+      $('save').disabled = false; toast(errTxt(e.message));
+    });
+  };
+  paint();
+}
+function start(){
+  AUTH = authNow();
+  if (!AUTH) { laNav('home'); return; }
+  flush();
+  if (LA.p && LA.p.activityId) load(LA.p.activityId, { area: LA.p.area, date: LA.p.date, title: LA.p.title });
+  else pick();
+}
+laReady(start);
+</script></body></html>
