@@ -1,12 +1,22 @@
 <!doctype html><html lang="pt"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#7d1d1a"><title>CHDCP · Apps</title><link rel="icon" href="agenda/favicon.png">
 <style>body{margin:0;background:#f2f4f5;font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:#1b2124}
-header{background:#7d1d1a;color:#fff;padding:22px 18px}h1{margin:0;font-size:21px}header p{margin:4px 0 0;opacity:.85;font-size:13px}
+header{background:#7d1d1a;color:#fff;padding:20px 18px;display:flex;align-items:center;gap:12px}header div{flex:1;min-width:0}h1{margin:0;font-size:21px}header p{margin:4px 0 0;opacity:.85;font-size:13px}
+.lgp{display:inline-flex;border:1.5px solid rgba(255,255,255,.6);border-radius:20px;overflow:hidden;flex:none}.lgp button{font:800 12px/1 inherit;color:#fff;background:none;border:0;padding:8px 10px;cursor:pointer}.lgp button.on{background:#fff;color:#7d1d1a}
 main{max-width:640px;margin:0 auto;padding:16px}a.app{display:flex;align-items:center;gap:16px;background:#fff;border:1px solid #e2e7ea;border-radius:16px;padding:14px;margin-bottom:12px;text-decoration:none;color:inherit}
 a.app img{width:64px;height:64px;border-radius:14px}a.app b{display:block;font-size:17px;color:#7d1d1a}a.app span{font-size:13px;color:#65727a}
 .how{font-size:13px;color:#65727a;background:#fff;border:1px dashed #e2e7ea;border-radius:12px;padding:12px}</style></head><body>
-<header><h1>CHDCP · CCM</h1><p>Improving Cardiac Surgery in Angola</p></header><main>
-<a class="app" href="agenda/"><img src="agenda/icon-192.png" alt=""><div><b>CHDCP Agenda</b><span>Actividades, presenças, questionário</span></div></a>
-<a class="app" href="avaliacao/"><img src="avaliacao/icon-192.png" alt=""><div><b>CHDCP Learning &amp; Assessment</b><span>Avaliação TOJ, teórica e resultados</span></div></a>
-<div class="how"><b>Instalar no telemóvel</b><br>Android (Chrome): abra a app → menu ⋮ → <i>Instalar aplicação</i>.<br>iPhone (Safari): abra a app → <i>Partilhar</i> → <i>Adicionar ao ecrã principal</i>.</div>
-</main></body></html>
+<header><div><h1>CHDCP · CCM</h1><p>Improving Cardiac Surgery in Angola</p></div><span class="lgp" id="lg"></span></header><main>
+<a class="app" href="agenda/"><img src="agenda/icon-192.png" alt=""><div><b>CHDCP Agenda</b><span data-t="ag"></span></div></a>
+<a class="app" href="avaliacao/"><img src="avaliacao/icon-192.png" alt=""><div><b>CHDCP Learning &amp; Assessment</b><span data-t="la"></span></div></a>
+<div class="how" data-t="how"></div>
+</main><script>
+var T={PT:{ag:'Actividades, presenças, questionário',la:'Avaliação TOJ, teórica e resultados',how:'<b>Instalar no telemóvel</b><br>Android (Chrome): abra a app → menu ⋮ → <i>Instalar aplicação</i>.<br>iPhone (Safari): abra a app → <i>Partilhar</i> → <i>Adicionar ao ecrã principal</i>.'},
+EN:{ag:'Activities, attendance, questionnaire',la:'TOJ and theory assessment, results',how:'<b>Install on the phone</b><br>Android (Chrome): open the app → menu ⋮ → <i>Install app</i>.<br>iPhone (Safari): open the app → <i>Share</i> → <i>Add to Home Screen</i>.'},
+IT:{ag:'Attività, presenze, questionario',la:'Valutazione TOJ, teorica e risultati',how:'<b>Installare sul telefono</b><br>Android (Chrome): apri l\'app → menu ⋮ → <i>Installa app</i>.<br>iPhone (Safari): apri l\'app → <i>Condividi</i> → <i>Aggiungi alla schermata Home</i>.'}};
+var L='PT';try{var v=localStorage.getItem('chdcp_lang');if(T[v])L=v}catch(e){}
+function draw(){document.documentElement.lang=L.toLowerCase();document.querySelectorAll('[data-t]').forEach(function(e){e.innerHTML=T[L][e.getAttribute('data-t')]});
+document.getElementById('lg').innerHTML=['PT','EN','IT'].map(function(x){return'<button class="'+(x===L?'on':'')+'" data-l="'+x+'">'+x+'</button>'}).join('');
+document.querySelectorAll('[data-l]').forEach(function(b){b.onclick=function(){L=b.getAttribute('data-l');try{localStorage.setItem('chdcp_lang',L)}catch(e){}draw()}})}
+draw();
+</script></body></html>

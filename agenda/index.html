@@ -18,6 +18,10 @@ input{font-family:inherit;font-size:16px}
 .top h1{font-size:20px;font-weight:800;line-height:1.2}
 .top p{font-size:12.5px;opacity:.85;margin-top:2px}
 .top .bar{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.lgp{display:inline-flex;flex:none;border:1.5px solid rgba(255,255,255,.55);border-radius:20px;overflow:hidden}
+.lgp button{font-size:11px;font-weight:800;color:#fff;padding:5px 8px;background:none;border:0;min-width:30px}
+.lgp button.on{background:#fff;color:var(--brand)}
+.hright{display:flex;gap:6px;align-items:center;flex:none}
 .chipbtn{font-size:11.5px;font-weight:800;border:1.5px solid rgba(255,255,255,.55);border-radius:20px;padding:6px 11px;color:#fff;white-space:nowrap}
 .body{padding:14px}
 .sec{font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--brand);text-transform:uppercase;margin:6px 2px 9px}
@@ -95,6 +99,9 @@ input{font-family:inherit;font-size:16px}
 .navdate button{height:44px;background:#fff;border:1px solid var(--line);border-radius:11px;font-size:20px;font-weight:800}
 .navdate .period{text-align:center;font-size:13px;font-weight:800;line-height:1.25}
 .navdate .period small{display:block;color:var(--muted);font-weight:600;margin-top:2px}
+.navdate .period small button{height:auto;border:0;background:none;font-size:12px;font-weight:700;color:var(--brand);text-decoration:underline;padding:2px 4px}
+.srow{display:flex;gap:7px;align-items:stretch}.srow .agsearch{flex:1;min-width:0}
+.ftg{flex:none;border:1px solid var(--line);border-radius:11px;background:#fff;font-size:12px;font-weight:800;color:var(--brand);padding:0 11px;white-space:nowrap}.ftg b{display:inline-block;background:var(--brand);color:#fff;border-radius:9px;font-size:10.5px;padding:1px 6px;margin-left:5px}.ftg.on{background:var(--brand-soft)}
 .weekstrip{display:grid;grid-template-columns:repeat(7,minmax(43px,1fr));gap:4px;margin-bottom:12px;overflow-x:auto}
 .wday{background:#fff;border:1px solid var(--line);border-radius:10px;min-width:43px;padding:7px 2px;text-align:center;position:relative}
 .wday b{display:block;font-size:12px}.wday span{display:block;font-size:10px;color:var(--muted);margin-top:2px}.wday.today{border-color:var(--brand);color:var(--brand)}
@@ -103,7 +110,7 @@ input{font-family:inherit;font-size:16px}
 .agsearch{width:100%;border:1px solid var(--line);border-radius:10px;padding:11px 12px;background:var(--bg);margin-bottom:8px}
 .selectrow{display:grid;grid-template-columns:1fr 1fr;gap:7px}
 .sel{width:100%;min-height:40px;border:1px solid var(--line);border-radius:10px;background:#fff;padding:7px 9px;font:inherit;font-size:12.5px;color:var(--ink)}
-.quick{display:flex;gap:6px;overflow-x:auto;margin-top:8px}.quick button{white-space:nowrap;min-height:36px;padding:7px 10px;border-radius:18px;border:1px solid var(--line);font-size:11.5px;font-weight:800}.quick button.on{background:var(--brand);border-color:var(--brand);color:#fff}
+.quick{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.quick button{white-space:nowrap;min-height:36px;padding:7px 10px;border-radius:18px;border:1px solid var(--line);font-size:11.5px;font-weight:800}.quick button.on{background:var(--brand);border-color:var(--brand);color:#fff}
 .legend{display:flex;flex-wrap:wrap;gap:6px;margin:8px 1px 2px}.legend span{font-size:10.5px;color:var(--muted);display:inline-flex;align-items:center;gap:4px}.legend i{width:12px;height:12px;border-radius:4px;border:2px solid var(--line);display:inline-block}.legend .lg-tent{border-style:dashed}.legend .lg-done{background:var(--ok-soft);border-color:var(--ok)}.legend .lg-general{background:#f1edfb;border-color:#7560aa}.legend .lg-hidden{background:var(--bad-soft);border-color:var(--bad)}
 .tag.general{background:#f1edfb;color:#5b3fa8}
 .typeico{margin-right:4px}
@@ -231,6 +238,11 @@ input{font-family:inherit;font-size:16px}
 .savebar .in{max-width:760px;margin:0 auto}
 .savebar .btn{padding:14px}
 .minor{display:inline-block;font-size:12.5px;font-weight:800;color:var(--brand);border:1.5px solid var(--brand-line);border-radius:18px;padding:8px 12px;margin:0 6px 10px 0;background:#fff}
+.addpanel{border:1.5px solid var(--brand-line);border-radius:12px;background:#fff;padding:10px;margin:0 0 12px}
+.addhead{display:flex;gap:8px;align-items:center}.addhead .inp{flex:1}.addhead .minor{margin:0;flex:none}
+.addlist{max-height:46vh;overflow:auto;margin-top:8px;-webkit-overflow-scrolling:touch}
+.addlist .user{margin-bottom:6px}.addnote{margin:2px 2px 8px}
+.addplus{flex:none;font-size:20px;font-weight:800;color:var(--brand);padding:0 4px}
 .pending{font-size:12.5px;padding:7px 11px;border-radius:9px;margin:0 0 10px;background:var(--warn-soft);color:var(--warn);font-weight:700}
 .pending button{color:inherit;text-decoration:underline;font-weight:800;margin-left:6px}
 .mg{background:#fff;border:1px solid var(--line);border-radius:14px;margin-bottom:9px;overflow:hidden}
@@ -312,6 +324,301 @@ input{font-family:inherit;font-size:16px}
 <div id="layer"></div>
 
 <script>
+/*I18N:BEGIN*/
+/* CHDCP · idioma (PT / EN / IT) — partilhado por Agenda e Learning & Assessment.
+   O texto é escrito em português no código; esta camada traduz o que aparece no ecrã
+   (texto, placeholder, title, aria-label) a partir de um dicionário PT → EN / IT.
+   A escolha fica no telefone (chave chdcp_lang) e passa entre as apps com ?lang=XX. */
+var I18N = (function () {
+  var KEY = 'chdcp_lang', L = 'PT', MAP = {}, PAT = [];
+  try {
+    var q = new URLSearchParams(location.search).get('lang') || (window.LA_BOOT && LA_BOOT.p && LA_BOOT.p.lang) || '';
+    var v = localStorage.getItem(KEY); if (/^(PT|EN|IT)$/.test(v || '')) L = v;
+    /* a língua que chega num link vale uma vez: depois manda a escolha feita aqui */
+    q = String(q).toUpperCase();
+    if (/^(PT|EN|IT)$/.test(q) && q !== localStorage.getItem(KEY + '_link')) { L = q; localStorage.setItem(KEY, L); localStorage.setItem(KEY + '_link', q); }
+  } catch (e) {}
+  function add(rows) { rows.forEach(function (r) { if (r[0] instanceof RegExp) PAT.push(r); else MAP[r[0]] = r; }); }
+  function tr(s) {
+    if (L === 'PT' || !s) return s;
+    var k = String(s).trim(); if (!k) return s;
+    var i = L === 'EN' ? 1 : 2, r = MAP[k];
+    if (r) return String(s).replace(k, r[i]);
+    for (var j = 0; j < PAT.length; j++) if (PAT[j][0].test(k)) return String(s).replace(k, k.replace(PAT[j][0], PAT[j][i]));
+    return s;
+  }
+  var ATTR = ['placeholder', 'title', 'aria-label'];
+  function walk(n) {
+    if (n.nodeType === 3) { var t = tr(n.nodeValue); if (t !== n.nodeValue) n.nodeValue = t; return; }
+    if (n.nodeType !== 1 || n.tagName === 'SCRIPT' || n.tagName === 'STYLE' || n.hasAttribute('data-noi18n')) return;
+    for (var a = 0; a < ATTR.length; a++) { var v = n.getAttribute(ATTR[a]); if (v) { var tv = tr(v); if (tv !== v) n.setAttribute(ATTR[a], tv); } }
+    for (var c = n.firstChild; c; c = c.nextSibling) walk(c);
+  }
+  function start() {
+    try { document.documentElement.lang = L.toLowerCase(); } catch (e) {}
+    if (L === 'PT' || !document.body || !window.MutationObserver) return;
+    walk(document.body);
+    new MutationObserver(function (ms) {
+      ms.forEach(function (m) { if (m.type === 'characterData') walk(m.target); else for (var i = 0; i < m.addedNodes.length; i++) walk(m.addedNodes[i]); });
+    }).observe(document.body, { childList: true, subtree: true, characterData: true });
+  }
+  function set(l) { try { localStorage.setItem(KEY, l); } catch (e) {} location.reload(); }
+  function picker() {
+    return '<span class="lgp" data-noi18n role="group" aria-label="Idioma · Language · Lingua">' + ['PT', 'EN', 'IT'].map(function (x) {
+      return '<button type="button" class="' + (x === L ? 'on' : '') + '" onclick="I18N.set(\'' + x + '\')">' + x + '</button>';
+    }).join('') + '</span>';
+  }
+  function url(u) { return !u || /[?&]lang=/.test(u) ? u : u + (u.indexOf('?') >= 0 ? '&' : '?') + 'lang=' + L; }
+  return { lang: function () { return L; }, add: add, tr: tr, start: start, set: set, picker: picker, url: url };
+})();
+
+/* Dicionário da CHDCP Agenda: [português, English, italiano].
+   Linhas com expressão regular servem para textos com números ou nomes ($1, $2…). */
+I18N.add([
+  /* acesso */
+  ['Agenda operativa CHDCP–CCM', 'CHDCP–CCM operational agenda', 'Agenda operativa CHDCP–CCM'],
+  ['Quem está a utilizar a aplicação?', 'Who is using the app?', 'Chi sta usando l\'app?'],
+  ['Procurar nome…', 'Search name…', 'Cerca nome…'],
+  ['A carregar…', 'Loading…', 'Caricamento…'],
+  ['Nenhum utilizador encontrado.', 'No user found.', 'Nessun utente trovato.'],
+  ['Usados recentemente', 'Recently used', 'Usati di recente'],
+  ['Por área', 'By area', 'Per area'],
+  ['Nenhum utilizador disponível.', 'No users available.', 'Nessun utente disponibile.'],
+  ['Transversais / ALL', 'Cross-cutting / ALL', 'Trasversali / ALL'],
+  ['SEM ÁREA', 'NO AREA', 'SENZA AREA'],
+  [/^Resultados da pesquisa · (\d+)$/, 'Search results · $1', 'Risultati della ricerca · $1'],
+  ['Bem-vinda/o,', 'Welcome,', 'Benvenuta/o,'],
+  ['PIN pessoal', 'Personal PIN', 'PIN personale'],
+  ['ENTRAR', 'SIGN IN', 'ENTRA'],
+  ['Limpar', 'Clear', 'Cancella'],
+  ['Outro utilizador', 'Another user', 'Altro utente'],
+  ['Primeiro acesso', 'First access', 'Primo accesso'],
+  ['Alterar PIN', 'Change PIN', 'Cambia PIN'],
+  ['Escolha o seu PIN pessoal', 'Choose your personal PIN', 'Scegli il tuo PIN personale'],
+  ['O PIN inicial', 'The initial PIN', 'Il PIN iniziale'],
+  [/^é temporário\. Para continuar, escolha um novo PIN de (\d+) algarismos, diferente de 1111\.$/, 'is temporary. To continue, choose a new $1-digit PIN, different from 1111.', 'è temporaneo. Per continuare scegli un nuovo PIN di $1 cifre, diverso da 1111.'],
+  ['Novo PIN', 'New PIN', 'Nuovo PIN'],
+  ['Repetir PIN', 'Repeat PIN', 'Ripeti PIN'],
+  ['GUARDAR NOVO PIN', 'SAVE NEW PIN', 'SALVA NUOVO PIN'],
+  ['Sair / outro utilizador', 'Sign out / another user', 'Esci / altro utente'],
+  [/^Introduza (\d+) algarismos nos dois campos\.$/, 'Enter $1 digits in both fields.', 'Inserisci $1 cifre in entrambi i campi.'],
+  ['Os dois PIN não coincidem.', 'The two PINs do not match.', 'I due PIN non coincidono.'],
+  ['Escolha um PIN diferente de 1111.', 'Choose a PIN other than 1111.', 'Scegli un PIN diverso da 1111.'],
+  ['PIN alterado.', 'PIN changed.', 'PIN cambiato.'],
+  ['A sessão expirou. Introduza o PIN.', 'Session expired. Enter your PIN.', 'Sessione scaduta. Inserisci il PIN.'],
+  ['a sessão expirou. Introduza o PIN.', 'session expired. Enter your PIN.', 'sessione scaduta. Inserisci il PIN.'],
+  ['PIN errado.', 'Wrong PIN.', 'PIN errato.'],
+  [/^PIN errado\. (.*)$/, 'Wrong PIN. $1', 'PIN errato. $1'],
+  [/^Demasiadas tentativas\. Tente de novo depois das (.*)$/, 'Too many attempts. Try again after $1', 'Troppi tentativi. Riprova dopo le $1'],
+  ['Utilizador não encontrado.', 'User not found.', 'Utente non trovato.'],
+  ['Utilizador inactivo. Contacte o administrador.', 'Inactive user. Contact the administrator.', 'Utente non attivo. Contatta l\'amministratore.'],
+  ['Sistema ocupado. Tente novamente dentro de alguns segundos.', 'System busy. Try again in a few seconds.', 'Sistema occupato. Riprova tra qualche secondo.'],
+  ['Sair', 'Sign out', 'Esci'],
+  ['☰ Menu', '☰ Menu', '☰ Menu'],
+
+  /* ligação / sincronização */
+  ['Sem ligação ao servidor', 'No connection to the server', 'Nessuna connessione al server'],
+  ['Verifique a internet e tente de novo.', 'Check the internet and try again.', 'Controlla internet e riprova.'],
+  ['Tentar de novo', 'Try again', 'Riprova'],
+  ['Não foi possível abrir', 'Could not open', 'Impossibile aprire'],
+  ['A actualizar…', 'Updating…', 'Aggiornamento…'],
+  [/^A actualizar… · dados de (.*)$/, 'Updating… · data from $1', 'Aggiornamento… · dati delle $1'],
+  [/^Sem ligação — dados de (.*)$/, 'Offline — data from $1', 'Offline — dati delle $1'],
+  [/^Actualizado (.*)$/, 'Updated $1', 'Aggiornato $1'],
+  [/^(\d+) registo\(s\) por enviar$/, '$1 record(s) to send', '$1 registrazione/i da inviare'],
+  ['Enviar agora', 'Send now', 'Invia ora'],
+  ['Nada por enviar.', 'Nothing to send.', 'Niente da inviare.'],
+  [/^Enviado: (.*)$/, 'Sent: $1', 'Inviato: $1'],
+  [/^Não enviado \((.*)\): (.*)$/, 'Not sent ($1): $2', 'Non inviato ($1): $2'],
+  ['Ainda sem ligação.', 'Still offline.', 'Ancora offline.'],
+  ['Sem ligação: tente quando houver rede.', 'Offline: try when there is a connection.', 'Offline: riprova quando c\'è rete.'],
+  ['Training Hub não disponível. Tente de novo.', 'Training Hub not available. Try again.', 'Training Hub non disponibile. Riprova.'],
+
+  /* menu inicial */
+  ['Agenda', 'Agenda', 'Agenda'],
+  ['Hoje, semana e lista', 'Today, week and list', 'Oggi, settimana ed elenco'],
+  ['Presenças', 'Attendance', 'Presenze'],
+  ['Aulas e reuniões', 'Lessons and meetings', 'Lezioni e riunioni'],
+  ['Avaliação TOJ', 'TOJ assessment', 'Valutazione TOJ'],
+  ['No posto de trabalho', 'On the job', 'Sul posto di lavoro'],
+  ['Avaliação teórica', 'Theory assessment', 'Valutazione teorica'],
+  ['Provas escritas', 'Written tests', 'Prove scritte'],
+  ['Questionário', 'Questionnaire', 'Questionario'],
+  ['Satisfação da formação', 'Training satisfaction', 'Gradimento della formazione'],
+  [/^(\d+) hoje · (\d+) no total$/, '$1 today · $2 in total', '$1 oggi · $2 in totale'],
+  [/^(\d+) actividade\(s\)$/, '$1 activity(ies)', '$1 attività'],
+  ['Meu percurso', 'My progress', 'Il mio percorso'],
+  ['Os meus resultados', 'My results', 'I miei risultati'],
+  ['Resultados da área', 'Area results', 'Risultati dell\'area'],
+  ['Formandos e competências', 'Trainees and skills', 'Formandi e competenze'],
+  [/^As minhas actividades de hoje · (.*)$/, 'My activities today · $1', 'Le mie attività di oggi · $1'],
+  ['Sem actividades suas hoje.', 'No activities of yours today.', 'Nessuna tua attività oggi.'],
+  [/^(.*) · vê tudo$/, '$1 · sees everything', '$1 · vede tutto'],
+  [/^(.*) · vê a sua área$/, '$1 · sees own area', '$1 · vede la sua area'],
+  [/^(.*) · vê as suas$/, '$1 · sees own activities', '$1 · vede le sue'],
+
+  /* agenda */
+  ['Hoje', 'Today', 'Oggi'],
+  ['Semana', 'Week', 'Settimana'],
+  ['Lista', 'List', 'Elenco'],
+  ['HOJE', 'TODAY', 'OGGI'],
+  ['Ir para hoje', 'Go to today', 'Vai a oggi'],
+  ['Anterior', 'Previous', 'Precedente'],
+  ['Seguinte', 'Next', 'Successivo'],
+  ['Janela disponível', 'Available window', 'Finestra disponibile'],
+  ['Procurar actividade, pessoa, local…', 'Search activity, person, place…', 'Cerca attività, persona, luogo…'],
+  ['Todas as áreas', 'All areas', 'Tutte le aree'],
+  ['Todos os tipos', 'All types', 'Tutti i tipi'],
+  ['As minhas', 'Mine', 'Le mie'],
+  ['Canceladas / adiadas', 'Cancelled / postponed', 'Annullate / rinviate'],
+  ['Limpar filtros', 'Clear filters', 'Pulisci filtri'],
+  ['Filtros', 'Filters', 'Filtri'],
+  ['↻ Actualizar', '↻ Refresh', '↻ Aggiorna'],
+  ['Prevista', 'Planned', 'Prevista'],
+  ['Realizada', 'Done', 'Svolta'],
+  ['Plano geral', 'General plan', 'Piano generale'],
+  ['Cancelada / adiada', 'Cancelled / postponed', 'Annullata / rinviata'],
+  ['Calendário', 'Calendar', 'Calendario'],
+  ['Compacta', 'Compact', 'Compatta'],
+  ['Melhor para ver todas as áreas na mesma semana.', 'Best to see all areas in the same week.', 'Ideale per vedere tutte le aree nella stessa settimana.'],
+  ['Melhor para uma área única ou poucas actividades.', 'Best for a single area or few activities.', 'Ideale per una sola area o poche attività.'],
+  ['Vista compacta semanal, ideal para leitura multiárea.', 'Compact weekly view, ideal for reading across areas.', 'Vista settimanale compatta, ideale per più aree.'],
+  ['Deslize horizontalmente no telemóvel para ver os cinco dias.', 'Swipe sideways on the phone to see all five days.', 'Scorri in orizzontale sul telefono per vedere i cinque giorni.'],
+  ['Nenhuma actividade.', 'No activities.', 'Nessuna attività.'],
+  ['Nenhuma actividade encontrada.', 'No activities found.', 'Nessuna attività trovata.'],
+  ['1 actividade', '1 activity', '1 attività'],
+  [/^(\d+) actividades$/, '$1 activities', '$1 attività'],
+  [/^(\d+) actividades · planos lidos às (.*)$/, '$1 activities · plans read at $2', '$1 attività · piani letti alle $2'],
+  ['Sem hora', 'No time', 'Senza orario'],
+  ['SEM', 'NO', 'SENZA'],
+  ['HORA', 'TIME', 'ORARIO'],
+  ['Fim-de-semana', 'Weekend', 'Fine settimana'],
+  [/^Feriado · (.*)$/, 'Holiday · $1', 'Festività · $1'],
+  ['Dia de feriado', 'Public holiday', 'Giorno festivo'],
+  ['Dia útil antes do feriado', 'Working day before a holiday', 'Giorno lavorativo prima della festività'],
+  ['Dia útil depois do feriado', 'Working day after a holiday', 'Giorno lavorativo dopo la festività'],
+  [/^Fora do período disponível no telefone \((.*)\)\.$/, 'Outside the period stored on the phone ($1).', 'Fuori dal periodo salvato sul telefono ($1).'],
+  ['O seu utilizador ainda não está ligado a uma pessoa do Training Hub: só vê as actividades da sua área.', 'Your user is not yet linked to a person in the Training Hub: you only see your area\'s activities.', 'Il tuo utente non è ancora collegato a una persona del Training Hub: vedi solo le attività della tua area.'],
+  ['FORMADOR', 'TRAINER', 'FORMATORE'],
+  ['PARTICIPANTE', 'PARTICIPANT', 'PARTECIPANTE'],
+  ['PREVISTA', 'PLANNED', 'PREVISTA'],
+  ['✓ REALIZADA', '✓ DONE', '✓ SVOLTA'],
+  ['PLANO GERAL', 'GENERAL PLAN', 'PIANO GENERALE'],
+  ['CANCELADA', 'CANCELLED', 'ANNULLATA'],
+  [/^PROTOCOLO · (.*)$/, 'PROTOCOL · $1', 'PROTOCOLLO · $1'],
+  [/^PROCEDIMENTO · (.*)$/, 'PROCEDURE · $1', 'PROCEDURA · $1'],
+  ['PRESENÇAS', 'ATTENDANCE', 'PRESENZE'],
+  ['TEÓRICA', 'THEORY', 'TEORICA'],
+  ['QUESTIONÁRIO', 'QUESTIONNAIRE', 'QUESTIONARIO'],
+  ['sem hora', 'no time', 'senza orario'],
+
+  ['Outra actividade', 'Other activity', 'Altra attività'],
+  [/^Outra actividade · (.*)$/, 'Other activity · $1', 'Altra attività · $1'],
+  [/^Sem plano mensal: (.*) \(mostrado o plano geral, provisório\)$/, 'No monthly plan: $1 (general plan shown, provisional)', 'Nessun piano mensile: $1 (mostrato il piano generale, provvisorio)'],
+
+  /* ficha */
+  ['Actividade', 'Activity', 'Attività'],
+  ['Data', 'Date', 'Data'],
+  ['Hora', 'Time', 'Ora'],
+  ['Hora (Luanda)', 'Time (Luanda)', 'Ora (Luanda)'],
+  ['Duração', 'Duration', 'Durata'],
+  ['Área', 'Area', 'Area'],
+  ['Tipo', 'Type', 'Tipo'],
+  ['Metodologia', 'Methodology', 'Metodologia'],
+  ['Plataforma', 'Platform', 'Piattaforma'],
+  ['Local', 'Place', 'Luogo'],
+  ['Local / sala', 'Place / room', 'Luogo / aula'],
+  ['Formador / responsável', 'Trainer / responsible', 'Formatore / responsabile'],
+  ['Tradutor', 'Translator', 'Traduttore'],
+  ['Público-alvo', 'Target audience', 'Destinatari'],
+  ['Participantes previstos', 'Expected participants', 'Partecipanti previsti'],
+  ['Estado', 'Status', 'Stato'],
+  ['Atenção', 'Attention', 'Attenzione'],
+  ['Fechar', 'Close', 'Chiudi'],
+  ['Voltar', 'Back', 'Indietro'],
+  ['Acções', 'Actions', 'Azioni'],
+  ['Registar presenças', 'Record attendance', 'Registra presenze'],
+  ['Presente / ausente de cada participante', 'Present / absent for each participant', 'Presente / assente per ogni partecipante'],
+  ['Abre Learning & Assessment já nesta actividade', 'Opens Learning & Assessment on this activity', 'Apre Learning & Assessment su questa attività'],
+  ['Notas da prova, em Learning & Assessment', 'Test scores, in Learning & Assessment', 'Voti della prova, in Learning & Assessment'],
+  ['Questionário de satisfação', 'Satisfaction questionnaire', 'Questionario di gradimento'],
+  ['Questionário anónimo da formação', 'Anonymous training questionnaire', 'Questionario anonimo sulla formazione'],
+  ['Actividade cancelada / adiada: sem acções.', 'Activity cancelled / postponed: no actions.', 'Attività annullata / rinviata: nessuna azione.'],
+  ['Esta actividade não tem registos a fazer.', 'Nothing to record for this activity.', 'Nessuna registrazione da fare per questa attività.'],
+  ['Só consulta: não é formador nem participante desta actividade.', 'View only: you are neither trainer nor participant of this activity.', 'Solo consultazione: non sei formatore né partecipante di questa attività.'],
+  [/^✓ (\d+) registados \((\d+) presentes\)$/, '✓ $1 recorded ($2 present)', '✓ $1 registrati ($2 presenti)'],
+  [/^Disponível a partir de (.*)$/, 'Available from $1', 'Disponibile da $1'],
+  [/^Resultados da área (.*)$/, 'Results for area $1', 'Risultati dell\'area $1'],
+  ['Formandos, competências, evolução', 'Trainees, skills, progress', 'Formandi, competenze, andamento'],
+  ['Plano de formação (Detailed Plan)', 'Training plan (Detailed Plan)', 'Piano formativo (Detailed Plan)'],
+  ['Objectivo', 'Objective', 'Obiettivo'],
+  ['Conteúdos / competências', 'Contents / skills', 'Contenuti / competenze'],
+  ['Domínio', 'Domain', 'Dominio'],
+  ['Fase', 'Phase', 'Fase'],
+  ['Avaliação', 'Assessment', 'Valutazione'],
+  ['Critério de sucesso', 'Success criterion', 'Criterio di successo'],
+  [/^Prioridades TOJ (.*)$/, 'TOJ priorities $1', 'Priorità TOJ $1'],
+  [/^Participantes previstos · (\d+)$/, 'Expected participants · $1', 'Partecipanti previsti · $1'],
+  ['Escolha a actividade', 'Choose the activity', 'Scegli l\'attività'],
+  [/^Anteriores \(últimos (\d+) dias\)$/, 'Earlier (last $1 days)', 'Precedenti (ultimi $1 giorni)'],
+  ['Próximos dias', 'Coming days', 'Prossimi giorni'],
+  ['Nenhuma actividade com esta acção para si.', 'No activity with this action for you.', 'Nessuna attività con questa azione per te.'],
+  [/^Disponível a partir de (.*)\.$/, 'Available from $1.', 'Disponibile da $1.'],
+
+  /* presenças */
+  ['Presentes', 'Present', 'Presenti'],
+  ['Ausentes', 'Absent', 'Assenti'],
+  ['Por marcar', 'To mark', 'Da segnare'],
+  ['Presente', 'Present', 'Presente'],
+  ['Ausente', 'Absent', 'Assente'],
+  ['Todos presentes', 'All present', 'Tutti presenti'],
+  ['+ Adicionar participante', '+ Add participant', '+ Aggiungi partecipante'],
+  ['Sem lista prevista para esta actividade. Use «Adicionar participante».', 'No expected list for this activity. Use «Add participant».', 'Nessun elenco previsto per questa attività. Usa «Aggiungi partecipante».'],
+  [/^Já registadas · (.*)\. Pode corrigir e guardar de novo\.$/, 'Already recorded · $1. You can correct and save again.', 'Già registrate · $1. Puoi correggere e salvare di nuovo.'],
+  ['membro do grupo', 'group member', 'membro del gruppo'],
+  ['adicionado no plano', 'added in the plan', 'aggiunto nel piano'],
+  ['adicionado', 'added', 'aggiunto'],
+  ['registado antes', 'recorded earlier', 'registrato prima'],
+  ['Guardar presenças', 'Save attendance', 'Salva presenze'],
+  [/^Guardar presenças \((\d+)\)$/, 'Save attendance ($1)', 'Salva presenze ($1)'],
+  ['Sem ligação: guardado no telefone, será enviado.', 'Offline: saved on the phone, it will be sent.', 'Offline: salvato sul telefono, verrà inviato.'],
+  ['Já estava guardado.', 'Already saved.', 'Era già salvato.'],
+  [/^Presenças guardadas: (\d+) presentes, (\d+) ausentes\.$/, 'Attendance saved: $1 present, $2 absent.', 'Presenze salvate: $1 presenti, $2 assenti.'],
+  ['Procurar nome ou Person ID…', 'Search name or Person ID…', 'Cerca nome o Person ID…'],
+  ['A carregar a lista…', 'Loading the list…', 'Caricamento elenco…'],
+  ['A procurar…', 'Searching…', 'Ricerca…'],
+  ['Escreva pelo menos 2 letras.', 'Type at least 2 letters.', 'Scrivi almeno 2 lettere.'],
+  ['Ninguém encontrado.', 'Nobody found.', 'Nessuno trovato.'],
+  [/^(\d+) encontrado\(s\)$/, '$1 found', '$1 trovati'],
+  [/^Pessoas da área (.*) · escreva para procurar entre todas \((\d+)\)$/, 'People in area $1 · type to search all ($2)', 'Persone dell\'area $1 · scrivi per cercare tra tutte ($2)'],
+  [/^Todas as pessoas \((\d+)\)$/, 'All people ($1)', 'Tutte le persone ($1)'],
+  [/^\+ (\d+) · escreva mais letras para ver$/, '+ $1 · type more letters to see them', '+ $1 · scrivi altre lettere per vederle'],
+  [/^Adicionado: (.*)$/, 'Added: $1', 'Aggiunto: $1'],
+  ['Marque pelo menos uma pessoa.', 'Mark at least one person.', 'Segna almeno una persona.'],
+  ['Prazo de registo terminado.', 'Recording period has ended.', 'Termine per la registrazione scaduto.'],
+  ['Só é possível registar a partir do dia da actividade.', 'Recording is possible only from the activity day.', 'Si può registrare solo dal giorno dell\'attività.'],
+  ['Esta acção não está disponível para si nesta actividade.', 'This action is not available to you for this activity.', 'Questa azione non è disponibile per te in questa attività.'],
+  ['Sem acesso a esta actividade.', 'No access to this activity.', 'Nessun accesso a questa attività.'],
+  ['Só o formador da actividade pode adicionar pessoas.', 'Only the activity trainer can add people.', 'Solo il formatore dell\'attività può aggiungere persone.'],
+  [/^Actividade não encontrada \((.*)\)\. Actualize a agenda\.$/, 'Activity not found ($1). Refresh the agenda.', 'Attività non trovata ($1). Aggiorna l\'agenda.'],
+  [/^Presenças · (.*)$/, 'Attendance · $1', 'Presenze · $1'],
+
+  /* questionário */
+  ['Abrir questionário', 'Open questionnaire', 'Apri questionario'],
+  ['Partilhar por WhatsApp', 'Share on WhatsApp', 'Condividi su WhatsApp'],
+  ['Copiar link', 'Copy link', 'Copia link'],
+  ['Link copiado.', 'Link copied.', 'Link copiato.'],
+  ['Copie o link:', 'Copy the link:', 'Copia il link:'],
+  ['Peça aos formandos para responderem no fim da sessão. O questionário é anónimo.', 'Ask the trainees to answer at the end of the session. The questionnaire is anonymous.', 'Chiedi ai formandi di rispondere a fine sessione. Il questionario è anonimo.'],
+  ['O questionário é anónimo e demora 2 minutos.', 'The questionnaire is anonymous and takes 2 minutes.', 'Il questionario è anonimo e richiede 2 minuti.'],
+  [/^Já preenchido: (.*)\.$/, 'Already filled in: $1.', 'Già compilato: $1.'],
+  ['Questionário não configurado.', 'Questionnaire not configured.', 'Questionario non configurato.'],
+  ['Learning & Assessment ainda não está ligado à Agenda (menu do Hub "Collega Agenda").', 'Learning & Assessment is not yet linked to the Agenda (Hub menu "Collega Agenda").', 'Learning & Assessment non è ancora collegato all\'Agenda (menu del Hub "Collega Agenda").']
+]);
+
+/*I18N:END*/
+</script>
+<script>
 /* ============================================================
    CHDCP – Activity Planning · cliente (vanilla JS) · v0.5.0 → v0.6.0 (blocco ECOSSISTEMA in fondo)
    v0.5: un solo pacchetto (apiAgendaAll) salvato sul telefono; vista,
@@ -362,6 +669,13 @@ var DIAS = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
 var DIAS_L = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
 var MESES = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
 var VIEWS = [['TODAY', 'Hoje'], ['WEEK', 'Semana'], ['LIST', 'Lista']];
+if (I18N.lang() === 'EN') {
+  DIAS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']; DIAS_L = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  MESES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+} else if (I18N.lang() === 'IT') {
+  DIAS = ['Dom', 'Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab']; DIAS_L = ['Domenica', 'Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
+  MESES = ['Gen', 'Feb', 'Mar', 'Apr', 'Mag', 'Giu', 'Lug', 'Ago', 'Set', 'Ott', 'Nov', 'Dic'];
+}
 var HOLK = { ON: 'Dia de feriado', BEFORE: 'Dia útil antes do feriado', AFTER: 'Dia útil depois do feriado' };
 
 function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
@@ -372,7 +686,7 @@ function ini(n) { return String(n || '?').split(' ').filter(Boolean).slice(0, 2)
 function avc(id) { var c = ['#256abf', '#11804a', '#7d1d1a', '#8a5a00', '#5b3fa8', '#1d7a8a']; var h = 0; String(id).split('').forEach(function (x) { h = (h * 31 + x.charCodeAt(0)) % 997; }); return c[h % c.length]; }
 function toast(t) { var d = document.createElement('div'); d.className = 'toast'; d.textContent = t; document.body.appendChild(d); setTimeout(function () { d.remove(); }, 2600); }
 function busy(on) { $('layer').innerHTML = on ? '<div class="loading">A carregar…</div>' : ''; }
-function head(sub, right) { return '<div class="top"><div class="bar"><div><h1>' + esc(APP_NAME) + '</h1><p>' + esc(sub || 'Agenda operativa CHDCP–CCM') + '</p></div>' + (right || '') + '</div></div>'; }
+function head(sub, right) { return '<div class="top"><div class="bar"><div style="min-width:0"><h1>' + esc(APP_NAME) + '</h1><p>' + esc(sub || 'Agenda operativa CHDCP–CCM') + '</p></div>' + (right == null ? I18N.picker() : right) + '</div></div>'; }
 
 function call(fn) {
   var args = Array.prototype.slice.call(arguments, 1);
@@ -388,6 +702,7 @@ function call(fn) {
 /* ---------------- ARRANQUE (bridge com o invólucro PWA) ---------------- */
 
 function boot() {
+  I18N.start();
   if (!PWA || !PWA_ORIGIN) { start(); return; }
   var done = false;
   window.addEventListener('message', function (e) {
@@ -758,7 +1073,7 @@ function renderWeekCompact(d, list) {
   });
   Object.keys(dayMap).forEach(function (k) { dayMap[k].sort(function (x, y) { return x.sm - y.sm || String(x.a.title).localeCompare(String(y.a.title)); }); });
   weekend.sort(function (x, y) { return x.a.date.localeCompare(y.a.date) || x.sm - y.sm; });
-  var h = '<div class="weekhelp">Vista compacta semanal, ideal para leitura multiárea.</div><div class="weekcompact">';
+  var h = '<div class="weekcompact">';
   days.forEach(function (ds) {
     var dt = ymd(ds), hol = holidayOn(ds), items = dayMap[ds] || [];
     h += '<div class="wcday' + (ds === d.today ? ' today' : '') + (hol ? ' holiday' : '') + '"><div class="wcdayhead"><div><b>' + DIAS_L[dt.getDay()] + ' ' + dt.getDate() + '</b></div><span>' + (hol ? esc(hol.name) : (items.length + (items.length === 1 ? ' actividade' : ' actividades'))) + '</span></div>';
@@ -881,7 +1196,7 @@ function renderAgenda() {
   var d = S.data, u = S.user, list = d.list || [];
   var h = head(u.name + ' · ' + ({ FULL: 'vê tudo', AREA: 'vê a sua área', OWN: 'vê as suas' }[u.visibility] || ''), '<button class="chipbtn" id="out">Sair</button>') + '<div class="body"><div id="syncw">' + syncHtml() + '</div>';
   if (d.outside) h += '<div class="outwin">Fora do período disponível no telefone (' + esc(fmtDate(d.from, false)) + ' – ' + esc(fmtDate(d.to, false)) + ').</div>';
-  if (d.warnings && d.warnings.length) h += '<div class="warnbox">' + d.warnings.map(esc).join('<br>') + '</div>';
+  if (d.warnings && d.warnings.length && /^(ADMIN|MANAGER)$/.test(u.role || '')) h += '<div class="warnbox">' + d.warnings.map(esc).join('<br>') + '</div>';
   if (!u.linked && u.visibility !== 'FULL') h += '<div class="warnbox">O seu utilizador ainda não está ligado a uma pessoa do Training Hub: só vê as actividades da sua área.</div>';
 
   h += '<div class="viewtabs" id="views">' + VIEWS.map(function (v) { return '<button data-v="' + v[0] + '" class="' + (S.view === v[0] ? 'on' : '') + '">' + v[1] + '</button>'; }).join('') + '</div>';
@@ -891,9 +1206,11 @@ function renderAgenda() {
     h += '<div class="listhead">' + esc(fmtDate(d.from, false)) + ' – ' + esc(fmtDate(d.to, false)) + '</div>';
   }
 
-  h += '<div class="tools"><input class="agsearch" id="q" value="' + esc(S.search) + '" placeholder="Procurar actividade, pessoa, local…" autocomplete="off">' +
-    '<div class="selectrow"><select class="sel" id="area">' + optionsHtml(d.facets && d.facets.areas, S.area, 'Todas as áreas') + '</select><select class="sel" id="method">' + optionsHtml(d.facets && d.facets.methods, S.method, 'Todos os tipos') + '</select></div>' +
-    '<div class="quick"><button id="mine" class="' + (S.mine ? 'on' : '') + '">As minhas</button><button id="hid" class="' + (S.hidden ? 'on' : '') + '">Canceladas / adiadas</button><button id="clear">Limpar filtros</button><button id="rf">↻ Actualizar</button></div></div>';
+  var nfil = (S.area ? 1 : 0) + (S.method ? 1 : 0) + (S.mine ? 1 : 0) + (S.hidden ? 1 : 0), fopen = S.fopen || nfil > 0 || window.innerWidth >= 900;
+  h += '<div class="tools"><div class="srow"><input class="agsearch" id="q" value="' + esc(S.search) + '" placeholder="Procurar actividade, pessoa, local…" autocomplete="off">' +
+    '<button class="ftg' + (fopen ? ' on' : '') + '" id="ftg" aria-expanded="' + fopen + '">Filtros' + (nfil ? '<b>' + nfil + '</b>' : '') + '</button></div>' +
+    '<div id="fx"' + (fopen ? '' : ' style="display:none"') + '><div class="selectrow"><select class="sel" id="area">' + optionsHtml(d.facets && d.facets.areas, S.area, 'Todas as áreas') + '</select><select class="sel" id="method">' + optionsHtml(d.facets && d.facets.methods, S.method, 'Todos os tipos') + '</select></div>' +
+    '<div class="quick"><button id="mine" class="' + (S.mine ? 'on' : '') + '">As minhas</button><button id="hid" class="' + (S.hidden ? 'on' : '') + '">Canceladas / adiadas</button><button id="clear">Limpar filtros</button><button id="rf">↻ Actualizar</button></div></div></div>';
 
   h += '<div class="legend"><span><i class="lg-tent"></i>Prevista</span><span><i class="lg-done"></i>Realizada</span><span><i class="lg-general"></i>Plano geral</span>' + (S.hidden ? '<span><i class="lg-hidden"></i>Cancelada / adiada</span>' : '') + '</div>';
   if (S.view === 'WEEK') {
@@ -938,6 +1255,7 @@ function renderAgenda() {
   $('method').onchange = function () { S.method = this.value; saveF(); loadAgenda(); };
   $('clear').onclick = function () { S.area = ''; S.method = ''; S.search = ''; S.mine = false; S.weekMode = ''; saveF(); loadAgenda(); };
   $('rf').onclick = function () { sync(false); };
+  $('ftg').onclick = function () { S.fopen = $('fx').style.display === 'none'; $('fx').style.display = S.fopen ? '' : 'none'; this.classList.toggle('on', S.fopen); };
   if ($('retry')) $('retry').onclick = function () { sync(false); };
   $('out').onclick = logout;
   $('q').oninput = function () {
@@ -945,7 +1263,7 @@ function renderAgenda() {
     clearTimeout(S.searchTimer);
     S.searchTimer = setTimeout(function () { saveF(); loadAgenda(); }, 200);
   };
-  Array.prototype.forEach.call(document.querySelectorAll('.act, .wcevent, .wc-note'), function (b) { b.onclick = function () { openAct(S.shown[+b.dataset.i]); }; });
+  Array.prototype.forEach.call(document.querySelectorAll('.act, .wcevent, .wc-note, .wcrow'), function (b) { b.onclick = function () { openAct(S.shown[+b.dataset.i]); }; });
 }
 
 
@@ -996,7 +1314,7 @@ window.addEventListener('online', function () { if (S.token && SYNC.state === 'o
 
 /* === ECOSSISTEMA v0.6 (JS) === */
 /* ============================================================
-   CHDCP Agenda · v0.6.0 · ECOSSISTEMA (cliente)
+   CHDCP Agenda · v0.6.1 · ECOSSISTEMA (cliente)
    Menu inicial · ficha = centro operativo (Detailed Plan, participantes,
    acções) · Registar presenças · Questionário · ligações a
    CHDCP Learning & Assessment (TOJ, Teórica, Resultados, Perfil).
@@ -1096,6 +1414,7 @@ function laOpen(mode, params) {
   busy(true);
   callT(30000, 'apiLaLink', S.token, mode, params || {}, IS_PWA).then(function (url) {
     busy(false);
+    url = I18N.url(url);
     if (IS_PWA) { location.href = url; return; }
     var w = null;
     try { w = window.open(url, '_blank'); } catch (e) { w = null; }
@@ -1108,7 +1427,7 @@ function laOpen(mode, params) {
 var _agendaActHtml = actHtml;
 actHtml = function (a, i) {
   var h = _agendaActHtml(a, i);
-  if (a.ax && a.ax.length) h = h.replace('<div class="tags">', '<div class="tags"><span class="tag act">⚡ ' + esc(a.ax.map(function (k) { return ACT_LABEL[k] ? ACT_LABEL[k][3] : k; }).join(' · ')) + '</span>');
+  if (a.ax && a.ax.length) h = h.replace('<div class="tags">', '<div class="tags"><span class="tag act">⚡ ' + esc(a.ax.map(function (k) { return ACT_LABEL[k] ? I18N.tr(ACT_LABEL[k][3]) : k; }).join(' · ')) + '</span>');
   return h;
 };
 
@@ -1160,12 +1479,12 @@ function goAgenda() { S.screen = 'AGENDA'; try { history.pushState({ ag: 1 }, ''
 var _agendaLogout = logout;
 logout = function () { S.screen = 'HOME'; NAV = []; $('layer').innerHTML = ''; _agendaLogout(); };
 
-function hrow(a, today) {
-  var when = (a.date === today ? 'Hoje' : fmtDate(a.date, false)) + (a.noTime ? ' · sem hora' : ' · ' + a.start + (a.end ? '–' + a.end : ''));
+function hrow(a, today, noTag) {
+  var when = (a.date === today ? I18N.tr('Hoje') : fmtDate(a.date, false)) + (a.noTime ? ' · ' + I18N.tr('sem hora') : ' · ' + a.start + (a.end ? '–' + a.end : ''));
   return '<button class="hrow' + (a.date > today ? ' later' : '') + '" data-id="' + esc(a.id) + '" style="--tc:' + esc(a.typeColor || '#93a0a7') + '">' +
     '<div class="t">' + esc(a.typeIcon || '') + ' ' + esc(a.title) + '</div><div class="m">' + esc(when) + ' · ' + esc(a.area) +
     (a.trainers && a.trainers.length ? ' · ' + esc(a.trainers.join(', ')) : '') + '</div>' +
-    ((a.ax || []).length ? '<div class="m"><span class="tag act">⚡ ' + esc(a.ax.map(function (k) { return ACT_LABEL[k] ? ACT_LABEL[k][3] : k; }).join(' · ')) + '</span></div>' : '') + '</button>';
+    (!noTag && (a.ax || []).length ? '<div class="m"><span class="tag act">⚡ ' + esc(a.ax.map(function (k) { return ACT_LABEL[k] ? I18N.tr(ACT_LABEL[k][3]) : k; }).join(' · ')) + '</span></div>' : '') + '</button>';
 }
 
 function renderHome() {
@@ -1174,13 +1493,13 @@ function renderHome() {
   var vis = { FULL: 'vê tudo', AREA: 'vê a sua área', OWN: 'vê as suas' }[u.visibility] || '';
   var mine = ALL.acts.filter(function (a) { return a.role && !a.hidden && a.date === today; })
     .sort(function (x, y) { return (x.start || '99').localeCompare(y.start || '99'); });
-  var h = head(u.name + (vis ? ' · ' + vis : ''), '<button class="chipbtn" id="out">Sair</button>') + '<div class="body"><div id="syncw">' + syncHtml() + '</div>';
-  if (ALL.warnings && ALL.warnings.length) h += '<div class="warnbox">' + ALL.warnings.map(esc).join('<br>') + '</div>';
+  var h = head(u.name + (vis ? ' · ' + vis : ''), '<div class="hright">' + I18N.picker() + '<button class="chipbtn" id="out">Sair</button></div>') + '<div class="body"><div id="syncw">' + syncHtml() + '</div>';
+  if (ALL.warnings && ALL.warnings.length && /^(ADMIN|MANAGER)$/.test(u.role || '')) h += '<div class="warnbox">' + ALL.warnings.map(esc).join('<br>') + '</div>';
   h += '<div class="hgrid"><div class="htiles"><div class="tiles">' + homeTiles().map(function (t) {
     return '<button class="tile" data-k="' + t.k + '"><span class="ic">' + t.ic + '</span><b>' + esc(t.t) + '</b><small>' + esc(t.d) + '</small></button>';
   }).join('') + '</div></div><div class="htoday"><div class="sec hsec">As minhas actividades de hoje · ' + esc(fmtDate(today, true)) + '</div>' +
     (mine.length ? mine.map(function (a) { return hrow(a, today); }).join('') : '<div class="noact">Sem actividades suas hoje.</div>') + '</div></div>';
-  h += '<div class="foot">CHDCP Agenda · v0.6.0</div></div>';
+  h += '<div class="foot">CHDCP Agenda · v0.6.1</div></div>';
   $('app').innerHTML = h;
   $('app').classList.remove('weekwide');
   $('app').classList.add('homewide');
@@ -1205,7 +1524,7 @@ function screenPick(k) {
     ['Próximos dias', list.filter(function (a) { return a.date > today; })]];
   var h = bhead(L[1], 'Escolha a actividade') + '<div class="body">';
   if (!list.length) h += '<div class="empty">Nenhuma actividade com esta acção para si.</div>';
-  groups.forEach(function (g) { if (g[1].length) h += '<div class="sec">' + esc(g[0]) + '</div>' + g[1].map(function (a) { return hrow(a, today); }).join(''); });
+  groups.forEach(function (g) { if (g[1].length) h += '<div class="sec">' + esc(g[0]) + '</div>' + g[1].map(function (a) { return hrow(a, today, true); }).join(''); });
   h += '</div>';
   page(h);
   Array.prototype.forEach.call(document.querySelectorAll('#pg .hrow'), function (b) {
@@ -1343,34 +1662,99 @@ function withCtx(key, fn, a, title, draw) {
   }).catch(function (e) { if (here() === me) errorPage(title, a.title, e.message, function () { withCtx(key, fn, a, title, draw); }); });
 }
 
+/* Adicionar participante: a lista completa vem UMA vez do servidor e é filtrada no telefone
+   (instantâneo, funciona com rede fraca). Área da actividade primeiro. O painel fica aberto
+   para adicionar várias pessoas seguidas. */
+/* lista de pessoas do Training Hub: guardada no telefone 12 h (abre logo, mesmo sem rede) */
+var PL_BUSY = null;
+function peopleCached() { var c = LS.get('people'); return c && c.p && (Date.now() - c.t < 12 * 3600000) ? c.p : null; }
+function loadPeople(a) {
+  if (PL_BUSY) return PL_BUSY;
+  PL_BUSY = callT(45000, 'apiPeopleList', S.token, a.id).then(function (r) { PL_BUSY = null; var p = (r && r.people) || []; LS.set('people', { t: Date.now(), p: p }); return p; },
+    function (e) { PL_BUSY = null; throw e; });
+  return PL_BUSY;
+}
+function setPlist(d, people, a) {
+  var area = String(a.area || '').toUpperCase();
+  var trn = (d.ctx.act && d.ctx.act.trainers || []).map(norm);
+  d.parea = area;
+  d.plist = people.filter(function (p) { return trn.indexOf(norm(p.name)) < 0; }).map(function (p) { return { id: p.id, name: p.name, areas: p.areas || [], same: (p.areas || []).indexOf(area) >= 0 ? 1 : 0 }; })
+    .sort(function (x, y) { return (y.same - x.same) || x.name.localeCompare(y.name); });
+}
+
 function bindAddPerson(a, d, onAdd) {
-  var box = $('addbox'), btn = $('addp');
+  var btn = $('addp');
   if (!btn) return;
-  btn.onclick = function () {
-    box.innerHTML = '<input class="inp" id="addq" placeholder="Nome ou Person ID (mín. 2 letras)" autocomplete="off"><div id="addr" style="margin-top:6px"></div>';
-    var tm = null;
-    $('addq').focus();
-    $('addq').oninput = function () {
-      var q = this.value;
-      clearTimeout(tm);
-      tm = setTimeout(function () {
-        if (q.trim().length < 2) { $('addr').innerHTML = ''; return; }
+  var open = function () {
+    d.addOpen = true;
+    $('addbox').innerHTML = '<div class="addpanel"><div class="addhead"><input class="inp" id="addq" placeholder="Procurar nome ou Person ID…" autocomplete="off" value="' + esc(d.addQ || '') + '">' +
+      '<button class="minor" id="addx" aria-label="Fechar">✕</button></div><div id="addr" class="addlist"><div class="small muted">A carregar a lista…</div></div></div>';
+    btn.style.display = 'none';
+    $('addx').onclick = function () { d.addOpen = false; d.addQ = ''; $('addbox').innerHTML = ''; btn.style.display = ''; };
+    var inRoster = function (id) { return d.ctx.people.some(function (x) { return x.id === id; }); };
+    var row = function (p) {
+      return '<button class="user" data-id="' + esc(p.id) + '" data-n="' + esc(p.name) + '"><span class="av" style="background:' + avc(p.id) + '">' + esc(ini(p.name)) + '</span>' +
+        '<span style="flex:1;min-width:0">' + esc(p.name) + '<br><span class="small muted">' + esc((p.areas || []).join(', ') || p.id) + '</span></span><span class="addplus">＋</span></button>';
+    };
+    var bindRows = function () {
+      Array.prototype.forEach.call($('addr').querySelectorAll('.user'), function (b) {
+        b.onclick = function () {
+          var ppl = d.ctx.people;
+          if (!inRoster(b.dataset.id)) ppl.push({ id: b.dataset.id, name: b.dataset.n, src: 'ADD' });
+          d.addQ = '';
+          toast('Adicionado: ' + b.dataset.n);
+          onAdd(b.dataset.id);
+        };
+      });
+    };
+    var draw = function () {
+      if (!$('addr')) return;
+      var q = norm(d.addQ || ''), all = (d.plist || []).filter(function (p) { return !inRoster(p.id); });
+      var shown, note = '';
+      if (q) {
+        shown = all.filter(function (p) { if (!p._h) p._h = norm(p.name + ' ' + p.id + ' ' + (p.areas || []).join(' ')); return p._h.indexOf(q) >= 0; });
+        note = shown.length + ' encontrado(s)';
+      } else {
+        var same = all.filter(function (p) { return p.same; });
+        shown = same.length ? same : all;
+        note = same.length ? 'Pessoas da área ' + (d.parea || '') + ' · escreva para procurar entre todas (' + all.length + ')' : 'Todas as pessoas (' + all.length + ')';
+      }
+      var more = shown.length > 80 ? shown.length - 80 : 0;
+      $('addr').innerHTML = '<div class="small muted addnote">' + esc(note) + '</div>' +
+        (shown.length ? shown.slice(0, 80).map(row).join('') : '<div class="small muted">Ninguém encontrado.</div>') +
+        (more ? '<div class="small muted addnote">+ ' + more + ' · escreva mais letras para ver</div>' : '');
+      bindRows();
+    };
+    /* servidor antigo (sem lista): procura no servidor como antes */
+    var legacy = function () {
+      var tm = null;
+      var run = function () {
+        var q = (d.addQ || '').trim();
+        if (q.length < 2) { $('addr').innerHTML = '<div class="small muted">Escreva pelo menos 2 letras.</div>'; return; }
+        $('addr').innerHTML = '<div class="small muted">A procurar…</div>';
         call('apiPeopleSearch', S.token, a.id, q).then(function (res) {
           if (!$('addr')) return;
-          $('addr').innerHTML = res.length ? res.map(function (p) {
-            return '<button class="user" data-id="' + esc(p.id) + '" data-n="' + esc(p.name) + '"><span class="av" style="background:' + avc(p.id) + '">' + esc(ini(p.name)) + '</span><span style="flex:1;min-width:0">' + esc(p.name) + '<br><span class="small muted">' + esc((p.areas || []).join(', ')) + '</span></span></button>';
-          }).join('') : '<div class="small muted">Ninguém encontrado.</div>';
-          Array.prototype.forEach.call($('addr').querySelectorAll('.user'), function (b) {
-            b.onclick = function () {
-              var ppl = d.ctx.people;
-              if (!ppl.some(function (x) { return x.id === b.dataset.id; })) ppl.push({ id: b.dataset.id, name: b.dataset.n, src: 'ADD' });
-              onAdd(b.dataset.id);
-            };
-          });
+          $('addr').innerHTML = res.length ? res.filter(function (p) { return !inRoster(p.id); }).map(row).join('') : '<div class="small muted">Ninguém encontrado.</div>';
+          bindRows();
         }).catch(function (e) { if ($('addr')) $('addr').innerHTML = '<div class="err">' + esc(e.message) + '</div>'; });
-      }, 400);
+      };
+      $('addq').oninput = function () { d.addQ = this.value; clearTimeout(tm); tm = setTimeout(run, 350); };
+      run();
     };
+    $('addq').oninput = function () { d.addQ = this.value; draw(); };
+    setTimeout(function () { try { $('addq').focus(); } catch (e) {} }, 30);
+    if (d.plist) { draw(); return; }
+    var c0 = peopleCached();
+    if (c0) { setPlist(d, c0, a); draw(); }
+    loadPeople(a).then(function (pl) { setPlist(d, pl, a); draw(); }).catch(function (e) {
+      if (!$('addr') || d.plist) return;
+      if (/não permitida|inexistente|is not a function|not defined|Script function not found/i.test(e.message)) { legacy(); return; }
+      $('addr').innerHTML = '<div class="err">' + esc(isNet(e.message) ? 'Sem ligação: tente quando houver rede.' : e.message) + '</div><button class="minor" id="addre">Tentar de novo</button>';
+      $('addre').onclick = function () { d.addOpen = false; open(); };
+    });
   };
+  btn.onclick = open;
+  if (d.addOpen) open();
 }
 
 /* ---------------- REGISTAR PRESENÇAS ---------------- */
@@ -1418,6 +1802,7 @@ function drawAttendance(a, d) {
   });
   if ($('allp')) $('allp').onclick = function () { c.people.forEach(function (p) { if (!d.mark[p.id]) d.mark[p.id] = 'PRESENT'; }); drawAttendance(a, d); };
   bindAddPerson(a, d, function (pid) { d.mark[pid] = 'PRESENT'; drawAttendance(a, d); });
+  if (!ro && !peopleCached()) loadPeople(a).catch(function () {});
   if ($('save')) $('save').onclick = function () {
     var items = Object.keys(d.mark).filter(function (k) { return d.mark[k]; }).map(function (k) { return { pid: k, st: d.mark[k] }; });
     if (!items.length) return;
@@ -1449,7 +1834,7 @@ function screenEval(a) {
     $('eo').onclick = function () { openExt(r.url); };
     if ($('ew')) $('ew').onclick = function () { openExt('https://wa.me/?text=' + encodeURIComponent((r.act.title || '') + ' · ' + dmy(r.act.date) + '\nQuestionário de satisfação (anónimo): ' + r.url)); };
     if ($('ec')) $('ec').onclick = function () {
-      try { navigator.clipboard.writeText(r.url).then(function () { toast('Link copiado.'); }, function () { prompt('Copie o link:', r.url); }); } catch (e) { prompt('Copie o link:', r.url); }
+      try { navigator.clipboard.writeText(r.url).then(function () { toast('Link copiado.'); }, function () { prompt(I18N.tr('Copie o link:'), r.url); }); } catch (e) { prompt(I18N.tr('Copie o link:'), r.url); }
     };
   }).catch(function (e) { if (here() === me) errorPage('Questionário', a.title, e.message, function () { screenEval(a); }); });
 }

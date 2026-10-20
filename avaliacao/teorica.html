@@ -9,6 +9,9 @@ button,input,select{font:inherit;color:inherit}button{cursor:pointer;border:0;ba
 .top{position:sticky;top:0;z-index:20;background:var(--brand);color:#fff;padding:calc(10px + env(safe-area-inset-top)) 14px 10px;display:flex;align-items:center;gap:10px;min-height:58px}
 .top .back{color:#fff;font-size:24px;font-weight:800;width:38px;height:38px;flex:none}
 .top .ttl{flex:1;min-width:0}.top .ttl b{display:block;font-size:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.top .ttl span{display:block;font-size:12px;opacity:.85;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lgp{display:inline-flex;flex:none;border:1.5px solid rgba(255,255,255,.55);border-radius:20px;overflow:hidden}
+.lgp button{font-size:11px;font-weight:800;color:#fff;padding:5px 8px;min-width:30px}
+.lgp button.on{background:#fff;color:var(--brand)}
 .chip{font-size:11.5px;font-weight:800;border:1.5px solid rgba(255,255,255,.55);border-radius:20px;padding:6px 11px;color:#fff;white-space:nowrap;flex:none}
 main{max-width:760px;margin:0 auto;padding:14px 14px 110px}
 .logo{display:block;max-width:240px;width:70%;margin:6px auto 14px}
@@ -44,13 +47,13 @@ main{max-width:760px;margin:0 auto;padding:14px 14px 110px}
 @media (min-width:1024px){main{max-width:1100px}.plist{grid-template-columns:repeat(3,1fr)}}
 @media (hover:hover) and (pointer:fine){.tile:hover,.hrow:hover,.prow:hover{border-color:var(--brand-line);box-shadow:0 2px 8px rgba(27,33,36,.08)}}
 </style>
-<script>var LA_BOOT=(function(){var q=new URLSearchParams(location.search),p={};["mode","activityId","personId","area","date","title","tab"].forEach(function(k){p[k]=q.get(k)||"";});if(!p.mode)p.mode="theory";return{v:"36",t:q.get("t")||"",p:p,urls:{home:"index.html"}};})();</script><script>var LA = window.LA_BOOT || { p:{}, urls:{} };
+<script>var LA_BOOT=(function(){var q=new URLSearchParams(location.search),p={};["mode","activityId","personId","area","date","title","tab","lang"].forEach(function(k){p[k]=q.get(k)||"";});if(!p.mode)p.mode="theory";return{v:"37",t:q.get("t")||"",p:p,urls:{home:"index.html"}};})();</script><script>var LA = window.LA_BOOT || { p:{}, urls:{} };
 function laSess(){ try { return JSON.parse(localStorage.getItem('la_sess') || 'null'); } catch(e){ return null; } }
 function laSetSess(s){ try { if (s) localStorage.setItem('la_sess', JSON.stringify(s)); else localStorage.removeItem('la_sess'); } catch(e){} }
 function laQs(o){ var k = Object.keys(o||{}).filter(function(x){ return o[x]; }); return k.map(function(x){ return x+'='+encodeURIComponent(o[x]); }).join('&'); }
 /* mode: home | toj | theory | results | person | area — sessione già nel telefono, niente biglietto */
 function laNav(mode, params){
-  var q = laQs(Object.assign({ mode: mode === 'home' ? '' : mode }, params||{}));
+  var q = laQs(Object.assign({ mode: mode === 'home' ? '' : mode }, params||{}, window.I18N ? { lang: I18N.lang() } : {}));
   var url;
   if (window.CHDCP_PWA) {
     var pg = { home:'index.html', toj:'toj.html', theory:'teorica.html', results:'resultados.html', person:'resultados.html', area:'resultados.html' }[mode] || 'index.html';
@@ -70,7 +73,131 @@ document.addEventListener('click', function(e){
   var b = e.target.closest ? e.target.closest('[data-lanav]') : null; if (!b) return;
   e.preventDefault(); var x = String(b.getAttribute('data-lanav')).split(':');
   laNav(x[0], x[0] === 'person' ? { personId: x[1] } : x[0] === 'area' ? { area: x[1] } : {});
-});</script></head><body>
+});</script><script>/* CHDCP · idioma (PT / EN / IT) — partilhado por Agenda e Learning & Assessment.
+   O texto é escrito em português no código; esta camada traduz o que aparece no ecrã
+   (texto, placeholder, title, aria-label) a partir de um dicionário PT → EN / IT.
+   A escolha fica no telefone (chave chdcp_lang) e passa entre as apps com ?lang=XX. */
+var I18N = (function () {
+  var KEY = 'chdcp_lang', L = 'PT', MAP = {}, PAT = [];
+  try {
+    var q = new URLSearchParams(location.search).get('lang') || (window.LA_BOOT && LA_BOOT.p && LA_BOOT.p.lang) || '';
+    var v = localStorage.getItem(KEY); if (/^(PT|EN|IT)$/.test(v || '')) L = v;
+    /* a língua que chega num link vale uma vez: depois manda a escolha feita aqui */
+    q = String(q).toUpperCase();
+    if (/^(PT|EN|IT)$/.test(q) && q !== localStorage.getItem(KEY + '_link')) { L = q; localStorage.setItem(KEY, L); localStorage.setItem(KEY + '_link', q); }
+  } catch (e) {}
+  function add(rows) { rows.forEach(function (r) { if (r[0] instanceof RegExp) PAT.push(r); else MAP[r[0]] = r; }); }
+  function tr(s) {
+    if (L === 'PT' || !s) return s;
+    var k = String(s).trim(); if (!k) return s;
+    var i = L === 'EN' ? 1 : 2, r = MAP[k];
+    if (r) return String(s).replace(k, r[i]);
+    for (var j = 0; j < PAT.length; j++) if (PAT[j][0].test(k)) return String(s).replace(k, k.replace(PAT[j][0], PAT[j][i]));
+    return s;
+  }
+  var ATTR = ['placeholder', 'title', 'aria-label'];
+  function walk(n) {
+    if (n.nodeType === 3) { var t = tr(n.nodeValue); if (t !== n.nodeValue) n.nodeValue = t; return; }
+    if (n.nodeType !== 1 || n.tagName === 'SCRIPT' || n.tagName === 'STYLE' || n.hasAttribute('data-noi18n')) return;
+    for (var a = 0; a < ATTR.length; a++) { var v = n.getAttribute(ATTR[a]); if (v) { var tv = tr(v); if (tv !== v) n.setAttribute(ATTR[a], tv); } }
+    for (var c = n.firstChild; c; c = c.nextSibling) walk(c);
+  }
+  function start() {
+    try { document.documentElement.lang = L.toLowerCase(); } catch (e) {}
+    if (L === 'PT' || !document.body || !window.MutationObserver) return;
+    walk(document.body);
+    new MutationObserver(function (ms) {
+      ms.forEach(function (m) { if (m.type === 'characterData') walk(m.target); else for (var i = 0; i < m.addedNodes.length; i++) walk(m.addedNodes[i]); });
+    }).observe(document.body, { childList: true, subtree: true, characterData: true });
+  }
+  function set(l) { try { localStorage.setItem(KEY, l); } catch (e) {} location.reload(); }
+  function picker() {
+    return '<span class="lgp" data-noi18n role="group" aria-label="Idioma · Language · Lingua">' + ['PT', 'EN', 'IT'].map(function (x) {
+      return '<button type="button" class="' + (x === L ? 'on' : '') + '" onclick="I18N.set(\'' + x + '\')">' + x + '</button>';
+    }).join('') + '</span>';
+  }
+  function url(u) { return !u || /[?&]lang=/.test(u) ? u : u + (u.indexOf('?') >= 0 ? '&' : '?') + 'lang=' + L; }
+  return { lang: function () { return L; }, add: add, tr: tr, start: start, set: set, picker: picker, url: url };
+})();
+
+/* Dicionário de Learning & Assessment (menu, avaliação teórica, ligações): [português, English, italiano].
+   A TOJ e o Painel de resultados têm traduções próprias e seguem a mesma escolha de língua. */
+I18N.add([
+  /* menu */
+  ['Sair', 'Sign out', 'Esci'],
+  ['Avaliações', 'Assessments', 'Valutazioni'],
+  ['Avaliação TOJ', 'TOJ assessment', 'Valutazione TOJ'],
+  ['No posto de trabalho, por skill', 'On the job, by skill', 'Sul posto di lavoro, per skill'],
+  ['Avaliação teórica', 'Theory assessment', 'Valutazione teorica'],
+  ['Notas das provas escritas', 'Written test scores', 'Voti delle prove scritte'],
+  ['Resultados', 'Results', 'Risultati'],
+  ['Todas as áreas', 'All areas', 'Tutte le aree'],
+  ['Visão geral', 'Overview', 'Panoramica'],
+  ['Por área', 'By area', 'Per area'],
+  ['Minha área', 'My area', 'La mia area'],
+  ['Competências e evolução', 'Skills and progress', 'Competenze e andamento'],
+  ['Formandos', 'Trainees', 'Formandi'],
+  ['Perfil individual', 'Individual profile', 'Profilo individuale'],
+  ['Meu percurso', 'My progress', 'Il mio percorso'],
+  ['Meu perfil', 'My profile', 'Il mio profilo'],
+  ['Os meus resultados', 'My results', 'I miei risultati'],
+  ['O seu utilizador ainda não tem funções em Learning & Assessment. Fale com o administrador.', 'Your user has no role in Learning & Assessment yet. Contact the administrator.', 'Il tuo utente non ha ancora ruoli in Learning & Assessment. Contatta l\'amministratore.'],
+  ['Entrar', 'Sign in', 'Entra'],
+  ['Nome', 'Name', 'Nome'],
+  ['— escolha —', '— choose —', '— scegli —'],
+  ['Formandos: abram a', 'Trainees: open', 'Formandi: aprite'],
+  ['PIN errado.', 'Wrong PIN.', 'PIN errato.'],
+  ['A sessão expirou.', 'Session expired.', 'Sessione scaduta.'],
+  ['Menu', 'Menu', 'Menu'],
+  ['☰ Learning & Assessment', '☰ Learning & Assessment', '☰ Learning & Assessment'],
+  ['📊 Perfil completo (resultados)', '📊 Full profile (results)', '📊 Profilo completo (risultati)'],
+
+  /* avaliação teórica */
+  ['Escolha a actividade', 'Choose the activity', 'Scegli l\'attività'],
+  ['A carregar…', 'Loading…', 'Caricamento…'],
+  [/^(\d+) registo\(s\) por enviar$/, '$1 record(s) to send', '$1 registrazione/i da inviare'],
+  ['Enviar agora', 'Send now', 'Invia ora'],
+  ['Sem actividades nos últimos dias nas suas áreas.', 'No activities in recent days in your areas.', 'Nessuna attività negli ultimi giorni nelle tue aree.'],
+  ['Tentar de novo', 'Try again', 'Riprova'],
+  ['ainda não no Hub', 'not yet in the Hub', 'non ancora nel Hub'],
+  [/^Avaliador: (.*)$/, 'Assessor: $1', 'Valutatore: $1'],
+  ['Notas já registadas: pode corrigir e guardar de novo.', 'Scores already recorded: you can correct and save again.', 'Voti già registrati: puoi correggere e salvare di nuovo.'],
+  ['Prova', 'Test', 'Prova'],
+  ['Nota máxima', 'Maximum score', 'Punteggio massimo'],
+  [/^Aprovado com ≥ (.*)% \(regra do Training Hub\)\. Deixe vazio quem não fez a prova\. Toque no nome para ver o perfil\.$/, 'Pass with ≥ $1% (Training Hub rule). Leave empty for those who did not take the test. Tap a name to see the profile.', 'Superato con ≥ $1% (regola del Training Hub). Lascia vuoto chi non ha fatto la prova. Tocca il nome per vedere il profilo.'],
+  ['presente', 'present', 'presente'],
+  ['ausente', 'absent', 'assente'],
+  [/^(.*) · presente$/, '$1 · present', '$1 · presente'],
+  [/^(.*) · ausente$/, '$1 · absent', '$1 · assente'],
+  [/^Sem formandos da área (.*)\.$/, 'No trainees in area $1.', 'Nessun formando nell\'area $1.'],
+  ['Guardar notas', 'Save scores', 'Salva voti'],
+  [/^Guardar notas \((\d+)\)$/, 'Save scores ($1)', 'Salva voti ($1)'],
+  [/^Nota fora de 0–(.*)$/, 'Score outside 0–$1', 'Voto fuori da 0–$1'],
+  ['Já estava guardado.', 'Already saved.', 'Era già salvato.'],
+  [/^Notas guardadas: (\d+) de (\d+) aprovados\.$/, 'Scores saved: $1 of $2 passed.', 'Voti salvati: $1 su $2 superati.'],
+  ['Sem ligação: guardado no telefone, será enviado.', 'Offline: saved on the phone, it will be sent.', 'Offline: salvato sul telefono, verrà inviato.'],
+  [/^Enviado: (.*)$/, 'Sent: $1', 'Inviato: $1'],
+  [/^Não enviado \((.*)\): (.*)$/, 'Not sent ($1): $2', 'Non inviato ($1): $2'],
+
+  /* erros */
+  ['A sessão expirou. Entre de novo.', 'Session expired. Sign in again.', 'Sessione scaduta. Entra di nuovo.'],
+  ['Esta área não está entre as suas.', 'This area is not one of yours.', 'Quest\'area non è tra le tue.'],
+  ['Actividade não encontrada no Training Hub.', 'Activity not found in the Training Hub.', 'Attività non trovata nel Training Hub.'],
+  ['Data futura: só é possível registar a partir do dia da actividade.', 'Future date: recording is possible only from the activity day.', 'Data futura: si può registrare solo dal giorno dell\'attività.'],
+  ['Nota máxima inválida.', 'Invalid maximum score.', 'Punteggio massimo non valido.'],
+  ['Introduza pelo menos uma nota.', 'Enter at least one score.', 'Inserisci almeno un voto.'],
+  ['Pessoa desconhecida no Training Hub.', 'Person unknown in the Training Hub.', 'Persona sconosciuta nel Training Hub.'],
+  [/^Nota fora do intervalo para (.*)$/, 'Score out of range for $1', 'Voto fuori intervallo per $1'],
+  ['Sistema ocupado: tente de novo.', 'System busy: try again.', 'Sistema occupato: riprova.'],
+  ['Pedido inválido.', 'Invalid request.', 'Richiesta non valida.'],
+  ['Ligação inválida: abra de novo a partir da Agenda.', 'Invalid link: open it again from the Agenda.', 'Link non valido: riapri dall\'Agenda.'],
+  ['Ligação expirada: abra de novo a partir da Agenda.', 'Link expired: open it again from the Agenda.', 'Link scaduto: riapri dall\'Agenda.'],
+  ['Ligação já usada.', 'Link already used.', 'Link già usato.'],
+  ['Learning & Assessment ainda não ligado à Agenda.', 'Learning & Assessment not yet linked to the Agenda.', 'Learning & Assessment non ancora collegato all\'Agenda.'],
+  ['Sem ligação ao servidor. Tente de novo.', 'No connection to the server. Try again.', 'Nessuna connessione al server. Riprova.']
+]);
+
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ I18N.start(); }); else I18N.start();</script></head><body>
 <header class="top"><button class="back" id="bk" aria-label="Menu">‹</button><div class="ttl"><b id="tt">Avaliação teórica</b><span id="ts">Learning &amp; Assessment</span></div></header>
 <main id="app"><div class="load">…</div></main><div id="bar"></div>
 <script>
