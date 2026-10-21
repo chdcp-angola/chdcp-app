@@ -403,6 +403,8 @@ var I18N = (function () {
    Linhas com expressão regular servem para textos com números ou nomes ($1, $2…). */
 I18N.add([
   /* v0.9 navegação */
+  [/^✓ Presenças registadas: (\d+) \((\d+) presentes\)$/, '✓ Attendance recorded: $1 ($2 present)', '✓ Presenze registrate: $1 ($2 presenti)'],
+  ['Presenças ainda não registadas.', 'Attendance not recorded yet.', 'Presenze non ancora registrate.'],
   ['Início', 'Home', 'Home'],
   ['Menu inicial', 'Main menu', 'Menu principale'],
   ['‹ Anterior', '‹ Previous', '‹ Precedente'],
@@ -1787,6 +1789,11 @@ function actionsHtml(a, d) {
   if (!ax.length) {
     h = '<div class="noact">' + (a.hidden ? 'Actividade cancelada / adiada: sem acções.' :
       a.role ? 'Esta actividade não tem registos a fazer.' : 'Só consulta: não é formador nem participante desta actividade.') + '</div>';
+    /* v0.9: em consulta (ponto focal, coordenação) vê-se se as presenças já foram registadas */
+    if (!a.role && d && (d.att || d.attReq)) {
+      h += d.att ? '<div class="noact" style="border-style:solid"><span class="done">✓ Presenças registadas: ' + d.att.n + ' (' + d.att.present + ' presentes)</span> · ' + esc(tsTxt(d.att.at)) + (d.att.by ? ' · ' + esc(d.att.by) : '') + '</div>'
+        : (a.date <= (ALL ? ALL.today : todayYmd()) ? '<div class="noact" style="border-style:solid">Presenças ainda não registadas.</div>' : '');
+    }
   } else {
     h = '<div class="acts">' + ax.map(function (k) {
       var L = ACT_LABEL[k], info = L[2];
