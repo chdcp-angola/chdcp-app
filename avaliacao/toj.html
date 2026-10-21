@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="pt">
 <head>
-<script>window.CHDCP_PWA=true;(function(){var API="https://script.google.com/macros/s/AKfycbzpGaQurqsz762hytflYHtHjFEGJssKLa9Jc4Kr1cgMaI0QUZ_021xmZj7-T3l6kisF/exec";function post(fn,args){return fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({fn:fn,args:args}),redirect:"follow",cache:"no-store"}).then(function(r){if(!r.ok)throw new Error("NetworkError HTTP "+r.status);return r.json();});}function runner(ok,ko){return new Proxy({},{get:function(t,k){if(k==="withSuccessHandler")return function(f){return runner(f,ko);};if(k==="withFailureHandler")return function(f){return runner(ok,f);};if(k==="withUserObject")return function(){return runner(ok,ko);};return function(){var a=[].slice.call(arguments);post(k,a).then(function(res){if(res&&res.ok){if(ok)ok(res.v);}else{if(ko)ko(new Error(res?res.e:"Erro"));}}).catch(function(e){if(ko)ko(new Error("NetworkError: "+(e&&e.message||e)));});};}});}window.google=window.google||{};google.script={run:runner(null,null),host:{close:function(){}},url:{getLocation:function(cb){var o={};new URLSearchParams(location.search).forEach(function(v,k){o[k]=v;});cb({parameter:o,hash:location.hash});}}};if("serviceWorker" in navigator)window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){});});})();</script><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#7d1d1a"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Avaliação"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="favicon.png">
+<script>window.CHDCP_PWA=true;(function(){var API="https://script.google.com/macros/s/AKfycbzpGaQurqsz762hytflYHtHjFEGJssKLa9Jc4Kr1cgMaI0QUZ_021xmZj7-T3l6kisF/exec";function post1(fn,args){return fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({fn:fn,args:args}),redirect:"follow",cache:"no-store"}).then(function(r){if(!r.ok)throw new Error("NetworkError HTTP "+r.status);return r.json();});}function post(fn,args,n){n=n||0;return post1(fn,args).catch(function(e){if(n>=2||navigator.onLine===false)throw e;return new Promise(function(ok){setTimeout(ok,n?4000:1500);}).then(function(){return post(fn,args,n+1);});});}function runner(ok,ko){return new Proxy({},{get:function(t,k){if(k==="withSuccessHandler")return function(f){return runner(f,ko);};if(k==="withFailureHandler")return function(f){return runner(ok,f);};if(k==="withUserObject")return function(){return runner(ok,ko);};return function(){var a=[].slice.call(arguments);post(k,a).then(function(res){if(res&&res.ok){if(ok)ok(res.v);}else{if(ko)ko(new Error(res?res.e:"Erro"));}}).catch(function(e){if(ko)ko(new Error("NetworkError: "+(e&&e.message||e)));});};}});}window.google=window.google||{};google.script={run:runner(null,null),host:{close:function(){}},url:{getLocation:function(cb){var o={};new URLSearchParams(location.search).forEach(function(v,k){o[k]=v;});cb({parameter:o,hash:location.hash});}}};if("serviceWorker" in navigator)window.addEventListener("load",function(){var sw=navigator.serviceWorker;if(sw.getRegistrations)sw.getRegistrations().then(function(rs){rs.forEach(function(r){if(/\/(agenda|avaliacao)\/$/.test(r.scope))r.unregister();});}).catch(function(){});sw.register("../sw.js",{scope:"../"}).catch(function(){});});})();</script><link rel="manifest" href="../manifest.webmanifest"><meta name="theme-color" content="#7d1d1a"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="CHDCP"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="icon" href="../favicon.png">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#7d1d1a">
@@ -274,7 +274,7 @@ button.nrow{border-left:0;border-right:0;border-bottom:0}
 </style>
 <title>Avaliação TOJ</title></head>
 <body>
-<script>var LA_BOOT=(function(){var q=new URLSearchParams(location.search),p={};["mode","activityId","personId","area","date","title","tab","lang"].forEach(function(k){p[k]=q.get(k)||"";});if(!p.mode)p.mode="toj";return{v:"37",t:q.get("t")||"",p:p,urls:{home:"index.html"}};})();</script><script>var LA = window.LA_BOOT || { p:{}, urls:{} };
+<script>var LA_BOOT=(function(){var q=new URLSearchParams(location.search),p={};["mode","activityId","personId","area","date","title","tab","lang"].forEach(function(k){p[k]=q.get(k)||"";});if(!p.mode)p.mode="toj";return{v:"38",t:q.get("t")||"",p:p,urls:{home:"index.html"}};})();</script><script>var LA = window.LA_BOOT || { p:{}, urls:{} };
 function laSess(){ try { return JSON.parse(localStorage.getItem('la_sess') || 'null'); } catch(e){ return null; } }
 function laSetSess(s){ try { if (s) localStorage.setItem('la_sess', JSON.stringify(s)); else localStorage.removeItem('la_sess'); } catch(e){} }
 function laQs(o){ var k = Object.keys(o||{}).filter(function(x){ return o[x]; }); return k.map(function(x){ return x+'='+encodeURIComponent(o[x]); }).join('&'); }
@@ -283,6 +283,8 @@ function laNav(mode, params){
   var q = laQs(Object.assign({ mode: mode === 'home' ? '' : mode }, params||{}, window.I18N ? { lang: I18N.lang() } : {}));
   var url;
   if (window.CHDCP_PWA) {
+    /* app unica: il menu è quello dell'Agenda (per ruolo) se su questo telefono si è entrati nell'Agenda */
+    if (mode === 'home') { var ag = null; try { ag = localStorage.getItem('ap_tok'); } catch(e){} if (ag && ag !== 'null') { location.href = '../agenda/'; return; } }
     var pg = { home:'index.html', toj:'toj.html', theory:'teorica.html', results:'resultados.html', person:'resultados.html', area:'resultados.html' }[mode] || 'index.html';
     location.href = pg + (q ? '?' + q : ''); return;
   }
@@ -296,6 +298,10 @@ function laReady(cb){
   try { history.replaceState(null, '', location.pathname + location.search.replace(/([?&])t=[^&]*&?/, '$1').replace(/[?&]$/, '')); } catch(e){}
   google.script.run.withSuccessHandler(function(s){ laSetSess(s); cb(s); }).withFailureHandler(function(){ cb(laSess()); }).laRedeem(t);
 }
+/* v0.9 · navegação comum: ‹ volta ao ecrã anterior da app (ex.: ficha da Agenda); ⌂ Início = menu inicial */
+function laCanBack(){ try { return history.length > 1 && !!document.referrer && document.referrer.indexOf(location.origin) === 0 && document.referrer.split('?')[0] !== location.href.split('?')[0]; } catch(e){ return false; } }
+function laBack(){ if (laCanBack()) history.back(); else laNav('home'); }
+function laHomeBtn(css){ return '<button type="button" class="lahm" data-lanav="home" title="Menu inicial" style="display:inline-flex;align-items:center;gap:5px;flex:none;color:inherit;font-weight:800;font-size:12px;line-height:1;border:1.5px solid currentColor;border-radius:20px;padding:6px 10px 6px 8px;background:none;cursor:pointer;' + (css || '') + '"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg><span class="lahmt">Início</span></button>'; }
 document.addEventListener('click', function(e){
   var b = e.target.closest ? e.target.closest('[data-lanav]') : null; if (!b) return;
   e.preventDefault(); var x = String(b.getAttribute('data-lanav')).split(':');
@@ -350,6 +356,12 @@ var I18N = (function () {
 /* Dicionário de Learning & Assessment (menu, avaliação teórica, ligações): [português, English, italiano].
    A TOJ e o Painel de resultados têm traduções próprias e seguem a mesma escolha de língua. */
 I18N.add([
+  /* v0.9 navegação */
+  ['Início', 'Home', 'Home'],
+  ['Menu inicial', 'Main menu', 'Menu principale'],
+  ['⌂ Início', '⌂ Home', '⌂ Home'],
+  ['‹ Voltar à actividade', '‹ Back to the activity', '‹ Torna all\'attività'],
+  ['‹ Voltar', '‹ Back', '‹ Indietro'],
   /* menu */
   ['Sair', 'Sign out', 'Esci'],
   ['Avaliações', 'Assessments', 'Valutazioni'],
@@ -428,6 +440,7 @@ if (document.readyState === 'loading') document.addEventListener('DOMContentLoad
 <header class="top">
   <button class="back hidden" id="backBtn" type="button" aria-label="‹">‹</button>
   <div class="ttl" id="ttl"><b>CHDCP · TOJ</b></div>
+  <span id="hmw"></span>
   <div class="lang" role="group" aria-label="Idioma · Language · Lingua">
     <button type="button" data-lang="PT" aria-pressed="true">PT</button>
     <button type="button" data-lang="EN" aria-pressed="false">EN</button>
@@ -823,11 +836,13 @@ function go(view, keep){
   save();
 }
 window.addEventListener('popstate', function(){ if (VIEW === 'card' || VIEW === 'over') { navBack(); return; } if (VIEW !== 'assess') return; hideSheet(); if (MACRO_PUSHED) { MACRO_PUSHED = false; toTiles(); return; } leaveAssess(); });
-$('backBtn').onclick = function(){ if (VIEW === 'card' || VIEW === 'over') { try { if (history.state && (history.state.v === 'card' || history.state.v === 'over')) { history.back(); return; } } catch(e){} navBack(); return; } if (VIEW === 'assess') { try { if (MACRO_PUSHED) { MACRO_PUSHED = false; history.go(-2); return; } if (history.state && history.state.v === 'assess') { history.back(); return; } } catch(e){} leaveAssess(); } };
+$('backBtn').onclick = function(){ if (VIEW === 'home') { laBack(); return; } if (VIEW === 'card' || VIEW === 'over') { try { if (history.state && (history.state.v === 'card' || history.state.v === 'over')) { history.back(); return; } } catch(e){} navBack(); return; } if (VIEW === 'assess') { try { if (MACRO_PUSHED) { MACRO_PUSHED = false; history.go(-2); return; } if (history.state && history.state.v === 'assess') { history.back(); return; } } catch(e){} leaveAssess(); } };
 function leaveAssess(){ if (S.session.some(function(id){ return counts(id).t; })) toast(t('saved')); go('home'); }
 function header(title, sub, back){
   $('ttl').innerHTML = '<b>'+esc(title)+'</b>'+(sub?'<span>'+esc(sub)+'</span>':'');
-  $('backBtn').classList.toggle('hidden', !back);
+  /* v0.9: no ecrã inicial da TOJ, ‹ volta à app de onde veio (ex.: ficha da Agenda) */
+  $('backBtn').classList.toggle('hidden', !back && !(VIEW === 'home' && window.laCanBack && laCanBack()));
+  if ($('hmw') && !$('hmw').innerHTML && window.laHomeBtn) $('hmw').innerHTML = laHomeBtn('color:#fff;border-color:rgba(255,255,255,.55);margin-right:2px');
 }
 
 /* ============================================================
@@ -837,7 +852,7 @@ function renderHome(){
   header(t('hello',{n:(S.assessor||'').split(' ')[0] || 'CHDCP'}), 'CHDCP · TOJ', false);
   var out = store.get(KEY.out, []), p = plan(), m = mode();
   var yest = isoShift(DATA.today, -1), other = S.date !== DATA.today && S.date !== yest;
-  var h = '<p style="margin:0 2px 8px"><button class="link" type="button" data-lanav="home">☰ Learning & Assessment</button></p>';
+  var h = '';
   if (S.act && S.act.area === S.area && S.act.date === S.date) h += '<div class="banner ok"><span>📅 '+esc(S.act.t || S.act.id)+' · '+esc(S.act.id)+'</span><button class="link" id="actX" type="button">✕</button></div>';
   if (out.length) h += '<div class="banner warn"><span>'+t('outbox',{n:out.length})+'</span><button class="link" id="retry" type="button">'+t('retry')+'</button></div>';
   if (S.session.length && S.session.some(function(id){ return counts(id).t; })) h += '<div class="banner ok"><span>'+t('resume',{p:S.session.map(function(id){ return esc(personById(id).name.split(' ')[0]); }).join(', ')})+'</span><button class="link" id="resume" type="button">'+t('resume_go')+'</button></div>';

@@ -1,5 +1,5 @@
 <!doctype html><html lang="pt"><head>
-<script>window.CHDCP_PWA=true;(function(){var API="https://script.google.com/macros/s/AKfycbzpGaQurqsz762hytflYHtHjFEGJssKLa9Jc4Kr1cgMaI0QUZ_021xmZj7-T3l6kisF/exec";function post(fn,args){return fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({fn:fn,args:args}),redirect:"follow",cache:"no-store"}).then(function(r){if(!r.ok)throw new Error("NetworkError HTTP "+r.status);return r.json();});}function runner(ok,ko){return new Proxy({},{get:function(t,k){if(k==="withSuccessHandler")return function(f){return runner(f,ko);};if(k==="withFailureHandler")return function(f){return runner(ok,f);};if(k==="withUserObject")return function(){return runner(ok,ko);};return function(){var a=[].slice.call(arguments);post(k,a).then(function(res){if(res&&res.ok){if(ok)ok(res.v);}else{if(ko)ko(new Error(res?res.e:"Erro"));}}).catch(function(e){if(ko)ko(new Error("NetworkError: "+(e&&e.message||e)));});};}});}window.google=window.google||{};google.script={run:runner(null,null),host:{close:function(){}},url:{getLocation:function(cb){var o={};new URLSearchParams(location.search).forEach(function(v,k){o[k]=v;});cb({parameter:o,hash:location.hash});}}};if("serviceWorker" in navigator)window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){});});})();</script><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#7d1d1a"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Avaliação"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="favicon.png"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>window.CHDCP_PWA=true;(function(){var API="https://script.google.com/macros/s/AKfycbzpGaQurqsz762hytflYHtHjFEGJssKLa9Jc4Kr1cgMaI0QUZ_021xmZj7-T3l6kisF/exec";function post1(fn,args){return fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({fn:fn,args:args}),redirect:"follow",cache:"no-store"}).then(function(r){if(!r.ok)throw new Error("NetworkError HTTP "+r.status);return r.json();});}function post(fn,args,n){n=n||0;return post1(fn,args).catch(function(e){if(n>=2||navigator.onLine===false)throw e;return new Promise(function(ok){setTimeout(ok,n?4000:1500);}).then(function(){return post(fn,args,n+1);});});}function runner(ok,ko){return new Proxy({},{get:function(t,k){if(k==="withSuccessHandler")return function(f){return runner(f,ko);};if(k==="withFailureHandler")return function(f){return runner(ok,f);};if(k==="withUserObject")return function(){return runner(ok,ko);};return function(){var a=[].slice.call(arguments);post(k,a).then(function(res){if(res&&res.ok){if(ok)ok(res.v);}else{if(ko)ko(new Error(res?res.e:"Erro"));}}).catch(function(e){if(ko)ko(new Error("NetworkError: "+(e&&e.message||e)));});};}});}window.google=window.google||{};google.script={run:runner(null,null),host:{close:function(){}},url:{getLocation:function(cb){var o={};new URLSearchParams(location.search).forEach(function(v,k){o[k]=v;});cb({parameter:o,hash:location.hash});}}};if("serviceWorker" in navigator)window.addEventListener("load",function(){var sw=navigator.serviceWorker;if(sw.getRegistrations)sw.getRegistrations().then(function(rs){rs.forEach(function(r){if(/\/(agenda|avaliacao)\/$/.test(r.scope))r.unregister();});}).catch(function(){});sw.register("../sw.js",{scope:"../"}).catch(function(){});});})();</script><link rel="manifest" href="../manifest.webmanifest"><meta name="theme-color" content="#7d1d1a"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="CHDCP"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="icon" href="../favicon.png"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#7d1d1a"><title>Avaliação teórica · CHDCP</title><style>
 :root{--brand:#7d1d1a;--brand-soft:#f6eceb;--brand-line:#e8cfcd;--ink:#1b2124;--muted:#65727a;--faint:#93a0a7;--line:#e2e7ea;--bg:#f2f4f5;--card:#fff;
 --ok:#11804a;--ok-soft:#e5f4ec;--warn:#a46a00;--warn-soft:#fff4d9;--bad:#b8322f;--bad-soft:#fbe7e5;--info:#235fb8;--info-soft:#eaf2fd;--r:14px}
@@ -23,6 +23,8 @@ main{max-width:760px;margin:0 auto;padding:14px 14px 110px}
 .field{display:block;font-size:12px;font-weight:800;color:var(--muted);margin:10px 2px 4px}
 .inp,select.inp{width:100%;border:1px solid var(--line);border-radius:10px;padding:12px;background:#fff;font-size:16px}
 .btn{display:block;width:100%;text-align:center;background:var(--brand);color:#fff;font-weight:800;font-size:17px;border-radius:14px;padding:15px;margin-top:14px}
+.btn.sec{background:#fff;color:var(--brand);border:1.5px solid var(--brand);font-size:14px;padding:11px;text-transform:none;letter-spacing:0}
+@media (max-width:380px){.lahmt{display:none}}
 .btn:disabled{opacity:.45}
 .err{color:var(--bad);font-weight:700;font-size:13.5px;margin-top:10px}
 .note{font-size:12.5px;color:var(--muted);line-height:1.5}
@@ -47,7 +49,7 @@ main{max-width:760px;margin:0 auto;padding:14px 14px 110px}
 @media (min-width:1024px){main{max-width:1100px}.plist{grid-template-columns:repeat(3,1fr)}}
 @media (hover:hover) and (pointer:fine){.tile:hover,.hrow:hover,.prow:hover{border-color:var(--brand-line);box-shadow:0 2px 8px rgba(27,33,36,.08)}}
 </style>
-<script>var LA_BOOT=(function(){var q=new URLSearchParams(location.search),p={};["mode","activityId","personId","area","date","title","tab","lang"].forEach(function(k){p[k]=q.get(k)||"";});if(!p.mode)p.mode="theory";return{v:"37",t:q.get("t")||"",p:p,urls:{home:"index.html"}};})();</script><script>var LA = window.LA_BOOT || { p:{}, urls:{} };
+<script>var LA_BOOT=(function(){var q=new URLSearchParams(location.search),p={};["mode","activityId","personId","area","date","title","tab","lang"].forEach(function(k){p[k]=q.get(k)||"";});if(!p.mode)p.mode="theory";return{v:"38",t:q.get("t")||"",p:p,urls:{home:"index.html"}};})();</script><script>var LA = window.LA_BOOT || { p:{}, urls:{} };
 function laSess(){ try { return JSON.parse(localStorage.getItem('la_sess') || 'null'); } catch(e){ return null; } }
 function laSetSess(s){ try { if (s) localStorage.setItem('la_sess', JSON.stringify(s)); else localStorage.removeItem('la_sess'); } catch(e){} }
 function laQs(o){ var k = Object.keys(o||{}).filter(function(x){ return o[x]; }); return k.map(function(x){ return x+'='+encodeURIComponent(o[x]); }).join('&'); }
@@ -56,6 +58,8 @@ function laNav(mode, params){
   var q = laQs(Object.assign({ mode: mode === 'home' ? '' : mode }, params||{}, window.I18N ? { lang: I18N.lang() } : {}));
   var url;
   if (window.CHDCP_PWA) {
+    /* app unica: il menu è quello dell'Agenda (per ruolo) se su questo telefono si è entrati nell'Agenda */
+    if (mode === 'home') { var ag = null; try { ag = localStorage.getItem('ap_tok'); } catch(e){} if (ag && ag !== 'null') { location.href = '../agenda/'; return; } }
     var pg = { home:'index.html', toj:'toj.html', theory:'teorica.html', results:'resultados.html', person:'resultados.html', area:'resultados.html' }[mode] || 'index.html';
     location.href = pg + (q ? '?' + q : ''); return;
   }
@@ -69,6 +73,10 @@ function laReady(cb){
   try { history.replaceState(null, '', location.pathname + location.search.replace(/([?&])t=[^&]*&?/, '$1').replace(/[?&]$/, '')); } catch(e){}
   google.script.run.withSuccessHandler(function(s){ laSetSess(s); cb(s); }).withFailureHandler(function(){ cb(laSess()); }).laRedeem(t);
 }
+/* v0.9 · navegação comum: ‹ volta ao ecrã anterior da app (ex.: ficha da Agenda); ⌂ Início = menu inicial */
+function laCanBack(){ try { return history.length > 1 && !!document.referrer && document.referrer.indexOf(location.origin) === 0 && document.referrer.split('?')[0] !== location.href.split('?')[0]; } catch(e){ return false; } }
+function laBack(){ if (laCanBack()) history.back(); else laNav('home'); }
+function laHomeBtn(css){ return '<button type="button" class="lahm" data-lanav="home" title="Menu inicial" style="display:inline-flex;align-items:center;gap:5px;flex:none;color:inherit;font-weight:800;font-size:12px;line-height:1;border:1.5px solid currentColor;border-radius:20px;padding:6px 10px 6px 8px;background:none;cursor:pointer;' + (css || '') + '"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg><span class="lahmt">Início</span></button>'; }
 document.addEventListener('click', function(e){
   var b = e.target.closest ? e.target.closest('[data-lanav]') : null; if (!b) return;
   e.preventDefault(); var x = String(b.getAttribute('data-lanav')).split(':');
@@ -123,6 +131,12 @@ var I18N = (function () {
 /* Dicionário de Learning & Assessment (menu, avaliação teórica, ligações): [português, English, italiano].
    A TOJ e o Painel de resultados têm traduções próprias e seguem a mesma escolha de língua. */
 I18N.add([
+  /* v0.9 navegação */
+  ['Início', 'Home', 'Home'],
+  ['Menu inicial', 'Main menu', 'Menu principale'],
+  ['⌂ Início', '⌂ Home', '⌂ Home'],
+  ['‹ Voltar à actividade', '‹ Back to the activity', '‹ Torna all\'attività'],
+  ['‹ Voltar', '‹ Back', '‹ Indietro'],
   /* menu */
   ['Sair', 'Sign out', 'Esci'],
   ['Avaliações', 'Assessments', 'Valutazioni'],
@@ -198,7 +212,7 @@ I18N.add([
 ]);
 
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ I18N.start(); }); else I18N.start();</script></head><body>
-<header class="top"><button class="back" id="bk" aria-label="Menu">‹</button><div class="ttl"><b id="tt">Avaliação teórica</b><span id="ts">Learning &amp; Assessment</span></div></header>
+<header class="top"><button class="back" id="bk" aria-label="Menu">‹</button><div class="ttl"><b id="tt">Avaliação teórica</b><span id="ts">Learning &amp; Assessment</span></div><span id="hmw"></span></header>
 <main id="app"><div class="load">…</div></main><div id="bar"></div>
 <script>
 function $(id){ return document.getElementById(id); }
@@ -235,7 +249,9 @@ function flush(){
     .catch(function(e){ if (!isNet(e.message)) { store(OUTK, outbox().filter(function(x){ return x.p.clientId !== it.p.clientId; })); toast('Não enviado (' + it.l + '): ' + errTxt(e.message)); } });
 }
 window.addEventListener('online', function(){ setTimeout(flush, 1500); });
-$('bk').onclick = function(){ if (CTX && !LA.p.activityId) { CTX = null; $('bar').innerHTML = ''; pick(); } else laNav('home'); };
+$('bk').onclick = function(){ if (CTX && !LA.p.activityId) { CTX = null; $('bar').innerHTML = ''; pick(); } else laBack(); };
+$('hmw').innerHTML = laHomeBtn('color:#fff;border-color:rgba(255,255,255,.55)');
+var SAVED_MSG = '';
 
 function pick(){
   head('Avaliação teórica', 'Escolha a actividade');
@@ -262,7 +278,10 @@ function draw(){
   var c = CTX, a = c.act;
   head('Avaliação teórica', a.area + ' · ' + dmy(a.date));
   var h = '<div class="ctx"><b>' + esc(a.title) + '</b><br>' + esc(dmy(a.date)) + ' · ' + esc(a.area) + ' · ' + esc(a.id) + (a.provisional ? ' · <i>ainda não no Hub</i>' : '') + '<br>Avaliador: ' + esc(c.assessor) + '</div>';
-  if (Object.keys(c.saved || {}).length) h += '<div class="banner ok">Notas já registadas: pode corrigir e guardar de novo.</div>';
+  if (SAVED_MSG) h += '<div class="card" style="text-align:center;border-color:#b9dfc6"><div style="font-size:34px">✅</div><b>' + esc(SAVED_MSG) + '</b>' +
+    '<div style="display:flex;gap:8px;margin-top:12px"><button class="btn sec" id="nbBack" style="flex:1;margin:0">‹ ' + (laCanBack() ? 'Voltar à actividade' : 'Voltar') + '</button>' +
+    '<button class="btn sec" id="nbHome" style="flex:1;margin:0" data-lanav="home">⌂ Início</button></div></div>';
+  else if (Object.keys(c.saved || {}).length) h += '<div class="banner ok">Notas já registadas: pode corrigir e guardar de novo.</div>';
   h += '<div class="two"><div><label class="field">Prova</label><input class="inp" id="tas" value="' + esc(D.assessment) + '"></div><div><label class="field">Nota máxima</label><input class="inp" id="tmx" inputmode="decimal" value="' + esc(D.max) + '"></div></div>' +
     '<p class="note" style="margin:8px 2px 10px">Aprovado com ≥ ' + esc(c.passMark) + '% (regra do Training Hub). Deixe vazio quem não fez a prova. Toque no nome para ver o perfil.</p>';
   h += '<div class="plist">' + (c.people.length ? c.people.map(function(p){
@@ -271,6 +290,8 @@ function draw(){
       '<input class="score" data-p="' + esc(p.id) + '" inputmode="decimal" placeholder="—" value="' + esc(D.raw[p.id] == null ? '' : D.raw[p.id]) + '"><span class="pct" id="pc_' + esc(p.id) + '"></span></div>';
   }).join('') : '<div class="card note">Sem formandos da área ' + esc(a.area) + '.</div>') + '</div>';
   $('app').innerHTML = h;
+  if ($('nbBack')) $('nbBack').onclick = function(){ if (!LA.p.activityId) { CTX = null; SAVED_MSG = ''; $('bar').innerHTML = ''; pick(); } else laBack(); };
+  SAVED_MSG = '';
   $('bar').innerHTML = '<div class="savebar"><button class="btn" id="save">Guardar notas</button></div>';
   var paint = function(){
     var max = num(D.max), n = 0, bad = false;
@@ -291,7 +312,8 @@ function draw(){
     var p = { clientId: D.cid, activityId: c.act.id, max: num(D.max), assessment: D.assessment, items: items, fallback: D.fb };
     $('save').disabled = true;
     call('laSaveTheory', [AUTH, p], 60000).then(function(r){
-      toast(r.duplicate ? 'Já estava guardado.' : 'Notas guardadas: ' + r.passed + ' de ' + r.total + ' aprovados.');
+      SAVED_MSG = r.duplicate ? 'Já estava guardado.' : 'Notas guardadas: ' + r.passed + ' de ' + r.total + ' aprovados.';
+      toast(SAVED_MSG); window.scrollTo(0, 0);
       D.cid = uid(); load(c.act.id, D.fb);
     }).catch(function(e){
       if (isNet(e.message)) { var o = outbox(); o.push({ p: p, l: c.act.title }); store(OUTK, o); toast('Sem ligação: guardado no telefone, será enviado.'); D.cid = uid(); $('save').disabled = false; return; }

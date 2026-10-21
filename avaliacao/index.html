@@ -1,5 +1,5 @@
 <!doctype html><html lang="pt"><head>
-<script>(function(){var m=new URLSearchParams(location.search).get("mode");var to={toj:"toj.html",theory:"teorica.html",person:"resultados.html",area:"resultados.html",results:"resultados.html"}[m];if(to)location.replace(to+location.search);})();</script><script>window.CHDCP_PWA=true;(function(){var API="https://script.google.com/macros/s/AKfycbzpGaQurqsz762hytflYHtHjFEGJssKLa9Jc4Kr1cgMaI0QUZ_021xmZj7-T3l6kisF/exec";function post(fn,args){return fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({fn:fn,args:args}),redirect:"follow",cache:"no-store"}).then(function(r){if(!r.ok)throw new Error("NetworkError HTTP "+r.status);return r.json();});}function runner(ok,ko){return new Proxy({},{get:function(t,k){if(k==="withSuccessHandler")return function(f){return runner(f,ko);};if(k==="withFailureHandler")return function(f){return runner(ok,f);};if(k==="withUserObject")return function(){return runner(ok,ko);};return function(){var a=[].slice.call(arguments);post(k,a).then(function(res){if(res&&res.ok){if(ok)ok(res.v);}else{if(ko)ko(new Error(res?res.e:"Erro"));}}).catch(function(e){if(ko)ko(new Error("NetworkError: "+(e&&e.message||e)));});};}});}window.google=window.google||{};google.script={run:runner(null,null),host:{close:function(){}},url:{getLocation:function(cb){var o={};new URLSearchParams(location.search).forEach(function(v,k){o[k]=v;});cb({parameter:o,hash:location.hash});}}};if("serviceWorker" in navigator)window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){});});})();</script><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#7d1d1a"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Avaliação"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="favicon.png"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>(function(){var m=new URLSearchParams(location.search).get("mode");var to={toj:"toj.html",theory:"teorica.html",person:"resultados.html",area:"resultados.html",results:"resultados.html"}[m];if(to)location.replace(to+location.search);})();</script><script>window.CHDCP_PWA=true;(function(){var API="https://script.google.com/macros/s/AKfycbzpGaQurqsz762hytflYHtHjFEGJssKLa9Jc4Kr1cgMaI0QUZ_021xmZj7-T3l6kisF/exec";function post1(fn,args){return fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({fn:fn,args:args}),redirect:"follow",cache:"no-store"}).then(function(r){if(!r.ok)throw new Error("NetworkError HTTP "+r.status);return r.json();});}function post(fn,args,n){n=n||0;return post1(fn,args).catch(function(e){if(n>=2||navigator.onLine===false)throw e;return new Promise(function(ok){setTimeout(ok,n?4000:1500);}).then(function(){return post(fn,args,n+1);});});}function runner(ok,ko){return new Proxy({},{get:function(t,k){if(k==="withSuccessHandler")return function(f){return runner(f,ko);};if(k==="withFailureHandler")return function(f){return runner(ok,f);};if(k==="withUserObject")return function(){return runner(ok,ko);};return function(){var a=[].slice.call(arguments);post(k,a).then(function(res){if(res&&res.ok){if(ok)ok(res.v);}else{if(ko)ko(new Error(res?res.e:"Erro"));}}).catch(function(e){if(ko)ko(new Error("NetworkError: "+(e&&e.message||e)));});};}});}window.google=window.google||{};google.script={run:runner(null,null),host:{close:function(){}},url:{getLocation:function(cb){var o={};new URLSearchParams(location.search).forEach(function(v,k){o[k]=v;});cb({parameter:o,hash:location.hash});}}};if("serviceWorker" in navigator)window.addEventListener("load",function(){var sw=navigator.serviceWorker;if(sw.getRegistrations)sw.getRegistrations().then(function(rs){rs.forEach(function(r){if(/\/(agenda|avaliacao)\/$/.test(r.scope))r.unregister();});}).catch(function(){});sw.register("../sw.js",{scope:"../"}).catch(function(){});});})();</script><link rel="manifest" href="../manifest.webmanifest"><meta name="theme-color" content="#7d1d1a"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="CHDCP"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="icon" href="../favicon.png"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#7d1d1a"><title>CHDCP Learning & Assessment</title><style>
 :root{--brand:#7d1d1a;--brand-soft:#f6eceb;--brand-line:#e8cfcd;--ink:#1b2124;--muted:#65727a;--faint:#93a0a7;--line:#e2e7ea;--bg:#f2f4f5;--card:#fff;
 --ok:#11804a;--ok-soft:#e5f4ec;--warn:#a46a00;--warn-soft:#fff4d9;--bad:#b8322f;--bad-soft:#fbe7e5;--info:#235fb8;--info-soft:#eaf2fd;--r:14px}
@@ -23,6 +23,8 @@ main{max-width:760px;margin:0 auto;padding:14px 14px 110px}
 .field{display:block;font-size:12px;font-weight:800;color:var(--muted);margin:10px 2px 4px}
 .inp,select.inp{width:100%;border:1px solid var(--line);border-radius:10px;padding:12px;background:#fff;font-size:16px}
 .btn{display:block;width:100%;text-align:center;background:var(--brand);color:#fff;font-weight:800;font-size:17px;border-radius:14px;padding:15px;margin-top:14px}
+.btn.sec{background:#fff;color:var(--brand);border:1.5px solid var(--brand);font-size:14px;padding:11px;text-transform:none;letter-spacing:0}
+@media (max-width:380px){.lahmt{display:none}}
 .btn:disabled{opacity:.45}
 .err{color:var(--bad);font-weight:700;font-size:13.5px;margin-top:10px}
 .note{font-size:12.5px;color:var(--muted);line-height:1.5}
@@ -47,7 +49,7 @@ main{max-width:760px;margin:0 auto;padding:14px 14px 110px}
 @media (min-width:1024px){main{max-width:1100px}.plist{grid-template-columns:repeat(3,1fr)}}
 @media (hover:hover) and (pointer:fine){.tile:hover,.hrow:hover,.prow:hover{border-color:var(--brand-line);box-shadow:0 2px 8px rgba(27,33,36,.08)}}
 </style>
-<script>var LA_BOOT=(function(){var q=new URLSearchParams(location.search),p={};["mode","activityId","personId","area","date","title","tab","lang"].forEach(function(k){p[k]=q.get(k)||"";});if(!p.mode)p.mode="";return{v:"37",t:q.get("t")||"",p:p,urls:{home:"index.html"}};})();</script><script>var LA = window.LA_BOOT || { p:{}, urls:{} };
+<script>var LA_BOOT=(function(){var q=new URLSearchParams(location.search),p={};["mode","activityId","personId","area","date","title","tab","lang"].forEach(function(k){p[k]=q.get(k)||"";});if(!p.mode)p.mode="";return{v:"38",t:q.get("t")||"",p:p,urls:{home:"index.html"}};})();</script><script>var LA = window.LA_BOOT || { p:{}, urls:{} };
 function laSess(){ try { return JSON.parse(localStorage.getItem('la_sess') || 'null'); } catch(e){ return null; } }
 function laSetSess(s){ try { if (s) localStorage.setItem('la_sess', JSON.stringify(s)); else localStorage.removeItem('la_sess'); } catch(e){} }
 function laQs(o){ var k = Object.keys(o||{}).filter(function(x){ return o[x]; }); return k.map(function(x){ return x+'='+encodeURIComponent(o[x]); }).join('&'); }
@@ -56,6 +58,8 @@ function laNav(mode, params){
   var q = laQs(Object.assign({ mode: mode === 'home' ? '' : mode }, params||{}, window.I18N ? { lang: I18N.lang() } : {}));
   var url;
   if (window.CHDCP_PWA) {
+    /* app unica: il menu è quello dell'Agenda (per ruolo) se su questo telefono si è entrati nell'Agenda */
+    if (mode === 'home') { var ag = null; try { ag = localStorage.getItem('ap_tok'); } catch(e){} if (ag && ag !== 'null') { location.href = '../agenda/'; return; } }
     var pg = { home:'index.html', toj:'toj.html', theory:'teorica.html', results:'resultados.html', person:'resultados.html', area:'resultados.html' }[mode] || 'index.html';
     location.href = pg + (q ? '?' + q : ''); return;
   }
@@ -69,6 +73,10 @@ function laReady(cb){
   try { history.replaceState(null, '', location.pathname + location.search.replace(/([?&])t=[^&]*&?/, '$1').replace(/[?&]$/, '')); } catch(e){}
   google.script.run.withSuccessHandler(function(s){ laSetSess(s); cb(s); }).withFailureHandler(function(){ cb(laSess()); }).laRedeem(t);
 }
+/* v0.9 · navegação comum: ‹ volta ao ecrã anterior da app (ex.: ficha da Agenda); ⌂ Início = menu inicial */
+function laCanBack(){ try { return history.length > 1 && !!document.referrer && document.referrer.indexOf(location.origin) === 0 && document.referrer.split('?')[0] !== location.href.split('?')[0]; } catch(e){ return false; } }
+function laBack(){ if (laCanBack()) history.back(); else laNav('home'); }
+function laHomeBtn(css){ return '<button type="button" class="lahm" data-lanav="home" title="Menu inicial" style="display:inline-flex;align-items:center;gap:5px;flex:none;color:inherit;font-weight:800;font-size:12px;line-height:1;border:1.5px solid currentColor;border-radius:20px;padding:6px 10px 6px 8px;background:none;cursor:pointer;' + (css || '') + '"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg><span class="lahmt">Início</span></button>'; }
 document.addEventListener('click', function(e){
   var b = e.target.closest ? e.target.closest('[data-lanav]') : null; if (!b) return;
   e.preventDefault(); var x = String(b.getAttribute('data-lanav')).split(':');
@@ -123,6 +131,12 @@ var I18N = (function () {
 /* Dicionário de Learning & Assessment (menu, avaliação teórica, ligações): [português, English, italiano].
    A TOJ e o Painel de resultados têm traduções próprias e seguem a mesma escolha de língua. */
 I18N.add([
+  /* v0.9 navegação */
+  ['Início', 'Home', 'Home'],
+  ['Menu inicial', 'Main menu', 'Menu principale'],
+  ['⌂ Início', '⌂ Home', '⌂ Home'],
+  ['‹ Voltar à actividade', '‹ Back to the activity', '‹ Torna all\'attività'],
+  ['‹ Voltar', '‹ Back', '‹ Indietro'],
   /* menu */
   ['Sair', 'Sign out', 'Esci'],
   ['Avaliações', 'Assessments', 'Valutazioni'],
@@ -271,7 +285,13 @@ function login(names, err){
     }).catch(function(e){ $('lb').disabled = false; $('le').textContent = errTxt(e.message); });
   };
 }
-function showLogin(err){ call('laLoginList', []).then(function(n){ login(n, err); }).catch(function(e){ $('app').innerHTML = '<div class="card err">' + esc(errTxt(e.message)) + '</div>'; }); }
+/* v39: lista dei nomi guardata nel telefono: lo schermo di accesso appare subito */
+function showLogin(err){
+  var c = store('la_names');
+  if (c && c.length) login(c, err);
+  call('laLoginList', []).then(function(n){ store('la_names', n); if (!c || JSON.stringify(c) !== JSON.stringify(n)) { if (!$('ln') || !$('ln').value) login(n, err); } })
+    .catch(function(e){ if (!c) $('app').innerHTML = '<div class="card err">' + esc(errTxt(e.message)) + '</div>'; });
+}
 $('out').onclick = function(){ var a = authNow(); if (a && a.sess) call('laLogout', [a]).catch(function(){}); laSetSess(null); store('chdcp_toj_v2_auth', null); store('rs_auth', null); store('la_home', null); showLogin(''); };
 laReady(function(){
   var a = authNow();

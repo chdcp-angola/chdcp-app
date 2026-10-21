@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-<script>window.CHDCP_PWA=true;(function(){var API="https://script.google.com/macros/s/AKfycbx5EXrVLumRRvYOjgj0qXPqgzCPKpzn5GwSgqj3ZjG1uQo7kzjt14Nas3IIK-oNCx7l/exec";function post(fn,args){return fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({fn:fn,args:args}),redirect:"follow",cache:"no-store"}).then(function(r){if(!r.ok)throw new Error("NetworkError HTTP "+r.status);return r.json();});}function runner(ok,ko){return new Proxy({},{get:function(t,k){if(k==="withSuccessHandler")return function(f){return runner(f,ko);};if(k==="withFailureHandler")return function(f){return runner(ok,f);};if(k==="withUserObject")return function(){return runner(ok,ko);};return function(){var a=[].slice.call(arguments);post(k,a).then(function(res){if(res&&res.ok){if(ok)ok(res.v);}else{if(ko)ko(new Error(res?res.e:"Erro"));}}).catch(function(e){if(ko)ko(new Error("NetworkError: "+(e&&e.message||e)));});};}});}window.google=window.google||{};google.script={run:runner(null,null),host:{close:function(){}},url:{getLocation:function(cb){var o={};new URLSearchParams(location.search).forEach(function(v,k){o[k]=v;});cb({parameter:o,hash:location.hash});}}};if("serviceWorker" in navigator)window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){});});})();</script><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#7d1d1a"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Agenda"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="favicon.png"><title>CHDCP Agenda</title>
+<script>window.CHDCP_PWA=true;(function(){var API="https://script.google.com/macros/s/AKfycbx5EXrVLumRRvYOjgj0qXPqgzCPKpzn5GwSgqj3ZjG1uQo7kzjt14Nas3IIK-oNCx7l/exec";function post1(fn,args){return fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({fn:fn,args:args}),redirect:"follow",cache:"no-store"}).then(function(r){if(!r.ok)throw new Error("NetworkError HTTP "+r.status);return r.json();});}function post(fn,args,n){n=n||0;return post1(fn,args).catch(function(e){if(n>=2||navigator.onLine===false)throw e;return new Promise(function(ok){setTimeout(ok,n?4000:1500);}).then(function(){return post(fn,args,n+1);});});}function runner(ok,ko){return new Proxy({},{get:function(t,k){if(k==="withSuccessHandler")return function(f){return runner(f,ko);};if(k==="withFailureHandler")return function(f){return runner(ok,f);};if(k==="withUserObject")return function(){return runner(ok,ko);};return function(){var a=[].slice.call(arguments);post(k,a).then(function(res){if(res&&res.ok){if(ok)ok(res.v);}else{if(ko)ko(new Error(res?res.e:"Erro"));}}).catch(function(e){if(ko)ko(new Error("NetworkError: "+(e&&e.message||e)));});};}});}window.google=window.google||{};google.script={run:runner(null,null),host:{close:function(){}},url:{getLocation:function(cb){var o={};new URLSearchParams(location.search).forEach(function(v,k){o[k]=v;});cb({parameter:o,hash:location.hash});}}};if("serviceWorker" in navigator)window.addEventListener("load",function(){var sw=navigator.serviceWorker;if(sw.getRegistrations)sw.getRegistrations().then(function(rs){rs.forEach(function(r){if(/\/(agenda|avaliacao)\/$/.test(r.scope))r.unregister();});}).catch(function(){});sw.register("../sw.js",{scope:"../"}).catch(function(){});});})();</script><link rel="manifest" href="../manifest.webmanifest"><meta name="theme-color" content="#7d1d1a"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="CHDCP"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="icon" href="../favicon.png"><title>CHDCP Agenda</title>
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -238,6 +238,7 @@ input{font-family:inherit;font-size:16px}
 .savebar .in{max-width:760px;margin:0 auto}
 .savebar .btn{padding:14px}
 .minor{display:inline-block;font-size:12.5px;font-weight:800;color:var(--brand);border:1.5px solid var(--brand-line);border-radius:18px;padding:8px 12px;margin:0 6px 10px 0;background:#fff}
+.pushcard{display:flex;align-items:center;gap:11px;background:#fff;border:1.5px solid var(--brand-line);border-radius:14px;padding:11px 12px;margin-bottom:12px}.pushcard .ic{font-size:24px}.pushcard .tx{flex:1;min-width:0}.pushcard b{display:block;color:var(--brand);font-size:14.5px}.pushcard small{display:block;font-size:12px;color:var(--muted)}.pbtn{flex:none;background:var(--brand);color:#fff;font-weight:800;font-size:13px;border-radius:10px;padding:9px 13px}
 .addpanel{border:1.5px solid var(--brand-line);border-radius:12px;background:#fff;padding:10px;margin:0 0 12px}
 .addhead{display:flex;gap:8px;align-items:center}.addhead .inp{flex:1}.addhead .minor{margin:0;flex:none}
 .addlist{max-height:46vh;overflow:auto;margin-top:8px;-webkit-overflow-scrolling:touch}
@@ -317,6 +318,30 @@ input{font-family:inherit;font-size:16px}
 .abtn.sec2{border-color:var(--line)}
 .abtn.sec2 b{color:var(--ink)}
 
+/* v0.9 · navegação: Início em todos os ecrãs, anterior/seguinte, passo seguinte */
+.top .hm{display:inline-flex;align-items:center;gap:5px;flex:none;color:#fff;font-size:12px;font-weight:800;border:1.5px solid rgba(255,255,255,.55);border-radius:20px;padding:6px 10px 6px 8px;margin-left:8px}
+.top .hm svg,.chipbtn svg{width:17px;height:17px;flex:none}
+.chipbtn.hmc{display:inline-flex;align-items:center;gap:5px}
+@media (max-width:380px){.top .hm span{display:none}.top .hm{padding:6px 8px}}
+.page.anim{animation:pgin .16s ease-out}
+html,body{overflow-x:hidden}
+.tags .tag{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@keyframes pgin{from{opacity:.4;transform:translateX(22px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.page.anim{animation:none}}
+.pn{display:flex;gap:8px;margin:14px 0 4px}
+.pn button{flex:1;min-width:0;text-align:left;background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px 12px;display:flex;flex-direction:column;gap:2px}
+.pn button.nx{text-align:right;align-items:flex-end}
+.pn button:disabled{opacity:.35}
+.pn b{font-size:12.5px;color:var(--brand);font-weight:800}
+.pn small{font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.done{text-align:center;padding:22px 16px}
+.done .ok{font-size:44px;line-height:1}
+.done h2{font-size:19px;margin:8px 0 4px}
+.nextsec{margin-top:16px}
+.navrow{display:flex;gap:8px;margin-top:12px}
+.navrow .sbtn{flex:1;margin:0;background:#fff;border:1.5px solid var(--brand-line,#e8cfcd);border-radius:14px;padding:12px 8px;font-weight:800;color:var(--brand);text-align:center}
+.kbd{display:none}
+@media (hover:hover) and (min-width:900px){.kbd{display:block;text-align:center;font-size:11px;color:var(--muted);margin-top:10px}}
 </style>
 </head>
 <body>
@@ -375,6 +400,19 @@ var I18N = (function () {
 /* Dicionário da CHDCP Agenda: [português, English, italiano].
    Linhas com expressão regular servem para textos com números ou nomes ($1, $2…). */
 I18N.add([
+  /* v0.9 navegação */
+  ['Início', 'Home', 'Home'],
+  ['Menu inicial', 'Main menu', 'Menu principale'],
+  ['‹ Anterior', '‹ Previous', '‹ Precedente'],
+  ['Seguinte ›', 'Next ›', 'Successiva ›'],
+  ['Entre as suas actividades', 'Among your activities', 'Tra le tue attività'],
+  ['Entre as actividades da agenda', 'Among the agenda activities', 'Tra le attività dell\'agenda'],
+  ['Teclado: ← → anterior / seguinte · Esc voltar · Home início', 'Keyboard: ← → previous / next · Esc back · Home main menu', 'Tastiera: ← → precedente / successiva · Esc indietro · Home menu'],
+  ['Passo seguinte nesta actividade', 'Next step for this activity', 'Passo successivo per questa attività'],
+  ['Outra actividade de hoje com registos', 'Another activity today with records to do', 'Altra attività di oggi con registrazioni'],
+  ['‹ Voltar à actividade', '‹ Back to the activity', '‹ Torna all\'attività'],
+  ['⌂ Início', '⌂ Home', '⌂ Home'],
+  ['Há marcações por guardar. Toque de novo para sair sem guardar.', 'There are unsaved marks. Tap again to leave without saving.', 'Ci sono segnature non salvate. Tocca di nuovo per uscire senza salvare.'],
   /* acesso */
   ['Agenda operativa CHDCP–CCM', 'CHDCP–CCM operational agenda', 'Agenda operativa CHDCP–CCM'],
   ['Quem está a utilizar a aplicação?', 'Who is using the app?', 'Chi sta usando l\'app?'],
@@ -603,6 +641,19 @@ I18N.add([
   [/^Actividade não encontrada \((.*)\)\. Actualize a agenda\.$/, 'Activity not found ($1). Refresh the agenda.', 'Attività non trovata ($1). Aggiorna l\'agenda.'],
   [/^Presenças · (.*)$/, 'Attendance · $1', 'Presenze · $1'],
 
+  /* notificações */
+  ['Activar notificações', 'Turn on notifications', 'Attiva le notifiche'],
+  ['Lembretes das suas reuniões e mensagens da formação.', 'Reminders of your meetings and training messages.', 'Promemoria delle tue riunioni e messaggi della formazione.'],
+  ['Activar', 'Turn on', 'Attiva'],
+  ['🔔 Desactivar notificações', '🔔 Turn off notifications', '🔔 Disattiva notifiche'],
+  ['Notificações activadas.', 'Notifications turned on.', 'Notifiche attivate.'],
+  ['Notificações desactivadas.', 'Notifications turned off.', 'Notifiche disattivate.'],
+  ['No iPhone: primeiro «Adicionar ao ecrã principal», depois abra a app a partir do ícone.', 'On iPhone: first «Add to Home Screen», then open the app from its icon.', 'Su iPhone: prima «Aggiungi alla schermata Home», poi apri l\'app dall\'icona.'],
+  ['Este telefone não suporta notificações.', 'This phone does not support notifications.', 'Questo telefono non supporta le notifiche.'],
+  ['Notificações bloqueadas: autorize-as nas definições do telefone.', 'Notifications blocked: allow them in the phone settings.', 'Notifiche bloccate: consentile nelle impostazioni del telefono.'],
+  ['As notificações ainda não estão configuradas.', 'Notifications are not set up yet.', 'Le notifiche non sono ancora configurate.'],
+  ['Não foi possível obter o código do telefone.', 'Could not get the phone code.', 'Impossibile ottenere il codice del telefono.'],
+
   /* questionário */
   ['Abrir questionário', 'Open questionnaire', 'Apri questionario'],
   ['Partilhar por WhatsApp', 'Share on WhatsApp', 'Condividi su WhatsApp'],
@@ -727,7 +778,7 @@ function start() {
     S.token = tok;
     var cached = loadData();
     if (cached && cached.uid === last.id) {
-      setData(cached.r); S.user = ALL.user; SYNC.state = 'busy'; loadAgenda(); sync(false);
+      setData(cached.r); S.user = ALL.user; SYNC.state = 'busy'; loadAgenda(); sync(false); resumeFromLa();
     } else {
       sync(true);
     }
@@ -889,7 +940,21 @@ function norm(v) { return String(v == null ? '' : v).trim().toLowerCase().normal
 function hm(ms) { return ms ? new Date(ms).toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' }) : ''; }
 function loadData() { try { return JSON.parse(localStorage.getItem(DKEY)); } catch (e) { return null; } }
 function saveData(r) { try { localStorage.setItem(DKEY, JSON.stringify({ uid: r.user.id, r: r })); } catch (e) {} }
-function dropData() { try { localStorage.removeItem(DKEY); } catch (e) {} }
+function dropData() { try { localStorage.removeItem(DKEY); localStorage.removeItem(CXKEY); } catch (e) {} CXM = null; }
+
+/* v0.8 · fichas e listas de presenças guardadas no telefone (3 dias, máx. 60):
+   abrem logo, mesmo com rede fraca; o servidor actualiza-as em segundo plano */
+var CXKEY = 'ap_cx_v1', CXM = null;
+function cxAll() { if (!CXM) { try { CXM = JSON.parse(localStorage.getItem(CXKEY)) || {}; } catch (e) { CXM = {}; } } return CXM; }
+function cxGet(k) { var x = cxAll()[k]; return x && Date.now() - x.t < 3 * 86400000 ? x.v : null; }
+function cxSave() { try { localStorage.setItem(CXKEY, JSON.stringify(CXM || {})); } catch (e) { CXM = {}; try { localStorage.removeItem(CXKEY); } catch (x) {} } }
+function cxSet(k, v, noSave) {
+  var o = cxAll(); o[k] = { t: Date.now(), v: v };
+  var ks = Object.keys(o);
+  if (ks.length > 60) ks.sort(function (a, b) { return o[a].t - o[b].t; }).slice(0, ks.length - 60).forEach(function (x) { delete o[x]; });
+  if (!noSave) cxSave();
+}
+function cxDel(k) { var o = cxAll(); if (o[k]) { delete o[k]; cxSave(); } }
 
 /* espande o pacote compacto (tipos por índice, campos vazios omitidos) */
 function setData(r) {
@@ -902,6 +967,13 @@ function setData(r) {
     ['start', 'end', 'area', 'title', 'method', 'platform', 'governance', 'governanceType', 'place', 'translator', 'exec', 'status', 'role'].forEach(function (k) { if (a[k] == null) a[k] = ''; });
     return a;
   });
+  /* v0.8: fichas e presenças de hoje e ontem já vieram no pacote */
+  if (r.pre) {
+    Object.keys(r.pre.det || {}).forEach(function (id) { ST[id] = r.pre.det[id]; cxSet('det|' + id, r.pre.det[id], true); });
+    Object.keys(r.pre.att || {}).forEach(function (id) { cxSet('att|' + id, r.pre.att[id], true); });
+    cxSave();
+    delete r.pre;
+  }
   ALL = { user: r.user, areas: r.areas || [], acts: acts, holidays: r.holidays || [], from: r.from, to: r.to, readAt: r.readAt, today: r.today, warnings: r.warnings || [], syncedAt: r.syncedAt || 0 };
   var real = todayYmd(); if (real > ALL.today) ALL.today = real;
 }
@@ -926,7 +998,7 @@ function sync(first) {
   callT(30000, 'apiAgendaAll', S.token).then(function (r) {
     SYNCING = false; busy(false);
     if (!r || r.session === false) { S.token = null; LS.del('tok'); dropData(); ALL = null; showPin(LS.get('last'), 'A sessão expirou. Introduza o PIN.'); return; }
-    r.syncedAt = Date.now(); saveData(r); setData(r); S.user = r.user; SYNC.state = '';
+    r.syncedAt = Date.now(); setData(r); saveData(r); S.user = r.user; SYNC.state = '';
     if (r.mustChangePin) { showChangePin(); return; }
     loadAgenda();
   }).catch(function () {
@@ -1314,7 +1386,7 @@ window.addEventListener('online', function () { if (S.token && SYNC.state === 'o
 
 /* === ECOSSISTEMA v0.6 (JS) === */
 /* ============================================================
-   CHDCP Agenda · v0.6.1 · ECOSSISTEMA (cliente)
+   CHDCP Agenda · v0.6.2 · ECOSSISTEMA (cliente)
    Menu inicial · ficha = centro operativo (Detailed Plan, participantes,
    acções) · Registar presenças · Questionário · ligações a
    CHDCP Learning & Assessment (TOJ, Teórica, Resultados, Perfil).
@@ -1349,18 +1421,39 @@ function findAct(id) { return (ALL && ALL.acts.filter(function (a) { return a.id
 
 /* ---------------- navegação (botão Voltar do telefone incluído) ---------------- */
 
-function page(html) {
-  $('layer').innerHTML = '<div class="page" id="pg"><div class="wrap">' + html + '</div></div>';
-  if ($('bk')) $('bk').onclick = back;
+function page(html, noAnim) {
+  $('layer').innerHTML = '<div class="page' + (noAnim || BACKING ? '' : ' anim') + '" id="pg"><div class="wrap">' + html + '</div></div>';
+  UNSAVED = null;
+  if ($('bk')) $('bk').onclick = function () { leaveOk(back); };
+  if ($('hm')) $('hm').onclick = function () { leaveOk(goMenu); };
 }
+/* marcações por guardar: o primeiro toque em ‹ / Início avisa, o segundo sai */
+var UNSAVED = null, LEAVE_T = 0;
+function leaveOk(fn) {
+  if (UNSAVED && UNSAVED() && Date.now() - LEAVE_T > 3000) { LEAVE_T = Date.now(); toast('Há marcações por guardar. Toque de novo para sair sem guardar.'); return; }
+  LEAVE_T = 0; fn();
+}
+var HOME_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg>';
 function bhead(title, sub) {
-  return '<div class="top"><div class="bar withback"><button class="back" id="bk" aria-label="Voltar">‹</button><div><h1>' + esc(title) + '</h1><p>' + esc(sub || '') + '</p></div></div></div>';
+  return '<div class="top"><div class="bar withback"><button class="back" id="bk" aria-label="Voltar">‹</button><div><h1>' + esc(title) + '</h1><p>' + esc(sub || '') + '</p></div>' +
+    '<button class="hm" id="hm" title="Menu inicial">' + HOME_SVG + '<span>Início</span></button></div></div>';
 }
 function go(render) { NAV.push(render); try { history.pushState({ sa: NAV.length }, ''); } catch (e) {} render(); }
+/* troca o ecrã actual sem criar um passo novo no «Voltar» (anterior / seguinte, ecrã de conclusão) */
+function swapTop(render) { if (!NAV.length) { go(render); return; } NAV[NAV.length - 1] = render; render(); }
+/* v0.9 · Início: fecha tudo e volta ao menu inicial num só toque (também o «Voltar» do telefone fica limpo) */
+var HOMING = 0;
+function goMenu() {
+  var n = NAV.length + (S.screen === 'AGENDA' ? 1 : 0);
+  NAV = []; $('layer').innerHTML = ''; S.screen = 'HOME'; renderHome(); window.scrollTo(0, 0);
+  if (n > 0) { HOMING = n; try { history.go(-n); } catch (e) { HOMING = 0; } }
+}
 function back() { try { if (history.state && history.state.sa) { history.back(); return; } } catch (e) {} popNav(); }
-function popNav() { NAV.pop(); if (NAV.length) NAV[NAV.length - 1](); else $('layer').innerHTML = ''; }
+function popNav() { NAV.pop(); if (NAV.length) { BACKING = true; NAV[NAV.length - 1](); BACKING = false; } else $('layer').innerHTML = ''; }
+var BACKING = false;
 function here() { return NAV.length; }
 window.addEventListener('popstate', function () {
+  if (HOMING) { HOMING = 0; return; }
   if (NAV.length) { popNav(); return; }
   if ($('pg')) { $('layer').innerHTML = ''; return; }
   if (S.screen === 'AGENDA' && !(history.state && history.state.ag)) { S.screen = 'HOME'; renderHome(); }
@@ -1431,6 +1524,66 @@ actHtml = function (a, i) {
   return h;
 };
 
+
+/* ---------------- NOTIFICAÇÕES (push, só na app instalada) ---------------- */
+
+var PUSHS = { busy: false, checked: false };
+function pushOk() { return IS_PWA && 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window; }
+function isIos() { return /iphone|ipad|ipod/i.test(navigator.userAgent); }
+function standalone() { return (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true; }
+function platformName() { return (isIos() ? 'iOS' : /android/i.test(navigator.userAgent) ? 'Android' : 'Web') + (standalone() ? ' · app' : ' · browser'); }
+function pushState() { var p = LS.get('push'); return p && S.user && p.u === S.user.id ? p : null; }
+function pushOn() { return !!(pushState() && window.Notification && Notification.permission === 'granted'); }
+function loadJs(src) { return new Promise(function (ok, ko) { var s = document.createElement('script'); s.src = src; s.onload = ok; s.onerror = function () { ko(new Error('NetworkError')); }; document.head.appendChild(s); }); }
+function pushToken(c) {
+  var base = 'https://www.gstatic.com/firebasejs/' + c.sdk + '/';
+  return (window.firebase && firebase.messaging ? Promise.resolve() : loadJs(base + 'firebase-app-compat.js').then(function () { return loadJs(base + 'firebase-messaging-compat.js'); }))
+    .then(function () { if (!firebase.apps.length) firebase.initializeApp(c.cfg); return navigator.serviceWorker.ready; })
+    .then(function (reg) { return firebase.messaging().getToken({ vapidKey: c.vapid, serviceWorkerRegistration: reg }); });
+}
+function pushEnable() {
+  if (!pushOk()) { toast(isIos() && !standalone() ? 'No iPhone: primeiro «Adicionar ao ecrã principal», depois abra a app a partir do ícone.' : 'Este telefone não suporta notificações.'); return; }
+  if (PUSHS.busy) return;
+  PUSHS.busy = true;
+  var cfg;
+  /* o pedido de autorização tem de ser o primeiro passo depois do toque */
+  Promise.resolve(Notification.requestPermission()).then(function (perm) {
+    if (perm !== 'granted') throw new Error('Notificações bloqueadas: autorize-as nas definições do telefone.');
+    busy(true);
+    return callT(30000, 'apiPushConfig', S.token);
+  }).then(function (c) {
+    if (!c.enabled) throw new Error('As notificações ainda não estão configuradas.');
+    cfg = c; return pushToken(cfg);
+  }).then(function (tk) {
+    if (!tk) throw new Error('Não foi possível obter o código do telefone.');
+    return callT(30000, 'apiPushRegister', S.token, tk, platformName(), I18N.lang()).then(function () { return tk; });
+  }).then(function (tk) {
+    LS.set('push', { u: S.user.id, t: tk, at: Date.now() }); PUSHS.busy = false; busy(false); toast('Notificações activadas.'); renderHome();
+  }).catch(function (e) { PUSHS.busy = false; busy(false); toast(isNet(e.message) ? 'Sem ligação: tente quando houver rede.' : e.message); });
+}
+function pushDisable() {
+  var p = pushState(); LS.del('push');
+  if (p) callT(30000, 'apiPushUnregister', S.token, p.t).catch(function () {});
+  toast('Notificações desactivadas.'); renderHome();
+}
+/* uma vez por sessão: o código do telefone pode mudar */
+function pushRefresh() {
+  var p = pushState();
+  if (!p || PUSHS.checked || !pushOk() || Notification.permission !== 'granted') return;
+  PUSHS.checked = true;
+  setTimeout(function () {
+    callT(30000, 'apiPushConfig', S.token).then(function (c) { return c.enabled ? pushToken(c) : null; }).then(function (tk) {
+      if (tk && (tk !== p.t || Date.now() - (p.at || 0) > 7 * 86400000)) {
+        return callT(30000, 'apiPushRegister', S.token, tk, platformName(), I18N.lang()).then(function () { LS.set('push', { u: S.user.id, t: tk, at: Date.now() }); });
+      }
+    }).catch(function () {});
+  }, 3000);
+}
+function pushCard() {
+  if (!IS_PWA || !S.user || pushOn()) return '';
+  return '<div class="pushcard"><span class="ic">🔔</span><div class="tx"><b>Activar notificações</b><small>Lembretes das suas reuniões e mensagens da formação.</small></div><button class="pbtn" id="pushOn">Activar</button></div>';
+}
+
 /* ---------------- MENU INICIAL ---------------- */
 
 var MAX_PAST = 45;
@@ -1469,7 +1622,7 @@ renderAgenda = function () {
   if (out && !$('menuB')) {
     var w = document.createElement('div'); w.style.cssText = 'display:flex;gap:6px;flex:none';
     out.parentNode.insertBefore(w, out);
-    w.innerHTML = '<button class="chipbtn" id="menuB">☰ Menu</button>';
+    w.innerHTML = '<button class="chipbtn hmc" id="menuB" title="Menu inicial">' + HOME_SVG + 'Início</button>';
     w.appendChild(out);
     $('menuB').onclick = goHome;
   }
@@ -1495,16 +1648,20 @@ function renderHome() {
     .sort(function (x, y) { return (x.start || '99').localeCompare(y.start || '99'); });
   var h = head(u.name + (vis ? ' · ' + vis : ''), '<div class="hright">' + I18N.picker() + '<button class="chipbtn" id="out">Sair</button></div>') + '<div class="body"><div id="syncw">' + syncHtml() + '</div>';
   if (ALL.warnings && ALL.warnings.length && /^(ADMIN|MANAGER)$/.test(u.role || '')) h += '<div class="warnbox">' + ALL.warnings.map(esc).join('<br>') + '</div>';
+  h += pushCard();
   h += '<div class="hgrid"><div class="htiles"><div class="tiles">' + homeTiles().map(function (t) {
     return '<button class="tile" data-k="' + t.k + '"><span class="ic">' + t.ic + '</span><b>' + esc(t.t) + '</b><small>' + esc(t.d) + '</small></button>';
   }).join('') + '</div></div><div class="htoday"><div class="sec hsec">As minhas actividades de hoje · ' + esc(fmtDate(today, true)) + '</div>' +
     (mine.length ? mine.map(function (a) { return hrow(a, today); }).join('') : '<div class="noact">Sem actividades suas hoje.</div>') + '</div></div>';
-  h += '<div class="foot">CHDCP Agenda · v0.6.1</div></div>';
+  h += '<div class="foot">CHDCP Agenda · v0.9.0' + (pushOn() ? ' · <button class="link" id="pushOff" style="margin:0">🔔 Desactivar notificações</button>' : '') + '</div></div>';
   $('app').innerHTML = h;
   $('app').classList.remove('weekwide');
   $('app').classList.add('homewide');
   $('out').onclick = logout;
   if ($('retry')) $('retry').onclick = function () { sync(false); };
+  if ($('pushOn')) $('pushOn').onclick = pushEnable;
+  if ($('pushOff')) $('pushOff').onclick = pushDisable;
+  pushRefresh();
   Array.prototype.forEach.call(document.querySelectorAll('.tile'), function (b) {
     b.onclick = function () {
       var k = b.dataset.k;
@@ -1562,7 +1719,7 @@ function renderDetail(a) {
   if (a.done) tags += '<span class="tag ok">✓ REALIZADA</span>';
   if (a.hidden) tags += '<span class="tag bad">' + esc((a.exec || a.status || 'CANCELADA').toUpperCase()) + '</span>';
   if (a.provisional) tags += '<span class="tag general">PLANO GERAL</span>';
-  var det = ST[a.id];
+  var det = ST[a.id] || cxGet('det|' + a.id);
   var h = bhead('Actividade', a.area + ' · ' + fmtDate(a.date, false)) + '<div class="body"><div class="dgrid"><div class="dmain">' +
     '<div class="card dhead"><div class="id">' + esc(a.id) + '</div><h2><span class="typeico">' + esc(a.typeIcon || '') + '</span>' + esc(a.title) + '</h2>' +
     (a.full ? '<div class="small muted">' + esc(a.full) + '</div>' : '') + '<div class="tags">' + tags + '</div></div>' +
@@ -1576,13 +1733,14 @@ function renderDetail(a) {
     row('Estado', [a.status, a.exec].filter(Boolean).join(' · ')) +
     (a.holiday ? row('Atenção', HOLK[a.holiday.kind] + ' (' + a.holiday.name + ', ' + a.holiday.date + ')') : '') +
     '</div><div id="planw">' + (det ? planHtml(det.plan) : '') + '</div><div id="rosterw">' + (det ? rosterHtml(det) : '') + '</div>' +
-    '</div><div class="dside"><div class="sec">Acções</div><div id="actsw">' + actionsHtml(a, det) + '</div></div></div></div>';
+    '</div><div class="dside"><div class="sec">Acções</div><div id="actsw">' + actionsHtml(a, det) + '</div>' + pnHtml(a) + '</div></div></div>';
   page(h);
   bindDetail(a);
+  bindPn(a);
   var me = here();
   callT(30000, 'apiActivityDetail', S.token, a.id).then(function (d) {
-    ST[a.id] = d;
-    if (here() !== me || !$('actsw')) return;
+    ST[a.id] = d; cxSet('det|' + a.id, d);
+    if (here() !== me || !$('actsw') || ($('pg') && $('pg').dataset.act !== a.id)) return;
     $('actsw').innerHTML = actionsHtml(a, d);
     $('planw').innerHTML = planHtml(d.plan);
     $('rosterw').innerHTML = rosterHtml(d);
@@ -1652,14 +1810,24 @@ function ctxBox(act) {
     ' · ' + esc(act.area) + (act.trainers && act.trainers.length ? '<br>👤 ' + esc(act.trainers.join(', ')) : '') + '<br><span class="small">' + esc(act.id) + '</span></div>';
 }
 
+/* v0.8 · mostra logo a cópia do telefone (se houver) e actualiza em segundo plano;
+   se a pessoa já começou a marcar, a cópia nova fica para a próxima abertura */
 function withCtx(key, fn, a, title, draw) {
   if (DR[key]) { draw(DR[key]); return; }
-  loadingPage(title, a.title);
-  var me = here();
+  var me, old = cxGet(key);
+  if (old) { DR[key] = { ctx: old, cid: uid(), stale: true }; draw(DR[key]); me = here(); }
+  else { loadingPage(title, a.title); me = here(); }
   callT(30000, fn, S.token, a.id).then(function (ctx) {
-    DR[key] = { ctx: ctx, cid: uid() };
+    cxSet(key, ctx);
+    var d = DR[key];
+    if (d && d.touched) return;
+    if (d && old && JSON.stringify(old) === JSON.stringify(ctx)) { d.stale = false; return; }
+    DR[key] = { ctx: ctx, cid: d ? d.cid : uid() };
     if (here() === me) draw(DR[key]);
-  }).catch(function (e) { if (here() === me) errorPage(title, a.title, e.message, function () { withCtx(key, fn, a, title, draw); }); });
+  }).catch(function (e) {
+    if (old) { if (DR[key]) DR[key].stale = false; return; } /* fica a cópia do telefone */
+    if (here() === me) errorPage(title, a.title, e.message, function () { withCtx(key, fn, a, title, draw); });
+  });
 }
 
 /* Adicionar participante: a lista completa vem UMA vez do servidor e é filtrada no telefone
@@ -1793,6 +1961,7 @@ function drawAttendance(a, d) {
   Array.prototype.forEach.call(document.querySelectorAll('.seg2 button'), function (b) {
     b.onclick = function () {
       var pid = b.dataset.p, s = b.dataset.s;
+      d.touched = true;
       d.mark[pid] = d.mark[pid] === s ? '' : s;
       var pair = b.parentNode.children;
       pair[0].className = d.mark[pid] === 'PRESENT' ? 'onP' : '';
@@ -1800,18 +1969,19 @@ function drawAttendance(a, d) {
       paint();
     };
   });
-  if ($('allp')) $('allp').onclick = function () { c.people.forEach(function (p) { if (!d.mark[p.id]) d.mark[p.id] = 'PRESENT'; }); drawAttendance(a, d); };
-  bindAddPerson(a, d, function (pid) { d.mark[pid] = 'PRESENT'; drawAttendance(a, d); });
+  if ($('allp')) $('allp').onclick = function () { d.touched = true; c.people.forEach(function (p) { if (!d.mark[p.id]) d.mark[p.id] = 'PRESENT'; }); drawAttendance(a, d); };
+  bindAddPerson(a, d, function (pid) { d.touched = true; d.mark[pid] = 'PRESENT'; drawAttendance(a, d); });
   if (!ro && !peopleCached()) loadPeople(a).catch(function () {});
+  UNSAVED = function () { return !!d.touched; };
   if ($('save')) $('save').onclick = function () {
     var items = Object.keys(d.mark).filter(function (k) { return d.mark[k]; }).map(function (k) { return { pid: k, st: d.mark[k] }; });
     if (!items.length) return;
     $('save').disabled = true; busy(true);
     var payload = { clientId: d.cid, activityId: a.id, items: items };
     saveOrQueue('apiSaveAttendance', payload, 'Presenças · ' + c.act.title, function (r, queued) {
-      busy(false); delete DR['att|' + a.id];
-      toast(queued ? 'Sem ligação: guardado no telefone, será enviado.' : (r.duplicate ? 'Já estava guardado.' : 'Presenças guardadas: ' + r.present + ' presentes, ' + r.absent + ' ausentes.'));
-      back();
+      busy(false); delete DR['att|' + a.id]; cxDel('att|' + a.id); cxDel('det|' + a.id); delete ST[a.id];
+      var msg = queued ? 'Sem ligação: guardado no telefone, será enviado.' : (r.duplicate ? 'Já estava guardado.' : 'Presenças guardadas: ' + r.present + ' presentes, ' + r.absent + ' ausentes.');
+      swapTop(function () { screenDone(a, 'ATTENDANCE', 'Presenças', msg, !!queued); });
     }, function (e) { busy(false); $('save').disabled = false; toast(e.message); });
   };
   paint();
@@ -1830,7 +2000,8 @@ function screenEval(a) {
       '<div class="small muted">' + (r.trainer ? 'Peça aos formandos para responderem no fim da sessão. O questionário é anónimo.' : 'O questionário é anónimo e demora 2 minutos.') + '</div>' +
       (pre.length ? '<div class="small muted" style="margin-top:8px">Já preenchido: ' + esc(pre.join(', ')) + '.</div>' : '') +
       '<button class="btn" id="eo">Abrir questionário</button>' +
-      (r.trainer ? '<button class="sbtn" id="ew">Partilhar por WhatsApp</button><button class="sbtn" id="ec">Copiar link</button>' : '') + '</div></div>');
+      (r.trainer ? '<button class="sbtn" id="ew">Partilhar por WhatsApp</button><button class="sbtn" id="ec">Copiar link</button>' : '') + '</div>' + nextHtml(a, 'EVALUATION') + '</div>');
+    bindNext(a);
     $('eo').onclick = function () { openExt(r.url); };
     if ($('ew')) $('ew').onclick = function () { openExt('https://wa.me/?text=' + encodeURIComponent((r.act.title || '') + ' · ' + dmy(r.act.date) + '\nQuestionário de satisfação (anónimo): ' + r.url)); };
     if ($('ec')) $('ec').onclick = function () {
@@ -1839,6 +2010,115 @@ function screenEval(a) {
   }).catch(function (e) { if (here() === me) errorPage('Questionário', a.title, e.message, function () { screenEval(a); }); });
 }
 
+
+/* ============================================================
+   v0.9 · NAVEGAÇÃO
+   - Início (⌂) em todos os ecrãs; «Voltar» do telefone coerente
+   - Ficha: anterior / seguinte (botões, deslizar o dedo, ← → no teclado)
+   - Depois de guardar: ecrã de conclusão com o passo seguinte
+   - Ao voltar de Learning & Assessment: reabre a ficha de onde saiu
+   - Teclado (computador): Esc = voltar · Home = Início · ← → = anterior / seguinte
+   ============================================================ */
+
+/* sequência para anterior / seguinte: as minhas actividades se a ficha é minha, senão a agenda visível */
+function pnList(a) {
+  if (!ALL) return [];
+  var mine = !!a.role;
+  return ALL.acts.filter(function (x) { return (x.id === a.id) || (!x.hidden && (!mine || x.role)); })
+    .sort(function (x, y) { return (x.date + (x.start || '99') + x.id).localeCompare(y.date + (y.start || '99') + y.id); });
+}
+function pnOf(a) {
+  var l = pnList(a), i = -1;
+  for (var k = 0; k < l.length; k++) if (l[k].id === a.id) { i = k; break; }
+  return { prev: i > 0 ? l[i - 1] : null, next: i >= 0 && i < l.length - 1 ? l[i + 1] : null, mine: !!a.role };
+}
+function pnHtml(a) {
+  var p = pnOf(a);
+  var lab = function (x) { return x ? esc(fmtDate(x.date, false) + (x.noTime ? '' : ' · ' + x.start) + ' · ' + x.title) : '—'; };
+  return '<div class="pn"><button id="pnP"' + (p.prev ? '' : ' disabled') + '><b>‹ Anterior</b><small>' + lab(p.prev) + '</small></button>' +
+    '<button class="nx" id="pnN"' + (p.next ? '' : ' disabled') + '><b>Seguinte ›</b><small>' + lab(p.next) + '</small></button></div>' +
+    '<div class="small muted" style="text-align:center">' + (p.mine ? 'Entre as suas actividades' : 'Entre as actividades da agenda') + '</div>' +
+    '<div class="kbd">Teclado: ← → anterior / seguinte · Esc voltar · Home início</div>';
+}
+function pnGo(a, dir) {
+  var p = pnOf(a), x = dir < 0 ? p.prev : p.next;
+  if (!x) return;
+  swapTop(function () { renderDetail(x); });
+}
+function bindPn(a) {
+  if ($('pnP')) $('pnP').onclick = function () { pnGo(a, -1); };
+  if ($('pnN')) $('pnN').onclick = function () { pnGo(a, 1); };
+  var pg = $('pg'); if (!pg) return;
+  pg.dataset.act = a.id;
+  var x0 = null, y0 = 0;
+  pg.addEventListener('touchstart', function (e) { var t = e.touches[0]; x0 = t.clientX; y0 = t.clientY; if (e.target.closest && e.target.closest('input,textarea,select,.wcrow')) x0 = null; }, { passive: true });
+  pg.addEventListener('touchend', function (e) {
+    if (x0 == null) return; var t = e.changedTouches[0], dx = t.clientX - x0, dy = t.clientY - y0; x0 = null;
+    if (Math.abs(dx) > 80 && Math.abs(dy) < 45) pnGo(a, dx < 0 ? 1 : -1);
+  }, { passive: true });
+}
+
+/* passos seguintes de uma actividade (as outras acções, actividade seguinte com acções, Início) */
+function nextActs(a, doneK) {
+  var ax = ACT_ORDER.filter(function (k) { return k !== doneK && (a.ax || []).indexOf(k) >= 0; });
+  return a.date > (ALL ? ALL.today : todayYmd()) ? [] : ax;
+}
+function nextTodo(a) {
+  if (!ALL) return null;
+  var today = ALL.today;
+  return ALL.acts.filter(function (x) { return x.id !== a.id && !x.hidden && (x.ax || []).length && x.date === today; })
+    .sort(function (x, y) { return (x.start || '99').localeCompare(y.start || '99'); })[0] || null;
+}
+function nextHtml(a, doneK) {
+  var ax = nextActs(a, doneK), nx = nextTodo(a), h = '<div class="nextsec">';
+  if (ax.length) h += '<div class="sec">Passo seguinte nesta actividade</div><div class="acts">' + ax.map(function (k) {
+    var L = ACT_LABEL[k];
+    return '<button class="abtn" data-nk="' + k + '"><span class="ic">' + L[0] + '</span><span><b>' + L[1] + '</b><small>' + L[2] + '</small></span><span class="go">›</span></button>';
+  }).join('') + '</div>';
+  if (nx) h += '<div class="sec">Outra actividade de hoje com registos</div>' + hrow(nx, ALL.today);
+  h += '<div class="navrow"><button class="sbtn" id="nbAct">‹ Voltar à actividade</button><button class="sbtn" id="nbHome">⌂ Início</button></div></div>';
+  return h;
+}
+function bindNext(a) {
+  Array.prototype.forEach.call(document.querySelectorAll('#pg [data-nk]'), function (b) { b.onclick = function () { runAction(b.dataset.nk, a); }; });
+  Array.prototype.forEach.call(document.querySelectorAll('#pg .nextsec .hrow'), function (b) { b.onclick = function () { openAct(findAct(b.dataset.id)); }; });
+  if ($('nbAct')) $('nbAct').onclick = back;
+  if ($('nbHome')) $('nbHome').onclick = goMenu;
+}
+function screenDone(a, k, title, msg, queued) {
+  page(bhead(title, a.title) + '<div class="body"><div class="card done"><div class="ok">' + (queued ? '📤' : '✅') + '</div><h2>' + esc(msg) + '</h2>' +
+    '<div class="small muted">' + esc(a.title) + ' · ' + esc(dmy(a.date)) + '</div></div>' + nextHtml(a, k) + '</div>');
+  bindNext(a);
+}
+
+/* sair para Learning & Assessment (app instalada): lembra a ficha, para o «Voltar» regressar a ela */
+var _laOpen09 = laOpen;
+laOpen = function (mode, params) {
+  try { var id = $('pg') && $('pg').dataset.act; if (IS_PWA) sessionStorage.setItem('ap_resume', JSON.stringify({ id: id || (params && params.activityId) || '', t: Date.now() })); } catch (e) {}
+  _laOpen09(mode, params);
+};
+function resumeFromLa() {
+  var r = null;
+  try { r = JSON.parse(sessionStorage.getItem('ap_resume') || 'null'); sessionStorage.removeItem('ap_resume'); } catch (e) { r = null; }
+  if (!r || !r.id || Date.now() - r.t > 3 * 3600000) return;
+  var nav = null; try { nav = performance.getEntriesByType('navigation')[0]; } catch (e) {}
+  if (!nav || nav.type !== 'back_forward') return;
+  var a = findAct(r.id); if (a) openAct(a);
+}
+/* página restaurada da memória do navegador (bfcache): está tudo como estava */
+window.addEventListener('pageshow', function (e) { if (e.persisted) { try { sessionStorage.removeItem('ap_resume'); } catch (x) {} } });
+
+/* teclado (computador) */
+document.addEventListener('keydown', function (e) {
+  var t = e.target, tag = t && t.tagName;
+  if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || e.altKey || e.ctrlKey || e.metaKey) return;
+  if (!S.token || !ALL) return;
+  if (e.key === 'Escape' && $('pg')) { e.preventDefault(); back(); }
+  else if (e.key === 'Home') { e.preventDefault(); goMenu(); }
+  else if ((e.key === 'ArrowLeft' || e.key === 'ArrowRight') && $('pg') && $('pg').dataset.act && $('pnP')) {
+    var a = findAct($('pg').dataset.act); if (a) { e.preventDefault(); pnGo(a, e.key === 'ArrowLeft' ? -1 : 1); }
+  }
+});
 
 boot();
 </script>
