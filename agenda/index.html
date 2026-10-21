@@ -324,6 +324,8 @@ input{font-family:inherit;font-size:16px}
 .chipbtn.hmc{display:inline-flex;align-items:center;gap:5px}
 @media (max-width:380px){.top .hm span{display:none}.top .hm{padding:6px 8px}}
 .page.anim{animation:pgin .16s ease-out}
+@media (max-width:1023px){.dgrid{display:flex;flex-direction:column}.dside{order:-1;margin-bottom:6px}.dside>.sec:first-child{margin-top:4px}}
+.seg2 button{min-width:68px;padding:0 6px}
 html,body{overflow-x:hidden}
 .tags .tag{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 @keyframes pgin{from{opacity:.4;transform:translateX(22px)}to{opacity:1;transform:none}}
@@ -334,9 +336,9 @@ html,body{overflow-x:hidden}
 .pn button:disabled{opacity:.35}
 .pn b{font-size:12.5px;color:var(--brand);font-weight:800}
 .pn small{font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
-.done{text-align:center;padding:22px 16px}
-.done .ok{font-size:44px;line-height:1}
-.done h2{font-size:19px;margin:8px 0 4px}
+.donebox{text-align:center;padding:22px 16px}
+.donebox .okic{font-size:44px;line-height:1}
+.donebox h2{font-size:19px;margin:8px 0 4px}
 .nextsec{margin-top:16px}
 .navrow{display:flex;gap:8px;margin-top:12px}
 .navrow .sbtn{flex:1;margin:0;background:#fff;border:1.5px solid var(--brand-line,#e8cfcd);border-radius:14px;padding:12px 8px;font-weight:800;color:var(--brand);text-align:center}
@@ -1608,7 +1610,7 @@ function homeTiles() {
     var nt = l.filter(function (a) { return a.date === ALL.today; }).length;
     t.push({ k: x[0], ic: x[1], t: x[2], d: nt ? nt + ' hoje · ' + l.length + ' no total' : l.length + ' actividade(s)', act: x[0] });
   });
-  if (S.user && S.user.linked) t.push({ k: 'MY', ic: '🎓', t: 'Meu percurso', d: 'Os meus resultados' });
+  if (S.user && S.user.linked && S.user.trainee !== false) t.push({ k: 'MY', ic: '🎓', t: 'Meu percurso', d: 'Os meus resultados' });
   if (staff()) t.push({ k: 'AREA', ic: '📊', t: 'Resultados da área', d: 'Formandos e competências' });
   return t;
 }
@@ -1720,9 +1722,11 @@ function renderDetail(a) {
   if (a.hidden) tags += '<span class="tag bad">' + esc((a.exec || a.status || 'CANCELADA').toUpperCase()) + '</span>';
   if (a.provisional) tags += '<span class="tag general">PLANO GERAL</span>';
   var det = ST[a.id] || cxGet('det|' + a.id);
-  var h = bhead('Actividade', a.area + ' · ' + fmtDate(a.date, false)) + '<div class="body"><div class="dgrid"><div class="dmain">' +
+  /* v0.9: titolo sopra; sul telefono le azioni vengono subito dopo il titolo (prima dei dettagli) */
+  var h = bhead('Actividade', a.area + ' · ' + fmtDate(a.date, false)) + '<div class="body">' +
     '<div class="card dhead"><div class="id">' + esc(a.id) + '</div><h2><span class="typeico">' + esc(a.typeIcon || '') + '</span>' + esc(a.title) + '</h2>' +
     (a.full ? '<div class="small muted">' + esc(a.full) + '</div>' : '') + '<div class="tags">' + tags + '</div></div>' +
+    '<div class="dgrid"><div class="dmain">' +
     '<div class="card">' +
     row('Data', DIAS_L[dt.getDay()] + ', ' + dt.getDate() + ' ' + MESES[dt.getMonth()] + ' ' + dt.getFullYear()) +
     row('Hora (Luanda)', a.noTime ? 'Sem hora' : a.start + (a.end ? ' – ' + a.end : '')) +
@@ -2086,7 +2090,7 @@ function bindNext(a) {
   if ($('nbHome')) $('nbHome').onclick = goMenu;
 }
 function screenDone(a, k, title, msg, queued) {
-  page(bhead(title, a.title) + '<div class="body"><div class="card done"><div class="ok">' + (queued ? '📤' : '✅') + '</div><h2>' + esc(msg) + '</h2>' +
+  page(bhead(title, a.title) + '<div class="body"><div class="card donebox"><div class="okic">' + (queued ? '📤' : '✅') + '</div><h2>' + esc(msg) + '</h2>' +
     '<div class="small muted">' + esc(a.title) + ' · ' + esc(dmy(a.date)) + '</div></div>' + nextHtml(a, k) + '</div>');
   bindNext(a);
 }
