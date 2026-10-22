@@ -1,7 +1,7 @@
 {
   "id": "./agenda/",
-  "name": "CHDCP Agenda",
-  "short_name": "CHDCP",
+  "name": "CHDCP Conecta",
+  "short_name": "Conecta",
   "description": "CHDCP–CCM: agenda, presenças, avaliação TOJ e teórica, resultados.",
   "lang": "pt",
   "start_url": "./agenda/",

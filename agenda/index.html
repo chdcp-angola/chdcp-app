@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-<script>window.CHDCP_PWA=true;(function(){var API="https://script.google.com/macros/s/AKfycbx5EXrVLumRRvYOjgj0qXPqgzCPKpzn5GwSgqj3ZjG1uQo7kzjt14Nas3IIK-oNCx7l/exec";function post1(fn,args){return fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({fn:fn,args:args}),redirect:"follow",cache:"no-store"}).then(function(r){if(!r.ok)throw new Error("NetworkError HTTP "+r.status);return r.json();});}function post(fn,args,n){n=n||0;return post1(fn,args).catch(function(e){if(n>=2||navigator.onLine===false)throw e;return new Promise(function(ok){setTimeout(ok,n?4000:1500);}).then(function(){return post(fn,args,n+1);});});}function runner(ok,ko){return new Proxy({},{get:function(t,k){if(k==="withSuccessHandler")return function(f){return runner(f,ko);};if(k==="withFailureHandler")return function(f){return runner(ok,f);};if(k==="withUserObject")return function(){return runner(ok,ko);};return function(){var a=[].slice.call(arguments);post(k,a).then(function(res){if(res&&res.ok){if(ok)ok(res.v);}else{if(ko)ko(new Error(res?res.e:"Erro"));}}).catch(function(e){if(ko)ko(new Error("NetworkError: "+(e&&e.message||e)));});};}});}window.google=window.google||{};google.script={run:runner(null,null),host:{close:function(){}},url:{getLocation:function(cb){var o={};new URLSearchParams(location.search).forEach(function(v,k){o[k]=v;});cb({parameter:o,hash:location.hash});}}};if("serviceWorker" in navigator)window.addEventListener("load",function(){var sw=navigator.serviceWorker;if(sw.getRegistrations)sw.getRegistrations().then(function(rs){rs.forEach(function(r){if(/\/(agenda|avaliacao)\/$/.test(r.scope))r.unregister();});}).catch(function(){});sw.register("../sw.js",{scope:"../"}).catch(function(){});});})();</script><link rel="manifest" href="../manifest.webmanifest"><meta name="theme-color" content="#7d1d1a"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="CHDCP"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="icon" href="../favicon.png"><title>CHDCP Agenda</title>
+<script>window.CHDCP_PWA=true;(function(){var API="https://script.google.com/macros/s/AKfycbx5EXrVLumRRvYOjgj0qXPqgzCPKpzn5GwSgqj3ZjG1uQo7kzjt14Nas3IIK-oNCx7l/exec";function post1(fn,args){return fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({fn:fn,args:args}),redirect:"follow",cache:"no-store"}).then(function(r){if(!r.ok)throw new Error("NetworkError HTTP "+r.status);return r.json();});}function post(fn,args,n){n=n||0;return post1(fn,args).catch(function(e){if(n>=2||navigator.onLine===false)throw e;return new Promise(function(ok){setTimeout(ok,n?4000:1500);}).then(function(){return post(fn,args,n+1);});});}function runner(ok,ko){return new Proxy({},{get:function(t,k){if(k==="withSuccessHandler")return function(f){return runner(f,ko);};if(k==="withFailureHandler")return function(f){return runner(ok,f);};if(k==="withUserObject")return function(){return runner(ok,ko);};return function(){var a=[].slice.call(arguments);post(k,a).then(function(res){if(res&&res.ok){if(ok)ok(res.v);}else{if(ko)ko(new Error(res?res.e:"Erro"));}}).catch(function(e){if(ko)ko(new Error("NetworkError: "+(e&&e.message||e)));});};}});}window.google=window.google||{};google.script={run:runner(null,null),host:{close:function(){}},url:{getLocation:function(cb){var o={};new URLSearchParams(location.search).forEach(function(v,k){o[k]=v;});cb({parameter:o,hash:location.hash});}}};if("serviceWorker" in navigator)window.addEventListener("load",function(){var sw=navigator.serviceWorker;if(sw.getRegistrations)sw.getRegistrations().then(function(rs){rs.forEach(function(r){if(/\/(agenda|avaliacao)\/$/.test(r.scope))r.unregister();});}).catch(function(){});sw.register("../sw.js",{scope:"../"}).catch(function(){});});})();</script><link rel="manifest" href="../manifest.webmanifest"><meta name="theme-color" content="#7d1d1a"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Conecta"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><link rel="icon" href="../favicon.png"><title>CHDCP Conecta</title>
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -286,6 +286,12 @@ input{font-family:inherit;font-size:16px}
 .pastsub{font-size:12.5px;font-weight:800;color:#8a5300;margin:10px 2px 2px;text-transform:uppercase;letter-spacing:.03em}
 .tag.pend{background:#fff1d6;color:#8a5300;border-color:#f0c36d}
 .olderbtn{display:block;width:100%;margin:14px 0 4px;border:1.5px dashed var(--brand-line);border-radius:14px;padding:12px;font-weight:800;color:var(--brand);background:#fff}
+.realbox{background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin:0 0 10px}
+.realbox .rt{display:flex;align-items:baseline;gap:8px;font-size:14px}.realbox .rt small{color:var(--muted);font-size:12px}
+.realbox .rr{display:flex;align-items:flex-end;gap:10px;margin-top:8px;flex-wrap:wrap}
+.realbox label{display:flex;flex-direction:column;font-size:11.5px;color:var(--muted);font-weight:700;gap:3px}
+.realbox input{font:700 17px/1.2 inherit;padding:8px 10px;border:1.5px solid var(--brand-line);border-radius:10px;background:#fff;color:var(--ink,#1b2124);min-width:108px}
+.realbox em{font-style:normal;font-weight:800;color:var(--brand);padding-bottom:10px}.realbox em.bad{color:#b3261e}
 .qrpage{text-align:center}
 .qrpage .sbtn{display:block;width:100%;max-width:420px;margin:14px auto 0;border:1.5px solid var(--brand-line);border-radius:14px;padding:13px;font-weight:800;color:var(--brand);background:#fff}
 .qrbox{background:#fff;border-radius:16px;padding:12px;margin:4px auto 14px;width:min(92vw,calc(100vh - 260px),640px);box-shadow:0 1px 4px rgba(27,33,36,.12)}
@@ -683,6 +689,14 @@ I18N.add([
   ['Partilhar por WhatsApp', 'Share on WhatsApp', 'Condividi su WhatsApp'],
   ['Copiar link', 'Copy link', 'Copia link'],
   ['Gerar QR code', 'Generate QR code', 'Genera QR code'],
+  ['Hora real', 'Actual time', 'Orario reale'],
+  ['registada', 'recorded', 'registrato'],
+  ['do plano · corrija se for diferente', 'from the plan · correct it if different', 'dal piano · correggi se diverso'],
+  ['Começou', 'Started', 'Iniziata'],
+  ['Acabou', 'Ended', 'Finita'],
+  ['Fim antes do início', 'End before start', 'Fine prima dell\'inizio'],
+  ['Verifique a hora de início e de fim.', 'Check the start and end time.', 'Controlla l\'ora di inizio e di fine.'],
+  [/^(\d+) min$/, '$1 min', '$1 min'],
   ['Passadas', 'Past', 'Passate'],
   ['Por completar', 'To complete', 'Da completare'],
   ['Últimos dias', 'Last days', 'Ultimi giorni'],
@@ -729,7 +743,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
 
 var PWA = "" === '1';
 var PWA_ORIGIN = "";
-var APP_NAME = "CHDCP Agenda";
+var APP_NAME = "CHDCP Conecta";
 
 var S = { token: null, user: null, data: null, view: 'WEEK', anchor: '', mine: false, hidden: false, area: '', method: '', search: '', searchTimer: null };
 var MEM = {};
@@ -1786,7 +1800,7 @@ function renderHome() {
     return '<button class="tile" data-k="' + t.k + '"><span class="ic">' + t.ic + '</span><b>' + esc(t.t) + '</b><small>' + esc(t.d) + '</small></button>';
   }).join('') + '</div></div><div class="htoday"><div class="sec hsec">As minhas actividades de hoje · ' + esc(fmtDate(today, true)) + '</div>' +
     (mine.length ? mine.map(function (a) { return hrow(a, today); }).join('') : '<div class="noact">Sem actividades suas hoje.</div>') + '</div></div>';
-  h += '<div class="foot">CHDCP Agenda · v0.9.3' + (pushOn() ? ' · <button class="link" id="pushOff" style="margin:0">🔔 Desactivar notificações</button>' : '') + '</div></div>';
+  h += '<div class="foot">CHDCP Conecta · v0.9.4' + (pushOn() ? ' · <button class="link" id="pushOff" style="margin:0">🔔 Desactivar notificações</button>' : '') + '</div></div>';
   $('app').innerHTML = h;
   $('app').classList.remove('weekwide');
   $('app').classList.add('homewide');
@@ -1921,7 +1935,7 @@ function actionsHtml(a, d) {
       a.role ? 'Esta actividade não tem registos a fazer.' : 'Só consulta: não é formador nem participante desta actividade.') + '</div>';
     /* v0.9: em consulta (ponto focal, coordenação) vê-se se as presenças já foram registadas */
     if (!a.role && d && (d.att || d.attReq)) {
-      h += d.att ? '<div class="noact" style="border-style:solid"><span class="done">✓ Presenças registadas: ' + d.att.n + ' (' + d.att.present + ' presentes)</span> · ' + esc(tsTxt(d.att.at)) + (d.att.by ? ' · ' + esc(d.att.by) : '') + '</div>'
+      h += d.att ? '<div class="noact" style="border-style:solid"><span class="done">✓ Presenças registadas: ' + d.att.n + ' (' + d.att.present + ' presentes)</span> · ' + (d.att.rs ? '🕒 ' + esc(d.att.rs + '–' + d.att.re) + ' · ' : '') + esc(tsTxt(d.att.at)) + (d.att.by ? ' · ' + esc(d.att.by) : '') + '</div>'
         : (a.date <= (ALL ? ALL.today : todayYmd()) ? '<div class="noact" style="border-style:solid">Presenças ainda não registadas.</div>' : '');
     }
   } else {
@@ -2080,6 +2094,11 @@ function drawAttendance(a, d) {
   var srcTxt = { GOVERNANCE: 'membro do grupo', AGENDA_ASSIGNMENT: '', PERSON_TRAINING_AREA: '', OVERRIDE: 'adicionado no plano', ADD: 'adicionado', SAVED: 'registado antes' };
   var h = bhead('Presenças', c.act.title) + '<div class="body">' + ctxBox(c.act);
   if (ro) h += '<div class="readonly">' + esc(c.canWrite.why) + '</div>';
+  /* v0.9.4: hora real (pré-preenchida com o plano; corrigir se começou ou acabou a outra hora) */
+  if (!d.real) d.real = { s: (c.real && c.real.s) || (c.act.noTime ? '' : c.act.start || ''), e: (c.real && c.real.e) || (c.act.noTime ? '' : c.act.end || '') };
+  h += '<div class="realbox"><div class="rt">🕒 <b>Hora real</b><small>' + (c.real ? 'registada' : 'do plano · corrija se for diferente') + '</small></div>' +
+    '<div class="rr"><label><span>Começou</span><input type="time" id="rS" value="' + esc(d.real.s) + '"' + (ro ? ' disabled' : '') + '></label>' +
+    '<label><span>Acabou</span><input type="time" id="rE" value="' + esc(d.real.e) + '"' + (ro ? ' disabled' : '') + '></label><em id="rD"></em></div></div>';
   if (c.savedAt) h += '<div class="sync">Já registadas · ' + esc(tsTxt(c.savedAt)) + (c.savedBy ? ' · ' + esc(c.savedBy) : '') + '. Pode corrigir e guardar de novo.</div>';
   h += '<div class="counters"><div class="p"><b id="cP">0</b><span>Presentes</span></div><div class="a"><b id="cA">0</b><span>Ausentes</span></div><div><b id="cN">0</b><span>Por marcar</span></div></div>';
   if (!ro) h += '<button class="minor" id="allp">Todos presentes</button><button class="minor" id="addp">+ Adicionar participante</button><div id="addbox"></div>';
@@ -2093,6 +2112,18 @@ function drawAttendance(a, d) {
   if (!ro) h += '<div class="savebar"><div class="in"><button class="btn" id="save">Guardar presenças</button></div></div>';
   page(h);
 
+  var rdur = function () {
+    var m = function (x) { var p = String(x || '').split(':'); return p.length === 2 ? +p[0] * 60 + +p[1] : null; };
+    var s = m(d.real.s), e = m(d.real.e);
+    return s != null && e != null ? e - s : null;
+  };
+  var paintReal = function () {
+    var x = rdur(), el = $('rD'); if (!el) return;
+    el.textContent = x == null ? '' : (x > 0 ? x + ' min' : I18N.tr('Fim antes do início'));
+    el.className = x != null && x <= 0 ? 'bad' : '';
+  };
+  ['rS', 'rE'].forEach(function (id) { if ($(id)) $(id).oninput = function () { d.real[id === 'rS' ? 's' : 'e'] = this.value; d.touched = true; paintReal(); }; });
+  paintReal();
   var paint = function () {
     var P = 0, A = 0;
     c.people.forEach(function (p) { if (d.mark[p.id] === 'PRESENT') P++; else if (d.mark[p.id] === 'ABSENT') A++; });
@@ -2118,7 +2149,10 @@ function drawAttendance(a, d) {
     var items = Object.keys(d.mark).filter(function (k) { return d.mark[k]; }).map(function (k) { return { pid: k, st: d.mark[k] }; });
     if (!items.length) return;
     $('save').disabled = true; busy(true);
+    var rd = rdur();
+    if ((d.real.s || d.real.e) && !(rd > 0)) { toast(I18N.tr('Verifique a hora de início e de fim.')); return; }
     var payload = { clientId: d.cid, activityId: a.id, items: items };
+    if (d.real.s && d.real.e) { payload.start = d.real.s; payload.end = d.real.e; }
     saveOrQueue('apiSaveAttendance', payload, 'Presenças · ' + c.act.title, function (r, queued) {
       busy(false); delete DR['att|' + a.id]; cxDel('att|' + a.id); cxDel('det|' + a.id); delete ST[a.id];
       var msg = queued ? 'Sem ligação: guardado no telefone, será enviado.' : (r.duplicate ? 'Já estava guardado.' : 'Presenças guardadas: ' + r.present + ' presentes, ' + r.absent + ' ausentes.');

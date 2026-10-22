@@ -1,5 +1,5 @@
-/* chdcp-app · 80e063d266 */
-var C = "chdcp-app-80e063d266", F = ["./","index.html","manifest.webmanifest","icon-192.png","icon-512.png","apple-touch-icon.png","favicon.png","agenda/","agenda/index.html","avaliacao/","avaliacao/index.html","avaliacao/toj.html","avaliacao/teorica.html","avaliacao/resultados.html","avaliacao/logo.png","avaliacao/star.png"];
+/* chdcp-app · e98efb3b34 */
+var C = "chdcp-app-e98efb3b34", F = ["./","index.html","manifest.webmanifest","icon-192.png","icon-512.png","apple-touch-icon.png","favicon.png","agenda/","agenda/index.html","avaliacao/","avaliacao/index.html","avaliacao/toj.html","avaliacao/teorica.html","avaliacao/resultados.html","avaliacao/logo.png","avaliacao/star.png"];
 self.addEventListener('install', function (e) { e.waitUntil(caches.open(C).then(function (c) { return c.addAll(F); }).then(function () { return self.skipWaiting(); })); });
 self.addEventListener('activate', function (e) { e.waitUntil(caches.keys().then(function (k) { return Promise.all(k.filter(function (x) { return x.indexOf('chdcp-') === 0 && x !== C; }).map(function (x) { return caches.delete(x); })); }).then(function () { return self.clients.claim(); })); });
 self.addEventListener('fetch', function (e) {
@@ -11,7 +11,7 @@ self.addEventListener('fetch', function (e) {
 self.addEventListener('push', function (e) {
   var d = {}; try { d = e.data ? e.data.json() : {}; } catch (x) { try { d = { data: { body: e.data.text() } }; } catch (y) { d = {}; } }
   var m = d.data || d.notification || d;
-  e.waitUntil(self.registration.showNotification(m.title || 'CHDCP', { body: m.body || '', icon: 'icon-192.png', tag: m.tag || undefined, renotify: !!m.tag, data: { url: m.url || '' } }));
+  e.waitUntil(self.registration.showNotification(m.title || 'CHDCP Conecta', { body: m.body || '', icon: 'icon-192.png', tag: m.tag || undefined, renotify: !!m.tag, data: { url: m.url || '' } }));
 });
 self.addEventListener('notificationclick', function (e) {
   e.notification.close();
