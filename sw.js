@@ -1,5 +1,5 @@
-/* chdcp-app · c116d33c85 */
-var C = "chdcp-app-c116d33c85", F = ["./","index.html","manifest.webmanifest","icon-192.png","icon-512.png","apple-touch-icon.png","favicon.png","agenda/","agenda/index.html","avaliacao/","avaliacao/index.html","avaliacao/toj.html","avaliacao/teorica.html","avaliacao/resultados.html","avaliacao/logo.png","avaliacao/star.png"];
+/* chdcp-app · 2fc587b2b0 */
+var C = "chdcp-app-2fc587b2b0", F = ["./","index.html","manifest.webmanifest","icon-192.png","icon-512.png","apple-touch-icon.png","favicon.png","agenda/","agenda/index.html","avaliacao/","avaliacao/index.html","avaliacao/toj.html","avaliacao/teorica.html","avaliacao/resultados.html","avaliacao/logo.png","avaliacao/star.png"];
 self.addEventListener('install', function (e) { e.waitUntil(caches.open(C).then(function (c) { return c.addAll(F); }).then(function () { return self.skipWaiting(); })); });
 self.addEventListener('activate', function (e) { e.waitUntil(caches.keys().then(function (k) { return Promise.all(k.filter(function (x) { return x.indexOf('chdcp-') === 0 && x !== C; }).map(function (x) { return caches.delete(x); })); }).then(function () { return self.clients.claim(); })); });
 self.addEventListener('fetch', function (e) {

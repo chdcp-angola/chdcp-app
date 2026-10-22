@@ -569,6 +569,7 @@ I18N.add([
   ['O seu utilizador ainda não está ligado a uma pessoa do Training Hub: só vê as actividades da sua área.', 'Your user is not yet linked to a person in the Training Hub: you only see your area\'s activities.', 'Il tuo utente non è ancora collegato a una persona del Training Hub: vedi solo le attività della tua area.'],
   ['FORMADOR', 'TRAINER', 'FORMATORE'],
   ['PARTICIPANTE', 'PARTICIPANT', 'PARTECIPANTE'],
+  ['REGISTO', 'RECORDER', 'REGISTRAZIONE'],
   ['PREVISTA', 'PLANNED', 'PREVISTA'],
   ['✓ REALIZADA', '✓ DONE', '✓ SVOLTA'],
   ['PLANO GERAL', 'GENERAL PLAN', 'PIANO GENERALE'],
@@ -1441,7 +1442,7 @@ function actHtml(a, i) {
   var cls = 'act' + (a.tentative ? ' tent' : '') + (a.done ? ' done' : '') + (a.hidden ? ' hid' : '');
   var tm = a.noTime ? '<i>SEM<br>HORA</i>' : '<b>' + esc(a.start) + '</b><span>' + esc(a.end) + '</span>';
   var tags = '<span class="tag area">' + esc(a.area) + '</span>';
-  if (a.role) tags += '<span class="tag role">' + (a.role === 'TRAINER' ? 'FORMADOR' : 'PARTICIPANTE') + '</span>';
+  if (a.role) tags += '<span class="tag role">' + (a.role === 'TRAINER' ? 'FORMADOR' : a.role === 'RECORDER' ? 'REGISTO' : 'PARTICIPANTE') + '</span>';
   if (a.governance) tags += '<span class="tag">' + esc((a.governanceType === 'PROTOCOL' ? 'PROTOCOLO · ' : 'PROCEDIMENTO · ') + a.governance) + '</span>';
   if (a.tentative) tags += '<span class="tag tent">PREVISTA</span>';
   if (a.done) tags += '<span class="tag ok">✓ REALIZADA</span>';
@@ -1801,7 +1802,7 @@ function renderHome() {
     return '<button class="tile" data-k="' + t.k + '"><span class="ic">' + t.ic + '</span><b>' + esc(t.t) + '</b><small>' + esc(t.d) + '</small></button>';
   }).join('') + '</div></div><div class="htoday"><div class="sec hsec">As minhas actividades de hoje · ' + esc(fmtDate(today, true)) + '</div>' +
     (mine.length ? mine.map(function (a) { return hrow(a, today); }).join('') : '<div class="noact">Sem actividades suas hoje.</div>') + '</div></div>';
-  h += '<div class="foot">CHDCP Conecta · v0.9.6' + (pushOn() ? ' · <button class="link" id="pushOff" style="margin:0">🔔 Desactivar notificações</button>' : '') + '</div></div>';
+  h += '<div class="foot">CHDCP Conecta · v0.9.7' + (pushOn() ? ' · <button class="link" id="pushOff" style="margin:0">🔔 Desactivar notificações</button>' : '') + '</div></div>';
   $('app').innerHTML = h;
   $('app').classList.remove('weekwide');
   $('app').classList.add('homewide');
@@ -1862,7 +1863,7 @@ function renderDetail(a) {
   var dt = ymd(a.date);
   var row = function (k, v) { return v ? '<div class="ro"><span>' + k + '</span><b>' + esc(v) + '</b></div>' : ''; };
   var tags = '<span class="tag area">' + esc(a.area) + '</span>';
-  if (a.role) tags += '<span class="tag role">' + (a.role === 'TRAINER' ? 'FORMADOR' : 'PARTICIPANTE') + '</span>';
+  if (a.role) tags += '<span class="tag role">' + (a.role === 'TRAINER' ? 'FORMADOR' : a.role === 'RECORDER' ? 'REGISTO' : 'PARTICIPANTE') + '</span>';
   if (a.governance) tags += '<span class="tag">' + esc((a.governanceType === 'PROTOCOL' ? 'PROTOCOLO · ' : 'PROCEDIMENTO · ') + a.governance) + '</span>';
   if (a.tentative) tags += '<span class="tag tent">PREVISTA</span>';
   if (a.done) tags += '<span class="tag ok">✓ REALIZADA</span>';
