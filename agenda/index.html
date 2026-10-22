@@ -689,6 +689,7 @@ I18N.add([
   ['Partilhar por WhatsApp', 'Share on WhatsApp', 'Condividi su WhatsApp'],
   ['Copiar link', 'Copy link', 'Copia link'],
   ['Gerar QR code', 'Generate QR code', 'Genera QR code'],
+  ['convidado fixo', 'standing invitee', 'invitato fisso'],
   ['Hora real', 'Actual time', 'Orario reale'],
   ['registada', 'recorded', 'registrato'],
   ['do plano · corrija se for diferente', 'from the plan · correct it if different', 'dal piano · correggi se diverso'],
@@ -1800,7 +1801,7 @@ function renderHome() {
     return '<button class="tile" data-k="' + t.k + '"><span class="ic">' + t.ic + '</span><b>' + esc(t.t) + '</b><small>' + esc(t.d) + '</small></button>';
   }).join('') + '</div></div><div class="htoday"><div class="sec hsec">As minhas actividades de hoje · ' + esc(fmtDate(today, true)) + '</div>' +
     (mine.length ? mine.map(function (a) { return hrow(a, today); }).join('') : '<div class="noact">Sem actividades suas hoje.</div>') + '</div></div>';
-  h += '<div class="foot">CHDCP Conecta · v0.9.4' + (pushOn() ? ' · <button class="link" id="pushOff" style="margin:0">🔔 Desactivar notificações</button>' : '') + '</div></div>';
+  h += '<div class="foot">CHDCP Conecta · v0.9.6' + (pushOn() ? ' · <button class="link" id="pushOff" style="margin:0">🔔 Desactivar notificações</button>' : '') + '</div></div>';
   $('app').innerHTML = h;
   $('app').classList.remove('weekwide');
   $('app').classList.add('homewide');
@@ -2091,7 +2092,7 @@ function screenAttendance(a) {
 
 function drawAttendance(a, d) {
   var c = d.ctx, ro = !c.canWrite.ok;
-  var srcTxt = { GOVERNANCE: 'membro do grupo', AGENDA_ASSIGNMENT: '', PERSON_TRAINING_AREA: '', OVERRIDE: 'adicionado no plano', ADD: 'adicionado', SAVED: 'registado antes' };
+  var srcTxt = { GOVERNANCE: 'membro do grupo', AGENDA_ASSIGNMENT: '', PERSON_TRAINING_AREA: '', OVERRIDE: 'adicionado no plano', ADD: 'adicionado', SAVED: 'registado antes', INVITE: 'convidado fixo' };
   var h = bhead('Presenças', c.act.title) + '<div class="body">' + ctxBox(c.act);
   if (ro) h += '<div class="readonly">' + esc(c.canWrite.why) + '</div>';
   /* v0.9.4: hora real (pré-preenchida com o plano; corrigir se começou ou acabou a outra hora) */
@@ -2105,7 +2106,7 @@ function drawAttendance(a, d) {
   if (!c.people.length) h += '<div class="empty">Sem lista prevista para esta actividade. Use «Adicionar participante».</div>';
   h += '<div class="plist">' + c.people.map(function (p) {
     var st = d.mark[p.id] || '';
-    return '<div class="prow"><div class="nm"><b>' + esc(p.name) + '</b><span>' + esc([p.r && p.r !== 'TRAINEE' ? p.r : '', srcTxt[p.src] || ''].filter(Boolean).join(' · ')) + '</span></div>' +
+    return '<div class="prow"><div class="nm"><b>' + esc(p.name) + '</b><span>' + esc([p.r && p.r !== 'TRAINEE' && p.r !== 'INVITED' ? p.r : '', srcTxt[p.src] || ''].filter(Boolean).join(' · ')) + '</span></div>' +
       '<div class="seg2"><button data-p="' + esc(p.id) + '" data-s="PRESENT" class="' + (st === 'PRESENT' ? 'onP' : '') + '"' + (ro ? ' disabled' : '') + '>Presente</button>' +
       '<button data-p="' + esc(p.id) + '" data-s="ABSENT" class="' + (st === 'ABSENT' ? 'onA' : '') + '"' + (ro ? ' disabled' : '') + '>Ausente</button></div></div>';
   }).join('') + '</div></div>';

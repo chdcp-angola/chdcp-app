@@ -298,6 +298,7 @@ var T={
  lastToj:['last TOJ {d}','última TOJ {d}','ultima TOJ {d}'],
  skills:['On-the-job competencies (TOJ)','Competências no posto (TOJ)','Competenze sul campo (TOJ)'],first:['First','1.ª','Prima'],latest:['Latest','Última','Ultima'],
  nskills:['No on-the-job rating in this period.','Sem avaliações no posto neste período.','Nessuna valutazione sul campo nel periodo.'],
+ obsbox:['Placements at Monzino (Italy)','Estágios no Monzino (Itália)','Stage al Monzino (Italia)'],obs_prog:['Programme','Programa','Programma'],obs_obj:['Objectives achieved','Objectivos atingidos','Obiettivi raggiunti'],obs_test:['Final test','Teste final','Test finale'],obs_tr:['Transfer actions','Acções de transferência','Azioni di trasferimento'],obs_ob:['Objectives','Objectivos','Obiettivi'],lessons_done:['Lessons delivered','Aulas realizadas','Lezioni svolte'],obs_n:['Placements','Estágios','Stage'],obs_nn:['{d} completed · {o} ongoing · {p} planned','{d} concluídos · {o} em curso · {p} previstos','{d} completati · {o} in corso · {p} previsti'],obs_pp:['Professionals','Profissionais','Professionisti'],obs_nc:['New competences','Novas competências','Nuove competenze'],obs_ncn:['evaluated placements with ≥ half of objectives achieved','estágios avaliados com ≥ metade dos objectivos atingidos','stage valutati con ≥ metà obiettivi raggiunti'],obs_ncs:['New comp.','Novas comp.','Nuove comp.'],obs_h:['Hours logged','Horas registadas','Ore registrate'],obs_hn:['of {p} planned','de {p} previstas','su {p} previste'],obs_trn:['{o} open · {l} overdue','{o} abertas · {l} em atraso','{o} aperte · {l} scadute'],obs_none:['No placement at Monzino in the period.','Nenhum estágio no Monzino no período.','Nessuno stage al Monzino nel periodo.'],obs_def:['CCM tutor evaluation','avaliação do tutor CCM','valutazione del tutor CCM'],PLANNED:['planned','previsto','previsto'],ONGOING:['ongoing','em curso','in corso'],COMPLETED:['completed','concluído','completato'],
  lessbox:['Lessons','Aulas','Lezioni'],att:['attended / held','frequentadas / realizadas','frequentate / svolte'],recent:['Latest lessons','Últimas aulas','Ultime lezioni'],
  planbox:['Detailed plan','Plano detalhado','Piano dettagliato'],
  st_present:['present','presente','presente'],st_absent:['absent','ausente','assente'],st_todo:['to do','a fazer','da fare'],st_assessed:['rated','avaliada','valutata'],st_not_assessed:['not rated','não avaliada','non valutata'],
@@ -332,13 +333,13 @@ function stack(d){var tot=(d||[]).reduce(function(a,b){return a+b},0);if(!tot)re
 function mini(f,c){if(f===''||f==null)return'';return'<span class="mini"><i style="width:'+Math.min(100,f*100)+'%;background:'+c+'"></i></span>'}
 function card(o){return'<div class="card'+(o.st?' st '+o.st:'')+'"><div class="l">'+esc(o.l)+'</div><div class="v" style="'+(o.c?'color:'+o.c:'')+'">'+o.v+'</div>'+(o.f!=null&&o.f!==''?'<div class="trk"><i style="width:'+Math.min(100,o.f*100)+'%;background:'+(o.bc||col(o.st))+'"></i></div>':'')+(o.n?'<div class="n">'+o.n+'</div>':'')+'</div>'}
 function delta(c,p,y,dec){if(c===''||p===''||p==null||c==null)return'';var d=c-p;if(Math.abs(d)<(dec?0.05:0.5))return'= '+t('vs',{y:y});return(d>0?'<span style="color:var(--ok)">▲ +':'<span style="color:var(--bad)">▼ −')+(dec?num(Math.abs(d),1):num(Math.abs(d)))+'</span> '+t('vs',{y:y})}
-function mainCards(k,kp,fb,y){var lf=k.avail?k.lessons/k.avail:'';var ll=lvl(lf,'LESSONS'),lp=lvl(k.plan,'PLAN'),lt=lvl(k.avg,'TOJ_LEVEL'),ls=fb?lvl(fb.cov,'FB_RATE'):'';
+function mainCards(k,kp,fb,y){var L=k.plan===undefined;var lf=!L&&k.avail?k.lessons/k.avail:'';var ll=L?'':lvl(lf,'LESSONS'),lp=L?'':lvl(k.plan,'PLAN'),lt=lvl(k.avg,'TOJ_LEVEL'),ls=fb&&!L?lvl(fb.cov,'FB_RATE'):'';
  return'<div class="grid">'+
  card({l:t('trainees'),v:num(k.trainees),n:kp?delta(k.trainees,kp.trainees,y):''})+
- card({l:t('lessons'),v:k.lessons+(k.avail?' / '+k.avail:''),st:ll,f:lf,n:(lf===''?'':pct(lf)+' · '+t('target',{t:pct(SET.TARGET_LESSONS)}))+(kp?'<br>'+delta(k.lessons,kp.lessons,y):'')})+
- card({l:t('plan'),v:pct(k.plan),st:lp,f:k.plan,c:lp==='bad'?'var(--bad)':'',n:k.plan===''?'':t('target',{t:pct(SET.TARGET_PLAN)})})+
+ (L?card({l:t('lessons_done'),v:num(k.lessons)}):card({l:t('lessons'),v:k.lessons+(k.avail?' / '+k.avail:''),st:ll,f:lf,n:(lf===''?'':pct(lf)+' · '+t('target',{t:pct(SET.TARGET_LESSONS)}))+(kp?'<br>'+delta(k.lessons,kp.lessons,y):'')}))+
+ (L?'':card({l:t('plan'),v:pct(k.plan),st:lp,f:k.plan,c:lp==='bad'?'var(--bad)':'',n:k.plan===''?'':t('target',{t:pct(SET.TARGET_PLAN)})}))+
  card({l:t('toj'),v:k.avg===''?'–':num(k.avg,1),st:lt,f:k.avg===''?'':k.avg/5,bc:'var(--l5)',n:k.ratings?t('ratings',{r:num(k.ratings),p:k.assessed,a:pct(k.autonomy)})+(kp?'<br>'+delta(k.avg,kp.avg,y,1):''):''})+
- card({l:t('satk'),v:fb&&fb.avg!==''?num(fb.avg,1):'–',st:ls,f:fb?fb.cov:'',c:fb&&fb.avg!==''&&fb.avg>=4?'var(--ok)':'',n:fb&&fb.acts?t('satn',{c:pct(fb.cov),r:pct(fb.rate)}):t('noq')})+
+ (L?card({l:t('satk'),v:fb&&fb.avg!==''&&fb.avg!=null?num(fb.avg,1):'–',n:fb&&fb.acts?'':t('noq')}):card({l:t('satk'),v:fb&&fb.avg!==''?num(fb.avg,1):'–',st:ls,f:fb?fb.cov:'',c:fb&&fb.avg!==''&&fb.avg>=4?'var(--ok)':'',n:fb&&fb.acts?t('satn',{c:pct(fb.cov),r:pct(fb.rate)}):t('noq')}))+
  '</div>'}
 function table(head,rows,cls){var h='<div class="box"><table><tr>'+head.map(function(x){return'<th'+(x.r?' class="r"':'')+'>'+esc(x.t)+'</th>'}).join('')+'</tr>';rows.forEach(function(r){h+='<tr'+(r.on?' class="click" data-go="'+esc(r.on)+'"':'')+'>'+r.c.map(function(c,i){return'<td'+(head[i]&&head[i].r?' class="r"':'')+'>'+c+'</td>'}).join('')+'</tr>'});return h+'</table></div>'}
 function sec(title,note,body){return'<div class="sec"><h2>'+esc(title)+(note?'<span>'+esc(note)+'</span>':'')+'</h2>'+body+'</div>'}
@@ -402,7 +403,9 @@ function go(){var f;if(S.tab==='general')fetchView({view:'general',period:S.peri
 
 function vGeneral(d){var k=d.k;
  var h='<div class="filters">'+periodSel()+'</div><h1>'+t('all_areas')+'</h1><div class="sub">'+t('p_'+d.period.replace(/ /g,'_'))+'</div>'+mainCards(k,d.kp,d.fb,d.prevYear);
- h+=sec(t('by_area'),t('click_area'),table([{t:t('area')},{t:t('trainees').split(' ')[0],r:1},{t:t('lessons'),r:1},{t:t('plan')},{t:t('assessed'),r:1},{t:t('profile')},{t:t('avg'),r:1},{t:t('satk')}],
+ if(d.lim)h+=sec(t('by_area'),t('click_area'),table([{t:t('area')},{t:t('trainees').split(' ')[0],r:1},{t:t('lessons_done'),r:1},{t:t('assessed'),r:1},{t:t('profile')},{t:t('avg'),r:1},{t:t('satk'),r:1}],
+  d.areas.map(function(x){return{on:'area:'+x.area,c:['<span class="lk">'+esc(x.area)+'</span>',num(x.trainees),num(x.lessons),x.assessed||'–',stack(x.dist),lvChip(x.avg),x.fbActs&&x.fbAvg!==''?num(x.fbAvg,1):'–']}})));
+ else h+=sec(t('by_area'),t('click_area'),table([{t:t('area')},{t:t('trainees').split(' ')[0],r:1},{t:t('lessons'),r:1},{t:t('plan')},{t:t('assessed'),r:1},{t:t('profile')},{t:t('avg'),r:1},{t:t('satk')}],
   d.areas.map(function(x){var lp=lvl(x.plan,'PLAN');return{on:'area:'+x.area,c:['<span class="lk">'+esc(x.area)+'</span>',num(x.trainees),x.lessons+(x.avail?' / '+x.avail:''),x.plan===''?'–':dot(lp)+pct(x.plan),x.assessed||'–',stack(x.dist),lvChip(x.avg),x.fbActs?dot(lvl(x.fbCov,'FB_RATE'))+(x.fbAvg===''?t('noq'):num(x.fbAvg,1)+' · '+pct(x.fbCov)):'–']}})));
  h+=sec(t('months'),t('m_lessons'),chart(d.months,'lessons','m'));
  if(d.strong.length)h+=sec(t('strong')+' · '+t('weak'),'',table([{t:''},{t:t('area')},{t:''},{t:t('avg'),r:1}],d.strong.map(function(x){return{c:['<span style="color:var(--ok)">▲</span>',esc(x.area),esc(tx(d.skillText[x.code])||x.code),lvChip(x.avg)]}}).concat(d.weak.map(function(x){return{c:['<span style="color:var(--bad)">▼</span>',esc(x.area),esc(tx(d.skillText[x.code])||x.code),lvChip(x.avg)]}}))));
@@ -416,6 +419,7 @@ function vArea(d){var k=d.k;
  h+=sec(t('months'),t('m_lessons'),chart(d.months,'lessons','m'));
  if(d.trainees.length)h+=sec(t('tlist'),t('click_t'),table([{t:t('name')},{t:t('tl_lessons'),r:1},{t:t('tl_hours'),r:1},{t:t('tl_skills'),r:1},{t:t('avg'),r:1},{t:t('indep'),r:1}],
   d.trainees.slice().sort(function(a,b){return a.n.localeCompare(b.n)}).map(function(x){return{on:'person:'+x.id,c:['<span class="lk">'+esc(x.n)+'</span>',x.lessons||'–',x.hours?num(x.hours,1):'–',x.skills||'–',lvChip(x.avg),pct(x.autonomy)]}})));
+ h+=obsSec(d.obs,'area');
  show(h+foot(d));bindFilters()}
 function levels(dist){var tot=(dist||[]).reduce(function(a,b){return a+b},0);if(!tot)return'';
 return'<div class="box" style="padding:10px 12px">'+[4,3,2,1,0].map(function(i){var n=dist[i];
@@ -428,19 +432,33 @@ function list(){var tok=S.q.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,''
  var ps=META.people.filter(function(p){var n=(p.n+' '+p.id).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');return tok.every(function(x){return n.indexOf(x)>=0})}).slice(0,200);
  document.getElementById('pl').innerHTML=ps.length?'<table>'+ps.map(function(p){return'<tr class="click" data-go="person:'+esc(p.id)+'"><td><span class="lk">'+esc(p.n)+'</span></td><td><span class="pill">'+esc(p.h||'–')+'</span></td><td style="color:var(--faint);font-size:11px">'+esc(p.id)+'</td></tr>'}).join('')+'</table>':'<div class="load">'+t('noresult')+'</div>';bindFilters()}
 
+function obsSec(o,mode){if(!o||(!o.list.length&&mode==='person'))return'';var k=o.k;if(!o.list.length)return sec(t('obsbox'),'','<div class="box"><div class="load">'+t('obs_none')+'</div></div>');
+ var g='<div class="grid">'+card({l:t('obs_n'),v:k.n,n:t('obs_nn',{d:k.done,o:k.on,p:k.pl})})+(mode==='area'?card({l:t('obs_pp'),v:k.people}):'')+
+ card({l:t('obs_nc'),v:k.ev?k.nc+' / '+k.ev:'–',st:k.ev?(k.share>=0.5?'good':'bad'):'',f:k.ev?k.share:'',n:k.ev?t('obs_ncn'):''})+
+ card({l:t('obs_h'),v:num(k.hl,1),n:t('obs_hn',{p:num(k.hp,0)})})+card({l:t('obs_tr'),v:k.ta,st:k.late?'bad':'',n:k.late===undefined?'':t('obs_trn',{o:k.open,l:k.late})})+'</div>';
+ var nc=function(x){return x.nc==='Y'?'<b style="color:var(--ok)">✔</b>':x.nc==='N'?'<b style="color:var(--bad)">✘</b>':'–'};
+ var lim=k.late===undefined;var tb=table([{t:mode==='area'?t('name'):t('date')},{t:mode==='area'?t('date'):t('obs_prog')}].concat(lim?[]:[{t:t('obs_ob'),r:1}]).concat([{t:t('obs_ncs'),r:1}]),o.list.map(function(x){var dt=fdate(x.s)+(x.e?' – '+fdate(x.e):'')+'<br><small>'+t(x.st)+'</small>';
+  var ex=[];if(x.test!=='')ex.push(t('obs_test')+' '+num(x.test,1));if(x.ta)ex.push(t('obs_tr')+' '+x.ta);var pr=esc(x.prog)+(x.tutor?'<br><small>'+esc(x.tutor)+'</small>':'')+(ex.length?'<br><small>'+ex.join(' · ')+'</small>':'');
+  return{on:mode==='area'?'person:'+x.pid:'',c:[mode==='area'?'<span class="lk">'+esc(x.n)+'</span>':dt,mode==='area'?dt:pr].concat(lim?[]:[x.oe?x.ok+' / '+(x.op||x.oe):'–']).concat([nc(x)])}}));
+ return sec(t('obsbox'),t('obs_def'),g+tb)}
 function vPerson(d){var k=d.k;
  var h='<div class="filters">'+periodSel()+'<button class="out" id="back">← '+t('people')+'</button></div><h1>'+esc(d.name)+'</h1><div class="sub">'+esc(d.id)+(d.areas.length?' · '+esc(d.areas.join(' / ')):'')+(d.cohort?' · '+esc(d.cohort):'')+(d.lastToj?' · '+t('lastToj',{d:fdate(d.lastToj)}):'')+'</div>';
  h+='<div class="grid">'+card({l:t('p_lessons'),v:num(k.lessons)})+card({l:t('p_hours'),v:num(k.hours,1)})+card({l:t('p_skills'),v:k.skills+(k.expected?' / '+k.expected:''),f:k.expected?k.skills/k.expected:'',bc:'var(--ok)'})+card({l:t('toj'),v:k.avg===''?'–':num(k.avg,1),st:lvl(k.avg,'TOJ_LEVEL'),f:k.avg===''?'':k.avg/5,bc:'var(--l5)',n:k.autonomy===''?'':pct(k.autonomy)+' '+t('indep').replace('% ','')})+'</div>';
  if(d.skills.length){var rows=[],last='';d.skills.forEach(function(s){var g=tx(s.g);if(g!==last){rows.push({c:['<b>'+esc(g)+'</b>','','',''],g:1});last=g}rows.push({c:[esc(tx(s.t)),lvChip(s.first),lvChip(s.latest),fdate(s.d)]})});
   h+=sec(t('skills'),'',levels(d.dist)+'<div style="height:8px"></div>'+table([{t:''},{t:t('first'),r:1},{t:t('latest'),r:1},{t:t('date'),r:1}],rows))}else h+=sec(t('skills'),'','<div class="note">'+t('nskills')+'</div>');
+ h+=obsSec(d.obs,'person');
  if(d.lessons.length)h+=sec(t('lessbox'),t('att'),table([{t:t('area')},{t:t('tl_lessons'),r:1},{t:t('tl_hours'),r:1}],d.lessons.map(function(x){return{c:[esc(x.area),x.done+' / '+x.total,num(x.hDone,1)+' / '+num(x.hTot,1)]}})));
  if(d.recent.length)h+=sec(t('recent'),'',table([{t:t('date')},{t:t('course')},{t:t('area')},{t:t('tl_hours'),r:1}],d.recent.map(function(x){return{c:[fdate(x.d),esc(x.t),esc(x.a),num(x.h,1)]}})));
  if(d.plan.length)h+=sec(t('planbox'),'',table([{t:t('date')},{t:''},{t:''}],d.plan.map(function(x){var st=String(x.s||'');var c=/present|assessed/.test(st)&&!/not/.test(st)?'var(--ok)':/absent|not/.test(st)?'var(--bad)':'var(--mut)';return{c:[fdate(x.d),esc(tx(x.t)||x.item),'<b style="color:'+c+'">'+t(st)+'</b>']}})));
  show(h+foot(d));bindFilters();var bk=document.getElementById('back');if(S.user.role==='SELF')bk.style.display='none';bk.onclick=function(){if(RSH>0){history.back();return}S.pid='';go()}}
 
 function vSat(d){var k=d.k,isT=S.user.role==='TRAINER';
- var h='<div class="filters">'+periodSel()+areaSel('fs',S.satArea,S.user.role==='SUPER')+(isT?'':'<select id="ft"><option value="">'+t('all_trainers')+'</option>'+(META.trainers||[]).map(function(x){return'<option'+(x===S.trainer?' selected':'')+'>'+esc(x)+'</option>'}).join('')+'</select>')+'</div>';
+ var h='<div class="filters">'+periodSel()+areaSel('fs',S.satArea,S.user.role==='SUPER')+(isT||d.lim?'':'<select id="ft"><option value="">'+t('all_trainers')+'</option>'+(META.trainers||[]).map(function(x){return'<option'+(x===S.trainer?' selected':'')+'>'+esc(x)+'</option>'}).join('')+'</select>')+'</div>';
  h+='<h1>'+t('sat')+'</h1><div class="sub">'+(d.area==='ALL AREAS'?t('all_areas'):esc(d.area))+' · '+(isT?t('mine'):(d.trainer==='ALL TRAINERS'?t('all_trainers'):esc(d.trainer)))+'</div>';
+ if(d.lim){h+='<div class="grid">'+card({l:t('avgq'),v:k.avg===''?'–':num(k.avg,1),c:k.avg!==''&&k.avg>=4?'var(--ok)':''})+'</div>';
+  h+=sec(t('byq'),'',table([{t:''},{t:t('avg'),r:1},{t:''}],(k.q||[]).map(function(x,i){return{c:[(i+1)+'. '+t('q'+(i+1)),x.avg===''?'–':'<b>'+num(x.avg,1)+'</b>',mini(x.avg===''?'':x.avg/5,'var(--ok)')]}})));
+  if(d.byArea.length>1)h+=sec(t('by_area'),'',table([{t:t('area')},{t:t('avgq'),r:1}],d.byArea.map(function(x){return{c:[esc(x.key),x.avg===''?'–':num(x.avg,1)]}})));
+  return show(h+foot(d)),bindFilters()}
  var lr=lvl(k.rate,'FB_RATE'),lc=lvl(k.cov,'FB_RATE');
  h+='<div class="grid">'+card({l:t('received'),v:num(k.received)})+card({l:t('rate'),v:pct(k.rate),st:lr,f:k.rate})+card({l:t('cov'),v:pct(k.cov),st:lc,f:k.cov,n:k.withFb+' / '+k.acts})+card({l:t('avgq'),v:k.avg===''?'–':num(k.avg,1),c:k.avg!==''&&k.avg>=4?'var(--ok)':k.avg!==''&&k.avg<(SET.FB_LOW_AVG||3)?'var(--bad)':''})+card({l:t('missing'),v:num(k.missing),c:k.missing?'var(--bad)':'var(--ok)'})+'</div>';
  h+=sec(t('byq'),'',table([{t:''},{t:t('avg'),r:1},{t:''}],k.q.map(function(x,i){return{c:[(i+1)+'. '+t('q'+(i+1)),x.avg===''?'–':'<b>'+num(x.avg,1)+'</b>',mini(x.avg===''?'':x.avg/5,'var(--ok)')]}})));
