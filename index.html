@@ -22,5 +22,5 @@ document.querySelectorAll('[data-l]').forEach(function(b){b.onclick=function(){L
 draw();
 /* già entrato nell'Agenda su questo telefono → dritto all'app */
 try{if(localStorage.getItem('ap_tok')&&!/[?&]stay/.test(location.search))location.replace('agenda/')}catch(e){}
-if('serviceWorker' in navigator)window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})});
+if('serviceWorker' in navigator)window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).catch(function(){})});
 </script></body></html>
