@@ -2049,7 +2049,7 @@ function renderHome() {
     return '<button class="tile" data-k="' + t.k + '"><span class="ic">' + t.ic + '</span><b>' + esc(t.t) + '</b><small>' + esc(t.d) + '</small></button>';
   }).join('') + '</div></div><div class="htoday"><div class="sec hsec">As minhas actividades de hoje · ' + esc(fmtDate(today, true)) + '</div>' +
     (mine.length ? mine.map(function (a) { return hrow(a, today); }).join('') : '<div class="noact">Sem actividades suas hoje.</div>') + '</div></div>';
-  h += '<div class="foot">CHDCP Conecta · v0.9.10c' + (pushOn() ? ' · <button class="link" id="pushOff" style="margin:0">🔔 Desactivar notificações</button>' : '') + '</div></div>';
+  h += '<div class="foot">CHDCP Conecta · v0.9.11' + (pushOn() ? ' · <button class="link" id="pushOff" style="margin:0">🔔 Desactivar notificações</button>' : '') + '</div></div>';
   $('app').innerHTML = h;
   $('app').classList.remove('weekwide');
   $('app').classList.add('homewide');
@@ -2911,8 +2911,12 @@ function msDetail(m0, ids) {
   var c = msStCls(m.st), steps = ['EN', 'OU', 'PL', 'RE'], si = steps.indexOf(c);
   var h = bhead(m.name, m.role + ' · ' + m.area) + '<div class="body"><div class="msdet">';
   h += '<div class="hd"><span class="tg" style="background:' + MS_TC[m.team] + '">' + esc(m.area + ' · ' + (m.dir === 'MIL' ? 'CHDCP → Milão' : 'CCM → Luanda')) + '</span><span class="mschip ' + c + '">' + esc(msStLbl(m.st)) + '</span></div>';
-  h += '<div class="kv"><div>' + (m.dir === 'MIL' ? 'Chegada a Milão' : 'Partida') + '<b>' + msF(a) + ' (' + dn(a) + ')</b></div><div>' + (m.dir === 'MIL' ? 'Partida de Milão' : 'Regresso') + '<b>' + msF(b) + ' (' + dn(b) + ')</b></div>' +
-    '<div>Duração<b>' + (msDiff(a, b) + 1) + ' dias</b></div><div>Mês de imputação<b>' + esc(m.imp || '') + '</b></div>' +
+  /* v0.9.11: CCM → Luanda: a/b = dias efectivos em Luanda; ta/tb = datas do Masterplan (partida e chegada a Milão) */
+  var ta = m.ta || a, tb = parts.reduce(function (x, p) { return (p.tb || p.b) > x ? (p.tb || p.b) : x; }, m.tb || b);
+  var trav = m.dir === 'LUA' && (ta !== a || tb !== b);
+  h += '<div class="kv"><div>' + (m.dir === 'MIL' ? 'Chegada a Milão' : 'Primeiro dia em Luanda') + '<b>' + msF(a) + ' (' + dn(a) + ')</b></div><div>' + (m.dir === 'MIL' ? 'Partida de Milão' : 'Último dia em Luanda') + '<b>' + msF(b) + ' (' + dn(b) + ')</b></div>' +
+    '<div>' + (m.dir === 'MIL' ? 'Duração' : 'Dias em Luanda') + '<b>' + (msDiff(a, b) + 1) + ' dias</b></div><div>Mês de imputação<b>' + esc(m.imp || '') + '</b></div>' +
+    (trav ? '<div>Viagem (Masterplan)<b>' + msF(ta) + ' → ' + msF(tb) + ' · ' + (msDiff(ta, tb) + 1) + ' dias</b></div>' : '') +
     (m.bill ? '<div>Facturação<b>' + esc(m.bill) + '</b></div>' : '') + (m.fp ? '<div>Ponto focal<b>' + esc(m.fp) + '</b></div>' : '') +
     (m.sa ? '<div>Fora de Luanda<b>' + msF(m.sa) + ' → ' + msF(m.sb) + '</b></div>' : '') + (m.ex ? '<div>Execution<b>' + esc(m.ex) + '</b></div>' : '') + '</div>';
   h += '<div class="steps">' + ['Envisioned', 'Outlined', 'Planned', 'Reported'].map(function (s, i) { return '<div class="' + (i <= si ? 'on' : '') + '"><i></i>' + s + '</div>'; }).join('') + '</div>';
@@ -2931,7 +2935,7 @@ function msDetail(m0, ids) {
   if (has('OFF_PLAN').length) chk.push(['Plano anual', ['wa', '⚠ fora do plano']]);
   if (has('AGENDA').length) chk.push(['Actividades na Agenda', ['wa', '⚠ nenhuma no período']]);
   if (has('OVERLAP').length) chk.push(['Outras missões da pessoa', ['ko', 'sobreposição']]);
-  if (m.dMp !== null && m.dMp !== undefined && m.dMp !== m.days) chk.push(['Dias no Masterplan', ['wa', m.dMp + ' (calculado ' + m.days + ')']]);
+  if (m.dMp !== null && m.dMp !== undefined && m.dMp !== m.days && m.dMp !== m.tdays) chk.push(['Dias no Masterplan', ['wa', m.dMp + ' (calculado ' + (m.tdays || m.days) + ')']]);
   h += '<div class="chk">' + chk.map(function (x) { return '<div><span>' + esc(x[0]) + '</span><span class="' + x[1][0] + '">' + esc(x[1][1]) + '</span></div>'; }).join('') + '</div>';
   if (m.note) h += '<div class="sec mssec">Nota</div><div class="msrow">' + esc(m.note) + '</div>';
   var other = alerts.filter(function (x) { return ['STATUS', 'HOLIDAY', 'DOCS', 'OFF_PLAN', 'AGENDA', 'OVERLAP'].indexOf(x.rule) < 0; });
@@ -2996,7 +3000,7 @@ function screenCalFeed(opts) {
       '</div><div class="calnote" style="background:var(--info-soft);border-color:#c9dbf5">O calendário mostra as actividades dos últimos 14 dias e dos próximos 60. «[Previsto]» = ainda não confirmada; canceladas aparecem como canceladas durante 14 dias. A informação de referência é sempre a da app.</div></div>';
     page(h, true);
     if ($('fOn')) $('fOn').onclick = function () { screenCalFeed({ create: true }); };
-    /* v0.9.10c: link vero (webcal://): sul telefono apre direttamente Calendário › Subscrever; window.open non funziona nell'app installata */
+    /* v0.9.11: link vero (webcal://): sul telefono apre direttamente Calendário › Subscrever; window.open non funziona nell'app installata */
     if ($('fSub')) $('fSub').onclick = function (e) { try { e.preventDefault(); window.location.href = r.webcal; } catch (x) {} };
     if ($('fG')) $('fG').onclick = function () { openExt(r.google); };
     if ($('fCp')) $('fCp').onclick = function () { copyTxt(r.url); };
