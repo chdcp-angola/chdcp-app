@@ -478,6 +478,7 @@ var T = {
     review_t:'Rever e enviar', review_d:'{p} formando(s) · {r} competência(s)', edit:'Editar', gnote:'Nota geral (opcional)',
     empty_p:'Sem avaliações: não será enviado.', send:'Enviar', send_n:'Enviar {n} formandos', back:'Voltar', sending:'A enviar…',
     sent:'Enviado', sent_d:'Avaliações enviadas: {n}. Entram no Hub na próxima importação.', queued:'O resto ficou guardado no telemóvel e será enviado quando houver rede.',
+    iv_t:'Intervenção', iv_d:'Dados para identificar a intervenção, como no modelo TOJ.', iv_multi:'Pode escolher mais do que uma.', iv_type:'Tipo(s) de intervenção', iv_pick:'— escolher —', iv_other:'Qual? (descrever)', iv_op1:'1.º operador', iv_op2:'2.º operador', iv_pt:'Doente', iv_ini:'Iniciais', iv_age:'Idade (anos)', iv_sex:'Sexo', iv_need:'Indique o tipo de intervenção.',
     some_wait:'Ainda há envios pendentes', again:'Avaliar outro formando', outbox:'Avaliações à espera de rede: {n}.', retry:'Enviar agora',
     draft:'Avaliação em curso recuperada.', discard:'Descartar', auto_adv:'Avançar automaticamente para a competência seguinte',
     all_done:'Tudo avaliado aqui ✓', mark_rest:'Marcar as restantes como não observadas ({n})',
@@ -505,6 +506,7 @@ var T = {
     review_t:'Review and send', review_d:'{p} trainee(s) · {r} skill(s)', edit:'Edit', gnote:'General note (optional)',
     empty_p:'No ratings: will not be sent.', send:'Send', send_n:'Send {n} trainees', back:'Back', sending:'Sending…',
     sent:'Sent', sent_d:'Assessments sent: {n}. They reach the Hub at the next import.', queued:'The rest is saved on this phone and will be sent when there is a connection.',
+    iv_t:'Surgical intervention', iv_d:'Data to identify the intervention, as in the TOJ form.', iv_multi:'You can choose more than one.', iv_type:'Type(s) of intervention', iv_pick:'— choose —', iv_other:'Which? (describe)', iv_op1:'First operator', iv_op2:'Second operator', iv_pt:'Patient', iv_ini:'Initials', iv_age:'Age (years)', iv_sex:'Gender', iv_need:'Choose the type of intervention.',
     some_wait:'Some not sent yet', again:'Assess another trainee', outbox:'Assessments waiting for a connection: {n}.', retry:'Send now',
     draft:'Assessment in progress recovered.', discard:'Discard', auto_adv:'Move to the next skill automatically',
     all_done:'All rated here ✓', mark_rest:'Mark the rest as not observed ({n})',
@@ -532,6 +534,7 @@ var T = {
     review_t:'Rivedi e invia', review_d:'{p} trainee · {r} skill', edit:'Modifica', gnote:'Nota generale (facoltativa)',
     empty_p:'Nessuna valutazione: non verrà inviato.', send:'Invia', send_n:'Invia {n} trainee', back:'Indietro', sending:'Invio…',
     sent:'Inviato', sent_d:'Valutazioni inviate: {n}. Entrano nel Hub al prossimo import.', queued:'Il resto è salvato sul telefono e verrà inviato appena c\'è rete.',
+    iv_t:'Intervento', iv_d:'Dati per identificare l\'intervento, come nel modello TOJ.', iv_multi:'Puoi sceglierne più di uno.', iv_type:'Tipo/i di intervento', iv_pick:'— scegli —', iv_other:'Quale? (descrivi)', iv_op1:'Primo operatore', iv_op2:'Secondo operatore', iv_pt:'Paziente', iv_ini:'Iniziali', iv_age:'Età (anni)', iv_sex:'Sesso', iv_need:'Indica il tipo di intervento.',
     some_wait:'Alcuni invii in sospeso', again:'Valuta un altro trainee', outbox:'Valutazioni in attesa di rete: {n}.', retry:'Invia ora',
     draft:'Valutazione in corso recuperata.', discard:'Scarta', auto_adv:'Passa automaticamente alla skill successiva',
     all_done:'Tutto valutato qui ✓', mark_rest:'Segna le restanti come non osservate ({n})',
@@ -599,7 +602,7 @@ function hl(text, q){
    STATO
    ============================================================ */
 var DATA = null, HIST = {}, HIST_OK = {}, VIEW = 'home', SENDING = false, LIMIT = 40, DRAFT_FOUND = false;
-var S = { assessor:'', area:'', date:'', modeManual:'', q:'', sel:[], session:[], cur:'', r:{}, n:{}, gn:{}, openNote:{}, macro:'', sq:'', auto:true };
+var S = { assessor:'', area:'', date:'', modeManual:'', q:'', sel:[], session:[], cur:'', r:{}, n:{}, gn:{}, iv:{}, openNote:{}, macro:'', sq:'', auto:true };
 var KEY = { draft:'chdcp_toj_v2_draft', out:'chdcp_toj_v2_outbox', prefs:'chdcp_toj_v2_prefs', auth:'chdcp_toj_v2_auth', boot:'chdcp_toj_v2_boot', area:'chdcp_toj_v2_area', hist:'chdcp_toj_v2_hist' };
 var AUTH = null, LOGIN = null;
 var store = {
@@ -609,7 +612,7 @@ var store = {
 };
 function save(){
   store.set(KEY.prefs, { lang:LANG, assessor:S.assessor, area:S.area, auto:S.auto });
-  if (S.session.length) store.set(KEY.draft, { area:S.area, date:S.date, modeManual:S.modeManual, session:S.session, cur:S.cur, r:S.r, n:S.n, gn:S.gn, macro:S.macro, bs:!!S.bs });
+  if (S.session.length) store.set(KEY.draft, { area:S.area, date:S.date, modeManual:S.modeManual, session:S.session, cur:S.cur, r:S.r, n:S.n, gn:S.gn, iv:S.iv, macro:S.macro, bs:!!S.bs });
 }
 /* v35: timeout (google.script.run non ne ha): la pagina non resta mai appesa */
 var TMO = { tojAppBootstrap:40000, tojAppSubmit:50000, tojAppPersonExtra:45000, tojAppAreaStatus:40000, tojAppSetPin:30000 };
@@ -736,7 +739,7 @@ function init(d, cached){
   if (dr && dr.session && dr.session.length && d.areas.indexOf(dr.area) >= 0) {
     S.area = dr.area; S.date = dr.date; S.modeManual = dr.modeManual || '';
     S.session = dr.session.filter(personById); S.cur = S.session.indexOf(dr.cur) >= 0 ? dr.cur : S.session[0];
-    S.r = dr.r || {}; S.n = dr.n || {}; S.gn = dr.gn || {}; S.macro = dr.macro || ''; S.bs = !!dr.bs;
+    S.r = dr.r || {}; S.n = dr.n || {}; S.gn = dr.gn || {}; S.iv = dr.iv || {}; S.macro = dr.macro || ''; S.bs = !!dr.bs;
     if (S.session.length) { DRAFT_FOUND = true; S.session.forEach(loadHist); try { history.pushState({v:'assess'}, ''); } catch(e){} }
   }
   /* v36: arrivo da un'attività dell'Agenda: area, data e attività già scelte */
@@ -1269,6 +1272,32 @@ function assessBar(){
    REVISIONE E INVIO
    ============================================================ */
 function lvBadge(v){ return v === 'NA' ? '<span class="lv" style="background:#e9edef;color:#65727a">–</span>' : '<span class="lv" style="background:var(--l'+v+');color:'+(v===1||v===5?'#fff':'#1b2124')+'">'+v+'</span>'; }
+/* v41: intervento chirurgico (CS / PERF), come nei modelli TOJ: tipo, operatori, paziente (iniziali, età, sesso) */
+var IV_AREAS = ['CS','PERF'];
+var IV_LIST = ['Sternal reconstruction','Surgical wound revision','Aortic aneurysm','Mitral valve replacement','Tricuspid valve replacement','Aortic valve replacement','Mitral valve repair','Tricuspid valve repair','Aortic valve repair','Ozaki procedure','Bentall procedure','David procedure','Re-opening for post-op bleeding','Patent ductus arteriosus','Patent foramen ovale','Atrial septal defect','Ventricular septal defect','Submitral aneurysm','CABG','Revision of mediastinal cavity','Miscellaneous (see notes)'];
+function ivOn(){ return IV_AREAS.indexOf(S.area) >= 0; }
+function ivSel(){ var t = (S.iv || {}).t; return Array.isArray(t) ? t : (t ? [t] : []); }
+function ivHtml(){
+  var v = S.iv || {}, opt = function(list, cur, first){ return (first ? '<option value="">'+first+'</option>' : '')+list.map(function(x){ var k = typeof x === 'string' ? x : x[0], l = typeof x === 'string' ? x : x[1]; return '<option value="'+esc(k)+'"'+(k===cur?' selected':'')+'>'+esc(l)+'</option>'; }).join(''); };
+  var names = DATA.people.filter(function(p){ return p.areas.indexOf(S.area) >= 0 || p.areas.indexOf('CS') >= 0; }).map(function(p){ return '<option value="'+esc(p.name)+'">'; }).join('');
+  var fs = 'width:100%;box-sizing:border-box;padding:9px 10px;border:1.5px solid var(--line);border-radius:10px;font:inherit;background:#fff';
+  return '<div class="rcard" id="ivBox"><div class="rh"><b>'+t('iv_t')+'</b></div><div style="color:var(--muted);font-size:.85rem;margin:2px 0 8px">'+t('iv_d')+'</div>'+
+    '<label style="font-size:.85rem;font-weight:700">'+t('iv_type')+' *</label><div style="color:var(--muted);font-size:.8rem">'+t('iv_multi')+'</div><div id="ivT" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px">'+IV_LIST.map(function(x){ var on = ivSel().indexOf(x) >= 0; return '<button type="button" class="ivc" data-iv="'+esc(x)+'" style="border:1.5px solid '+(on?'var(--brand)':'var(--line)')+';background:'+(on?'var(--brand)':'#fff')+';color:'+(on?'#fff':'inherit')+';border-radius:16px;padding:6px 10px;font:inherit;font-size:.85rem">'+(on?'✓ ':'')+esc(x)+'</button>'; }).join('')+'</div>'+
+    '<input id="ivO" style="'+fs+';margin-top:6px;'+(ivSel().indexOf(IV_LIST[IV_LIST.length-1])>=0?'':'display:none')+'" placeholder="'+t('iv_other')+'" value="'+esc(v.o||'')+'">'+
+    '<div style="display:flex;gap:8px;margin-top:8px"><div style="flex:1"><label style="font-size:.85rem;font-weight:700">'+t('iv_op1')+'</label><input id="ivO1" list="ivDL" style="'+fs+'" value="'+esc(v.op1||'')+'"></div>'+
+    '<div style="flex:1"><label style="font-size:.85rem;font-weight:700">'+t('iv_op2')+'</label><input id="ivO2" list="ivDL" style="'+fs+'" value="'+esc(v.op2||'')+'"></div></div><datalist id="ivDL">'+names+'</datalist>'+
+    '<div style="font-size:.85rem;font-weight:700;margin-top:8px">'+t('iv_pt')+'</div><div style="display:flex;gap:8px">'+
+    '<input id="ivPI" maxlength="6" style="'+fs+';flex:1;text-transform:uppercase" placeholder="'+t('iv_ini')+'" value="'+esc(v.pi||'')+'">'+
+    '<select id="ivPA" style="'+fs+';flex:1">'+opt([['<5','< 5'],['5-18','5–18'],['>18','> 18']], v.pa, t('iv_age'))+'</select>'+
+    '<select id="ivPS" style="'+fs+';flex:1">'+opt([['M','M'],['F','F']], v.ps, t('iv_sex'))+'</select></div>'+
+    '<div class="banner warn" id="ivErr" style="margin-top:8px;display:none">'+t('iv_need')+'</div></div>';
+}
+function ivBind(){
+  if (!$('ivBox')) return;
+  var put = function(){ S.iv = { t:ivSel(), o:$('ivO').value, op1:$('ivO1').value, op2:$('ivO2').value, pi:$('ivPI').value.toUpperCase(), pa:$('ivPA').value, ps:$('ivPS').value }; $('ivO').style.display = S.iv.t.indexOf(IV_LIST[IV_LIST.length-1]) >= 0 ? '' : 'none'; if (S.iv.t.length) $('ivErr').style.display = 'none'; save(); };
+  $('ivT').onclick = function(e){ var b = e.target.closest('[data-iv]'); if (!b) return; var cur = ivSel().slice(), k = b.dataset.iv, i = cur.indexOf(k); if (i >= 0) cur.splice(i, 1); else cur.push(k); S.iv = S.iv || {}; S.iv.t = IV_LIST.filter(function(x){ return cur.indexOf(x) >= 0; }); var on = i < 0; b.style.background = on ? 'var(--brand)' : '#fff'; b.style.color = on ? '#fff' : ''; b.style.borderColor = on ? 'var(--brand)' : 'var(--line)'; b.textContent = (on ? '✓ ' : '') + k; put(); };
+  ['ivO','ivO1','ivO2','ivPI','ivPA','ivPS'].forEach(function(k){ $(k).oninput = put; $(k).onchange = put; });
+}
 function openReview(){
   var by = {}; skillsOfArea().forEach(function(s){ by[s.code] = s; });
   var tp = 0, tr = 0;
@@ -1285,13 +1314,14 @@ function openReview(){
   var dl = S.session.map(function(id){ var x = dupSkills(id); return x.length ? '<b>'+esc(personById(id).name)+'</b>: '+x.map(function(s){ return esc(sDesc(s)); }).join(', ') : ''; }).filter(Boolean);
   S.dupOk = !dl.length;
   var dupBox = dl.length ? '<div class="banner warn" id="dupW" style="margin-top:10px;display:block">⚠ '+esc(t('dup_w',{d:dmy(S.date)}))+'<br>'+dl.join('<br>')+'</div>' : '';
-  showSheet('<div class="grab"></div><h3>'+t('review_t')+'</h3><div style="color:var(--muted);font-size:.9rem">'+esc(S.area)+' · '+dmy(S.date)+' · '+(mode()==='WEEK'?t('mode_week'):t('mode_spot'))+' · '+t('review_d',{p:tp,r:tr})+'</div>'+dupBox+cards+
+  showSheet('<div class="grab"></div><h3>'+t('review_t')+'</h3><div style="color:var(--muted);font-size:.9rem">'+esc(S.area)+' · '+dmy(S.date)+' · '+(mode()==='WEEK'?t('mode_week'):t('mode_spot'))+' · '+t('review_d',{p:tp,r:tr})+'</div>'+dupBox+(ivOn() ? ivHtml() : '')+cards+
     '<div class="actions"><button class="btn ghost" type="button" id="rBack">'+t('back')+'</button><button class="btn" type="button" id="rSend">'+(tp>1?t('send_n',{n:tp}):t('send'))+'</button></div>');
   each('[data-gn]', function(ta){ ta.oninput = function(){ S.gn[ta.dataset.gn] = ta.value; save(); }; });
   each('[data-qg]', function(box){ box.onclick = function(e){ var b = e.target.closest('[data-qn]'); if (!b) return; var ta = document.querySelector('[data-gn="'+box.dataset.qg+'"]'); if (ta) addQn(ta, b.dataset.qn); }; });
   each('[data-edit]', function(b){ b.onclick = function(){ hideSheet(); S.cur = b.dataset.edit; renderAssess(); window.scrollTo(0,0); }; });
+  ivBind();
   $('rBack').onclick = hideSheet;
-  $('rSend').onclick = function(){ if (!S.dupOk) { S.dupOk = true; buzz(); $('rSend').textContent = t('dup_go'); $('rSend').style.background = 'var(--warn)'; var w = $('dupW'); if (w) w.scrollIntoView({block:'center'}); return; } sendAll(); };
+  $('rSend').onclick = function(){ if (ivOn() && !ivSel().length) { buzz(); $('ivErr').style.display = 'block'; $('ivBox').scrollIntoView({block:'center'}); return; } if (!S.dupOk) { S.dupOk = true; buzz(); $('rSend').textContent = t('dup_go'); $('rSend').style.background = 'var(--warn)'; var w = $('dupW'); if (w) w.scrollIntoView({block:'center'}); return; } sendAll(); };
 }
 function showSheet(h){ $('panel').innerHTML = h; $('sheet').classList.add('open'); }
 function hideSheet(){ $('sheet').classList.remove('open'); }
@@ -1301,7 +1331,7 @@ function payloadFor(id){
   var m = S.r[id] || {}, notes = S.n[id] || {}, ratings = [];
   skillsOfArea().forEach(function(s){ var v = m[s.code]; if (v) ratings.push({ code:s.code, score: v === 'NA' ? '' : v, note: notes[s.code] || '' }); });
   var actId = (S.act && S.act.area === S.area && S.act.date === S.date) ? S.act.id : '';
-  return { clientId:'APP-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,8), area:S.area, date:S.date, mode:mode(), personId:id, assessorName:S.assessor, note:S.gn[id]||'', ratings:ratings, auth:AUTH, activityId:actId };
+  return { clientId:'APP-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,8), area:S.area, date:S.date, mode:mode(), personId:id, assessorName:S.assessor, note:S.gn[id]||'', ratings:ratings, auth:AUTH, activityId:actId, iv: ivOn() ? (S.iv || {}) : null };
 }
 function sendAll(){
   if (SENDING) return;
@@ -1381,7 +1411,7 @@ function flushOutbox(manual){
 }
 function finishSession(){
   S.session.forEach(function(id){ delete S.r[id]; delete S.n[id]; delete S.gn[id]; });
-  S.session = []; S.cur = ''; S.sel = []; S.q = ''; S.sq = ''; S.openNote = {}; DRAFT_FOUND = false;
+  S.session = []; S.cur = ''; S.sel = []; S.q = ''; S.sq = ''; S.openNote = {}; S.iv = {}; DRAFT_FOUND = false;
   store.del(KEY.draft);
   try { if (MACRO_PUSHED) { MACRO_PUSHED = false; history.go(-2); } else if (history.state && history.state.v === 'assess') history.back(); } catch(e){}
   go('home');

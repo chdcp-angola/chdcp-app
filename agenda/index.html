@@ -370,6 +370,135 @@ html,body{overflow-x:hidden}
 .navrow .sbtn{flex:1;margin:0;background:#fff;border:1.5px solid var(--brand-line,#e8cfcd);border-radius:14px;padding:12px 8px;font-weight:800;color:var(--brand);text-align:center}
 .kbd{display:none}
 @media (hover:hover) and (min-width:900px){.kbd{display:block;text-align:center;font-size:11px;color:var(--muted);margin-top:10px}}
+
+/* ===== v0.9.8 · Missões ===== */
+.page.mspage .wrap{max-width:1500px}
+.msbody{padding-bottom:30px}
+.msseg{display:flex;gap:6px;margin-bottom:10px;position:sticky;top:0;z-index:5;background:var(--bg);padding:4px 0}
+.msseg button{flex:1;font-size:13px;font-weight:700;padding:9px 0;border-radius:10px;background:#fff;border:1px solid var(--line);color:var(--muted);min-height:40px}
+.msseg button.on{background:var(--brand);border-color:var(--brand);color:#fff}
+.msseg button b{display:inline-block;background:var(--bad);color:#fff;border-radius:9px;font-size:10.5px;padding:1px 6px;margin-left:3px}
+.msnav{display:flex;align-items:center;justify-content:space-between;margin:2px 0 8px}
+.msnav b{font-size:15.5px}
+.msnav button{font-size:24px;color:var(--brand);font-weight:800;width:44px;height:40px;border-radius:10px;background:#fff;border:1px solid var(--line)}
+.msflt{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px;align-items:center}
+.msflt button{font-size:11.5px;font-weight:700;padding:6px 10px;border-radius:16px;background:#fff;border:1px solid var(--line);color:var(--muted);min-height:32px}
+.msflt button.on{background:var(--brand);border-color:var(--brand);color:#fff}
+.msflt button.tm{border-left:4px solid var(--c,var(--line))}
+.msflt button.tm.on{background:var(--c,var(--brand));border-color:var(--c,var(--brand))}
+.msflt .sp{flex:1}
+.mssec{display:flex;justify-content:space-between;align-items:center;margin-top:14px}
+.mssec .link{margin:0;font-size:12px;color:var(--brand);font-weight:700;text-transform:none;letter-spacing:0;text-decoration:none}
+.mskpi{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.mskpi .k{background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px 12px}
+.mskpi .l{font-size:10.5px;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:.04em}
+.mskpi .v{font-size:26px;font-weight:800;margin-top:2px;line-height:1.15}
+.mskpi .v small{font-size:11.5px;color:var(--muted);font-weight:600;margin-left:5px}
+.mskpi .t{display:flex;gap:3px;flex-wrap:wrap;margin-top:6px}
+.mskpi .t i{font-style:normal;font-size:10px;font-weight:800;color:#fff;border-radius:5px;padding:2px 5px}
+.msal{display:flex;gap:9px;align-items:flex-start;border-radius:12px;padding:8px 10px;margin-bottom:6px;font-size:12.5px;border:1px solid;line-height:1.4}
+.msal .n{min-width:24px;height:24px;border-radius:7px;font-weight:800;font-size:12.5px;display:flex;align-items:center;justify-content:center;color:#fff;flex:none}
+.msal b{display:block;font-size:13px}
+.msal.R{background:var(--bad-soft);border-color:#f0c3bf}.msal.R .n{background:var(--bad)}
+.msal.Y{background:var(--warn-soft);border-color:#f0d49a}.msal.Y .n{background:var(--warn)}
+.msal.B{background:var(--info-soft);border-color:#c9dbf5}.msal.B .n{background:var(--info)}
+.msal[data-mid]{cursor:pointer}
+.msal-l{margin-top:4px}.msal-l .link{display:block;margin:3px 0;text-align:left;font-size:12px;text-decoration:none;color:var(--ink)}
+.msmv{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.msmv .d{display:flex;gap:10px;padding:8px 12px;border-top:1px solid var(--line)}.msmv .d:first-child{border-top:0}
+.msmv .dd{min-width:38px;text-align:center}.msmv .dd b{display:block;font-size:17px}.msmv .dd span{font-size:10.5px;color:var(--muted);font-weight:700}
+.msmv .x{flex:1;font-size:12px}
+.msmv .in,.msmv .out{display:block;font-weight:800;margin:2px 0}.msmv .in{color:var(--ok)}.msmv .out{color:var(--bad)}
+.msp{display:inline-block;border-left:3px solid var(--c);background:var(--bg);border-radius:4px;padding:2px 7px;margin:2px 4px 2px 0;font-weight:600;font-size:12px}
+.mswk{background:#fff;border:1px solid var(--line);border-radius:14px;padding:6px 0 4px}
+.msgh,.mscnt,.msgr{display:grid;grid-template-columns:128px repeat(7,1fr);padding:0 10px;align-items:center}
+.msgh{font-size:10.5px;color:var(--muted);font-weight:700;text-align:center;padding-top:4px}
+.msgh div:first-child{text-align:left}.msgh div.h{color:var(--bad)}.msgh b{display:block;font-size:13px;color:var(--ink)}
+.msgh.mil{margin-top:8px}
+.mscnt{font-size:11px;font-weight:800;text-align:center;margin:3px 0 4px}
+.mscnt div{background:var(--brand-soft);color:var(--brand);margin:0 1px;border-radius:5px;padding:2px 0}.mscnt div.hi{background:#f6c8c4;color:#7a1f1c}
+.mscnt div:first-child{background:none;text-align:left;color:var(--muted);font-weight:700}
+.mstm{font-size:10.5px;font-weight:800;color:#fff;margin:6px 10px 2px;border-radius:6px;padding:3px 7px;display:flex;justify-content:space-between}
+.msgr{width:100%;height:30px;text-align:left}
+.msgr .nm{font-size:11.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.1}.msgr .nm small{display:block;font-weight:500;color:var(--muted);font-size:10px}
+.msgr .c{height:14px;position:relative}.msgr .c.we{background:#eceff1}.msgr .c.h{background:#fbe1df}
+.msgr .c.on::after{content:'';position:absolute;inset:0;background:var(--c)}
+.msgr .c.on.env::after{background:repeating-linear-gradient(135deg,var(--c) 0 4px,color-mix(in srgb,var(--c) 40%,#fff) 4px 8px)}
+.msgr .c.on.s::after{border-radius:6px 0 0 6px;left:2px}.msgr .c.on.e::after{border-radius:0 6px 6px 0;right:2px}
+.msgr .c .ar{position:absolute;z-index:2;font-size:10px;top:-1px;left:3px;color:#fff;font-weight:800}
+.mslg{font-size:10.5px;color:var(--muted);padding:8px 12px 4px}
+.gscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;background:#fff;border:1px solid var(--line);border-radius:12px}
+table.msg{border-collapse:collapse;font-size:11.5px;table-layout:fixed;width:100%}
+table.msg col.lab{width:190px}
+table.msg td,table.msg th{border-right:1px solid #eef0f2;padding:0;height:24px;white-space:nowrap;overflow:hidden}
+table.msg th{font-weight:600;color:var(--muted);font-size:10px;line-height:1.15;text-align:center;padding:3px 0}
+table.msg th.td{color:#fff;background:var(--brand)!important}
+table.msg .lab{position:sticky;left:0;z-index:2;background:#fff;padding:0 8px!important;text-align:left;border-right:1px solid var(--line)!important;text-overflow:ellipsis}
+table.msg .lab span{color:var(--muted)}
+table.msg .lab .dot{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:6px;vertical-align:middle}
+table.msg tr.grp td{background:var(--brand);color:#fff;font-weight:800;font-size:11.5px;height:24px}
+table.msg tr.grp td.lab{background:var(--brand)}
+table.msg tr.sub td.lab{font-weight:700;background:#faf6f5}
+table.msg tr.sub td.lab i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+table.msg .we{background:#f1f3f4}table.msg .mshol{background:#fbe1df}
+table.msg tr.row{cursor:pointer}table.msg tr.row:hover td{background-color:#fafbfc}
+table.msg td.dn{text-align:center;color:var(--muted)}
+table.msg td.b{position:relative}table.msg td.b>span{position:absolute;left:0;right:0;top:5px;bottom:5px;background:var(--c)}
+table.msg td.b.s>span{border-radius:6px 0 0 6px;margin-left:2px}table.msg td.b.e>span{border-radius:0 6px 6px 0;margin-right:2px}
+table.msg td.b.env>span{background:repeating-linear-gradient(135deg,var(--c) 0 5px,color-mix(in srgb,var(--c) 40%,#fff) 5px 10px)}
+table.msg td.b.out>span{background:color-mix(in srgb,var(--c) 60%,#fff)}
+table.msg td.b em{position:absolute;left:4px;top:5px;color:#fff;font-style:normal;font-weight:800;font-size:10px;z-index:1;text-shadow:0 0 2px rgba(0,0,0,.45)}
+table.msg tr.mscntr td{font-weight:800;text-align:center;color:var(--brand);background:var(--brand-soft)}
+table.msg tr.mscntr td.lab{color:var(--brand);background:var(--brand-soft)}
+table.msg tr.mscntr td.hi{background:#f6c8c4;color:#7a1f1c}
+table.msg .ic{display:inline-block;width:15px;height:15px;border-radius:50%;background:var(--warn);color:#fff;font-size:10px;font-weight:800;text-align:center;line-height:15px;margin-left:5px;font-style:normal}
+table.msg .ic.r{background:var(--bad)}
+table.msy tr.qh th{background:#8b1512;color:#fff;font-size:11px}
+table.msy tr.mh th{background:#efd9d7;color:var(--ink);font-size:11px}
+table.msy td.c{text-align:center;font-weight:800;font-size:10.5px;cursor:pointer}
+table.msy td.tot{text-align:center;font-weight:800}
+table.msy tr.teamrow td{height:42px;text-align:center}
+table.msy .vt{writing-mode:vertical-rl;transform:rotate(180deg);font-size:9px;font-weight:800;color:#fff;line-height:1}
+table.msy .vh{font-size:8.5px;color:var(--bad);font-weight:700}
+.mscov{background:var(--warn-soft);border:1px solid #f0d49a;border-radius:12px;padding:8px 11px;font-size:12.5px;margin-bottom:8px;color:#5c3d00}.mscov b{display:block}
+.mslegend{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:var(--muted);padding:9px 2px}
+.mslegend i{display:inline-block;width:20px;height:10px;border-radius:3px;vertical-align:middle;margin-right:5px}
+.mslegend .lenv{background:repeating-linear-gradient(135deg,#888 0 4px,#ddd 4px 8px)}.mslegend .lout{background:#bbb}
+.msside{margin-top:10px}
+.mschip{display:inline-block;font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:99px;margin-left:6px;vertical-align:1px;white-space:nowrap}
+.mschip.EN{background:#fde5cd;color:#8a4a00}.mschip.OU{background:#cbdcf8;color:#1f4d99}.mschip.PL{background:#d8eed9;color:#11663a}.mschip.RE{background:#e2e7ea;color:#3a454b}.mschip.NO{background:var(--bad-soft);color:var(--bad)}
+.mscard{display:block;width:100%;text-align:left;background:#fff;border:1px solid var(--line);border-left:5px solid var(--c);border-radius:12px;padding:10px 12px;margin-bottom:7px}
+.mscard .n{font-weight:700;font-size:14px}.mscard .r{font-size:12px;color:var(--muted);margin-top:2px}.mscard .r b{color:var(--ink)}
+.msdet{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px}
+.msdet .hd{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.msdet .tg{font-size:11px;font-weight:800;color:#fff;border-radius:6px;padding:3px 8px}
+.msdet .kv{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.msdet .kv div{background:var(--bg);border-radius:11px;padding:8px 10px;font-size:11px;color:var(--muted);font-weight:700}.msdet .kv b{display:block;font-size:14px;color:var(--ink);margin-top:2px}
+.msdet .steps{display:flex;margin-top:12px;gap:4px}.msdet .steps div{flex:1;text-align:center;font-size:10.5px;font-weight:700;color:var(--faint)}
+.msdet .steps i{display:block;height:6px;border-radius:4px;background:var(--line);margin-bottom:4px}.msdet .steps .on{color:var(--ink)}.msdet .steps .on i{background:var(--warn)}
+.msdet .chk{margin-top:12px;font-size:13px}.msdet .chk div{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-top:1px solid var(--line)}
+.msdet .chk .ok{color:var(--ok);font-weight:700;text-align:right}.msdet .chk .ko{color:var(--bad);font-weight:700;text-align:right}.msdet .chk .wa{color:var(--warn);font-weight:700;text-align:right}
+.msrow{font-size:12.5px;padding:6px 0;border-top:1px solid var(--line)}
+.msbtns{display:flex;gap:8px;margin-top:14px}.msbtn{flex:1;text-align:center;padding:11px;border-radius:11px;font-size:13.5px;font-weight:700;background:var(--bg);border:1px solid var(--line)}
+.msfoot{font-size:11px;color:var(--faint);margin-top:14px;text-align:center}.msfoot .link{font-size:11px;color:var(--brand);margin:0}
+@media (min-width:1024px){
+  .msgrid{display:grid;grid-template-columns:5fr 6fr;gap:18px;align-items:start}
+  .msmgrid{display:grid;grid-template-columns:1fr 330px;gap:14px;align-items:start}
+  .msside{margin-top:0;position:sticky;top:60px}
+  table.msg col.lab{width:250px}
+  .mskpi{grid-template-columns:1fr 1fr}
+}
+@media (max-width:420px){ table.msg col.lab{width:150px} }
+
+/* ===== v0.9.9 · calendário pessoal ===== */
+.calopt{display:flex;gap:12px;align-items:center;width:100%;text-align:left;background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:13px 14px;margin-bottom:8px;min-height:var(--tap)}
+.calopt .ic{font-size:22px;width:30px;text-align:center}.calopt b{display:block;font-size:15px}.calopt small{color:var(--muted);font-size:12px}.calopt .go{margin-left:auto;color:var(--faint);font-size:20px}
+.calnote{font-size:12.5px;color:var(--muted);background:var(--warn-soft);border:1px solid #f0d49a;border-radius:12px;padding:9px 11px;margin:4px 0 12px;line-height:1.45}
+.calurl{font-family:ui-monospace,Menlo,monospace;font-size:11px;word-break:break-all;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px 10px;margin:8px 0}
+.calhow details{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:7px}.calhow summary{font-weight:700;font-size:14px;cursor:pointer}
+.calhow ol{margin:8px 0 2px 18px;font-size:13px;line-height:1.5}
+.calstate{display:flex;justify-content:space-between;align-items:center;gap:10px}.calstate .on{color:var(--ok);font-weight:800}.calstate .off{color:var(--muted);font-weight:700}
+.calbtns{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.calbtns button{flex:1;min-width:140px;padding:11px;border-radius:11px;font-weight:700;font-size:13.5px;background:var(--bg);border:1px solid var(--line)}.calbtns button.pri{background:var(--brand);color:#fff;border-color:var(--brand)}.calbtns button.bad{color:var(--bad)}
 </style>
 </head>
 <body>
@@ -428,6 +557,122 @@ var I18N = (function () {
 /* Dicionário da CHDCP Agenda: [português, English, italiano].
    Linhas com expressão regular servem para textos com números ou nomes ($1, $2…). */
 I18N.add([
+  /* v0.9.10 link sessões */
+  ["Entrar na sessão online", "Join the online session", "Entra nella sessione online"],
+  /* v0.9.9 calendário */
+  ["Adicionar ao calendário", "Add to calendar", "Aggiungi al calendario"],
+  ["Google, Outlook, iPhone (cópia: não se actualiza)", "Google, Outlook, iPhone (copy: does not update)", "Google, Outlook, iPhone (copia: non si aggiorna)"],
+  ["O meu calendário", "My calendar", "Il mio calendario"],
+  ["Agenda no Google, Outlook ou iPhone", "Agenda in Google, Outlook or iPhone", "Agenda in Google, Outlook o iPhone"],
+  ["A sua agenda no telemóvel ou no computador", "Your agenda on your phone or computer", "La tua agenda sul telefono o sul computer"],
+  ["A preparar…", "Preparing…", "Preparazione…"],
+  ["iPhone / iPad (Calendário)", "iPhone / iPad (Calendar)", "iPhone / iPad (Calendario)"],
+  ["Abre o ficheiro .ics → «Adicionar»", "Opens the .ics file → «Add»", "Apre il file .ics → «Aggiungi»"],
+  ["Abre o Google Calendar com o evento preenchido", "Opens Google Calendar with the event filled in", "Apre Google Calendar con l'evento compilato"],
+  ["Outlook (Microsoft 365 / trabalho)", "Outlook (Microsoft 365 / work)", "Outlook (Microsoft 365 / lavoro)"],
+  ["Outlook.com (pessoal)", "Outlook.com (personal)", "Outlook.com (personale)"],
+  ["Ficheiro .ics (Apple, Outlook de computador…)", ".ics file (Apple, desktop Outlook…)", "File .ics (Apple, Outlook da computer…)"],
+  ["Descarrega e abre no calendário", "Download and open in your calendar", "Scarica e apri nel calendario"],
+  ["Link pessoal da agenda", "Personal agenda link", "Link personale dell'agenda"],
+  ["● activo", "● active", "● attivo"],
+  ["○ desactivado", "○ off", "○ disattivato"],
+  ["Activar o meu calendário", "Turn on my calendar", "Attiva il mio calendario"],
+  ["Subscrever no iPhone / Mac", "Subscribe on iPhone / Mac", "Abbonati su iPhone / Mac"],
+  ["Adicionar ao Google", "Add to Google", "Aggiungi a Google"],
+  ["Copiar link", "Copy link", "Copia link"],
+  ["Gerar novo link", "Create new link", "Genera nuovo link"],
+  ["Desactivar", "Turn off", "Disattiva"],
+  ["Como subscrever", "How to subscribe", "Come abbonarsi"],
+  ["Ainda não lido por nenhum calendário.", "Not read by any calendar yet.", "Non ancora letto da nessun calendario."],
+  ["Link copiado.", "Link copied.", "Link copiato."],
+  ["Mac (Calendário)", "Mac (Calendar)", "Mac (Calendario)"],
+  ["Outlook (Monzino / Microsoft 365, Outlook.com)", "Outlook (Monzino / Microsoft 365, Outlook.com)", "Outlook (Monzino / Microsoft 365, Outlook.com)"],
+  /* v0.9.8 missões */
+  ["Feriado durante a missão", "Holiday during the mission", "Festivo durante la missione"],
+  ["Documentos do observer", "Observer documents", "Documenti dell'observer"],
+  ["Missões sobrepostas", "Overlapping missions", "Missioni sovrapposte"],
+  ["Nome em falta (TBD)", "Missing name (TBD)", "Nome mancante (TBD)"],
+  ["Semana planeada sem nomes", "Planned week without names", "Settimana pianificata senza nomi"],
+  ["Missão fora do plano anual", "Mission outside the annual plan", "Missione fuori dal piano annuale"],
+  ["Missão sem actividades na Agenda", "Mission without Agenda activities", "Missione senza attività in Agenda"],
+  ["Qualidade dos dados do Masterplan", "Masterplan data quality", "Qualità dei dati del Masterplan"],
+  ["Alertas · Novembro", "Alerts · November", "Alert · Novembre"],
+  ["todos", "all", "tutti"],
+  [/^ver todos \((\d+)\)$/, "see all ($1)", "vedi tutti ($1)"],
+  [/^↓ chegam (\d+)$/, "↓ $1 arrive", "↓ arrivano $1"],
+  [/^↑ partem (\d+)$/, "↑ $1 leave", "↑ partono $1"],
+  [/^Status atrasado · (\d+)$/, "Late status · $1", "Stato in ritardo · $1"],
+  [/^Documentos observer · (\d+)$/, "Observer documents · $1", "Documenti observer · $1"],
+  [/^Feriado · (\d+)$/, "Holiday · $1", "Festivo · $1"],
+  [/^Nome em falta · (\d+)$/, "Missing name · $1", "Nome mancante · $1"],
+  [/^Plano sem nomes · (\d+)$/, "Plan without names · $1", "Piano senza nomi · $1"],
+  [/^Fora do plano · (\d+)$/, "Outside the plan · $1", "Fuori piano · $1"],
+  [/^Agenda vs missão · (\d+)$/, "Agenda vs mission · $1", "Agenda vs missione · $1"],
+  [/^(\d+) missões entre dois meses$/, "$1 missions across two months", "$1 missioni a cavallo di due mesi"],
+  [/^Cobertura do plano (\d+)$/, "Plan coverage $1", "Copertura del piano $1"],
+  ["Missões", "Missions", "Missioni"],
+  ["Ano · Gantt", "Year · Gantt", "Anno · Gantt"],
+  ["Alertas", "Alerts", "Alert"],
+  ["Mês", "Month", "Mese"],
+  ["CCM em Luanda", "CCM in Luanda", "CCM a Luanda"],
+  ["CHDCP em Milão", "CHDCP in Milan", "CHDCP a Milano"],
+  ["Pico clínicos / dia", "Peak clinicians / day", "Picco clinici / giorno"],
+  ["Status da semana", "Week status", "Stato della settimana"],
+  ["Atenção", "Attention", "Attenzione"],
+  ["Chegadas e partidas · Luanda", "Arrivals and departures · Luanda", "Arrivi e partenze · Luanda"],
+  ["Quem está onde, dia a dia", "Who is where, day by day", "Chi è dove, giorno per giorno"],
+  ["clínicos / dia", "clinicians / day", "clinici / giorno"],
+  ["Todas", "All", "Tutte"],
+  ["Profissional", "Professional", "Professionista"],
+  ["Dias", "Days", "Giorni"],
+  ["Clínicos CCM em Luanda / dia", "CCM clinicians in Luanda / day", "Clinici CCM a Luanda / giorno"],
+  ["Equipa em Luanda (plano)", "Team in Luanda (plan)", "Squadra a Luanda (piano)"],
+  ["Coordenação & management", "Coordination & management", "Coordinamento & management"],
+  ["Equipas CCM em Luanda", "CCM teams in Luanda", "Squadre CCM a Luanda"],
+  ["CHDCP no CCM – Milão", "CHDCP at CCM – Milan", "CHDCP al CCM – Milano"],
+  ["Missões nomeadas sem linha no plano", "Named missions without a plan line", "Missioni nominate senza riga nel piano"],
+  ["Partida", "Departure", "Partenza"],
+  ["Regresso", "Return", "Rientro"],
+  ["Duração", "Duration", "Durata"],
+  ["Mês de imputação", "Budget month", "Mese di imputazione"],
+  ["Facturação", "Billing", "Fatturazione"],
+  ["Ponto focal", "Focal point", "Punto focale"],
+  ["Fora de Luanda", "Outside Luanda", "Fuori Luanda"],
+  ["Chegada a Milão", "Arrival in Milan", "Arrivo a Milano"],
+  ["Partida de Milão", "Departure from Milan", "Partenza da Milano"],
+  ["Feriados no período", "Holidays in the period", "Festivi nel periodo"],
+  ["Clínicos CCM em Luanda ao mesmo tempo", "CCM clinicians in Luanda at the same time", "Clinici CCM a Luanda nello stesso momento"],
+  ["Carta convite", "Invitation letter", "Lettera d'invito"],
+  ["Passaporte", "Passport", "Passaporto"],
+  ["Plano anual", "Annual plan", "Piano annuale"],
+  ["Actividades na Agenda", "Activities in the Agenda", "Attività in Agenda"],
+  ["Outras missões da pessoa", "Other missions of the person", "Altre missioni della persona"],
+  ["Dias no Masterplan", "Days in the Masterplan", "Giorni nel Masterplan"],
+  ["Ver no mês", "See in month", "Vedi nel mese"],
+  ["Ver na Agenda", "See in Agenda", "Vedi in Agenda"],
+  ["Sem alertas nesta semana.", "No alerts this week.", "Nessun alert questa settimana."],
+  ["Sem alertas neste mês.", "No alerts this month.", "Nessun alert questo mese."],
+  ["Sem missões neste mês.", "No missions this month.", "Nessuna missione questo mese."],
+  ["Sem missões neste ano.", "No missions this year.", "Nessuna missione quest'anno."],
+  ["Nenhuma chegada ou partida nesta semana.", "No arrivals or departures this week.", "Nessun arrivo o partenza questa settimana."],
+  ["Ninguém do CCM em Luanda nesta semana.", "Nobody from CCM in Luanda this week.", "Nessuno del CCM a Luanda questa settimana."],
+  ["Nenhum observer CHDCP em Milão.", "No CHDCP observer in Milan.", "Nessun observer CHDCP a Milano."],
+  ["Milão (CCM)", "Milan (CCM)", "Milano (CCM)"],
+  ["Ainda sem nomes no Masterplan para esta semana.", "No names in the Masterplan for this week yet.", "Ancora nessun nome nel Masterplan per questa settimana."],
+  ["Envisioned / sem status", "Envisioned / no status", "Envisioned / senza stato"],
+  ["Feriado", "Holiday", "Festivo"],
+  ["Nota", "Note", "Nota"],
+  ["↻ Reler agora", "↻ Reload now", "↻ Rileggi ora"],
+  ["CCM ⇄ CHDCP · semana, mês, ano", "CCM ⇄ CHDCP · week, month, year", "CCM ⇄ CHDCP · settimana, mese, anno"],
+  ["A carregar o plano de missões…", "Loading the mission plan…", "Caricamento del piano missioni…"],
+  ["Sem acesso às missões.", "No access to missions.", "Nessun accesso alle missioni."],
+  ["pessoas", "people", "persone"],
+  ["observers", "observers", "observer"],
+  ["▸ CCM em Luanda", "▸ CCM in Luanda", "▸ CCM a Luanda"],
+  [/^(\d+) missões terminadas por fechar$/, '$1 completed missions to close', '$1 missioni concluse da chiudere'],
+  [/^(\d+) equipas na mesma semana$/, '$1 teams in the same week', '$1 squadre nella stessa settimana'],
+  [/^Sobrecarga: (\d+) clínicos CCM em Luanda$/, 'Overload: $1 CCM clinicians in Luanda', 'Sovraccarico: $1 clinici CCM a Luanda'],
+  [/^\/ (\d+) por confirmar$/, '/ $1 to confirm', '/ $1 da confermare'],
   /* v0.9 navegação */
   [/^✓ Presenças registadas: (\d+) \((\d+) presentes\)$/, '✓ Attendance recorded: $1 ($2 present)', '✓ Presenze registrate: $1 ($2 presenti)'],
   ['Presenças ainda não registadas.', 'Attendance not recorded yet.', 'Presenze non ancora registrate.'],
@@ -1710,6 +1955,8 @@ function homeTiles() {
   });
   if (S.user && S.user.linked && S.user.trainee !== false) t.push({ k: 'MY', ic: '🎓', t: 'Meu percurso', d: 'Os meus resultados' });
   if (staff()) t.push({ k: 'AREA', ic: '📊', t: 'Resultados da área', d: 'Formandos e competências' });
+  t.push({ k: 'CAL', ic: '🗓️', t: 'O meu calendário', d: 'Agenda no Google, Outlook ou iPhone' });
+  if (msCanSee()) t.push({ k: 'MISS', ic: '✈️', t: 'Missões', d: 'CCM ⇄ CHDCP · semana, mês, ano' });
   return t;
 }
 
@@ -1802,7 +2049,7 @@ function renderHome() {
     return '<button class="tile" data-k="' + t.k + '"><span class="ic">' + t.ic + '</span><b>' + esc(t.t) + '</b><small>' + esc(t.d) + '</small></button>';
   }).join('') + '</div></div><div class="htoday"><div class="sec hsec">As minhas actividades de hoje · ' + esc(fmtDate(today, true)) + '</div>' +
     (mine.length ? mine.map(function (a) { return hrow(a, today); }).join('') : '<div class="noact">Sem actividades suas hoje.</div>') + '</div></div>';
-  h += '<div class="foot">CHDCP Conecta · v0.9.7' + (pushOn() ? ' · <button class="link" id="pushOff" style="margin:0">🔔 Desactivar notificações</button>' : '') + '</div></div>';
+  h += '<div class="foot">CHDCP Conecta · v0.9.10' + (pushOn() ? ' · <button class="link" id="pushOff" style="margin:0">🔔 Desactivar notificações</button>' : '') + '</div></div>';
   $('app').innerHTML = h;
   $('app').classList.remove('weekwide');
   $('app').classList.add('homewide');
@@ -1818,6 +2065,8 @@ function renderHome() {
       if (k === 'AGENDA') goAgenda();
       else if (k === 'MY') laOpen('person', {});
       else if (k === 'AREA') laOpen('area', {});
+      else if (k === 'MISS') { NAV = []; go(screenMissions); }
+      else if (k === 'CAL') { NAV = []; go(screenCalFeed); }
       else { NAV = []; go(function () { screenPick(k); }); }
     };
   });
@@ -1948,7 +2197,9 @@ function actionsHtml(a, d) {
       return '<button class="abtn" data-k="' + k + '"' + (future ? ' disabled' : '') + '><span class="ic">' + L[0] + '</span><span><b>' + L[1] + '</b><small>' + info + '</small></span><span class="go">›</span></button>';
     }).join('') + '</div>';
   }
+  if (d && d.meet && !a.hidden && a.date >= addDays(ALL ? ALL.today : todayYmd(), -1)) h = '<div class="acts" style="margin-bottom:9px"><button class="abtn" data-k="MEET" style="border-color:var(--info);background:var(--info-soft)"><span class="ic">🎥</span><span><b>Entrar na sessão online</b><small>' + esc(d.meet.replace(/^https?:\/\//, '').split('/')[0]) + '</small></span><span class="go">›</span></button></div>' + h;
   /* resultados: formador / ponto focal (Learning & Assessment controla as permissões) */
+  if (!a.hidden) h += '<div class="acts" style="margin-top:9px"><button class="abtn sec2" data-k="CALADD"><span class="ic">📅</span><span><b>Adicionar ao calendário</b><small>Google, Outlook, iPhone (cópia: não se actualiza)</small></span><span class="go">›</span></button></div>';
   if (staff() && a.area && a.area !== 'ALL') {
     h += '<div class="acts" style="margin-top:9px"><button class="abtn sec2" data-k="AREA"><span class="ic">📊</span><span><b>Resultados da área ' + esc(a.area) + '</b><small>Formandos, competências, evolução</small></span><span class="go">›</span></button></div>';
   }
@@ -1957,7 +2208,7 @@ function actionsHtml(a, d) {
 
 function bindDetail(a) {
   Array.prototype.forEach.call(document.querySelectorAll('#pg .abtn'), function (b) {
-    b.onclick = function () { if (b.dataset.k === 'AREA') laOpen('area', { area: a.area }); else runAction(b.dataset.k, a); };
+    b.onclick = function () { if (b.dataset.k === 'AREA') laOpen('area', { area: a.area }); else if (b.dataset.k === 'CALADD') go(function () { screenCalAdd(a); }); else if (b.dataset.k === 'MEET') { var dd = ST[a.id] || cxGet('det|' + a.id); if (dd && dd.meet) openExt(dd.meet); } else runAction(b.dataset.k, a); };
   });
   Array.prototype.forEach.call(document.querySelectorAll('#pg .prof'), function (b) { b.onclick = function () { laOpen('person', { personId: b.dataset.pid }); }; });
 }
@@ -2321,6 +2572,437 @@ document.addEventListener('keydown', function (e) {
     var a = findAct($('pg').dataset.act); if (a) { e.preventDefault(); pnGo(a, e.key === 'ArrowLeft' ? -1 : 1); }
   }
 });
+
+
+/* ============================================================
+   v0.9.8 · MISSÕES (CCM ⇄ CHDCP) — só para quem tem «Missioni [Y/N]» = Y
+   Semana (resumo + quem está onde) · Mês (Gantt diário) · Ano (Gantt semanal plano × nomeados)
+   ============================================================ */
+var MSK = 'ap_ms_v1';
+var MSD = null;
+var MSV = { view: 'WEEK', anchor: '', year: 0, dir: 'ALL', team: '' };
+var MS_TC = { OR: '#e5484d', NUR: '#2f7bd9', CARD: '#ee6b2f', IMG: '#5b3fb0', MGT: '#2b2f33', OBS: '#e7a000', PHA: '#14892e', X: '#18a77a' };
+var MS_TN = { OR: 'OR team', NUR: 'Nursing', CARD: 'Cardiologia', IMG: 'Imaging', MGT: 'MGT / Apoio', OBS: 'CHDCP @ CCM', PHA: 'Farmácia', X: 'Transversal' };
+var MS_ORDER = ['OR', 'NUR', 'CARD', 'IMG', 'X', 'MGT'];
+var MS_DN = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'];
+var MS_MES = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+
+function msCanSee() { return !!(ALL && ALL.user && ALL.user.ms); }
+function msTodayY() { return (MSD && MSD.today) || (ALL && ALL.today) || todayYmd(); }
+function msMon(s) { var d = ymd(s), k = (d.getDay() + 6) % 7; return addDays(s, -k); }
+function msIsoWeek(s) { var d = ymd(s); d.setDate(d.getDate() + 3 - (d.getDay() + 6) % 7); var w1 = new Date(d.getFullYear(), 0, 4); return 1 + Math.round(((d - w1) / 86400000 - 3 + (w1.getDay() + 6) % 7) / 7); }
+function msF(s) { return s ? s.slice(8, 10) + '/' + s.slice(5, 7) : ''; }
+function msDiff(a, b) { return Math.round((ymd(b) - ymd(a)) / 86400000); }
+function msShort(n) { var p = String(n || '').trim().split(/\s+/); if (p.length < 2) return p[0] || ''; var q = p.length > 2 && /^(de|da|dos|das|do)$/i.test(p[p.length - 2]); return p[0] + ' ' + (q ? p[p.length - 2] + ' ' : '') + p[p.length - 1]; }
+function msStCls(st) { return /^planned/i.test(st) ? 'PL' : /^reported/i.test(st) ? 'RE' : /^outlin/i.test(st) ? 'OU' : /^envision/i.test(st) ? 'EN' : 'NO'; }
+function msStLbl(st) { return st || 'Sem status'; }
+function msOn(m, d) { return m.a <= d && m.b >= d; }
+/* missões contíguas da mesma pessoa e direcção numa só linha (ex. tradutores semana a semana) */
+function msMerged(list) {
+  var by = {}, out = [];
+  list.slice().sort(function (x, y) { return x.a.localeCompare(y.a); }).forEach(function (m) {
+    var k = m.tbd ? m.id : norm(m.name) + '|' + m.dir, p = by[k];
+    if (p && m.a <= addDays(p.b, 1)) { if (m.b > p.b) p.b = m.b; p.days = msDiff(p.a, p.b) + 1; p.ids.push(m.id); if (msStCls(m.st) === 'EN' || msStCls(m.st) === 'NO') p.st = m.st; }
+    else { p = {}; for (var x in m) p[x] = m[x]; p.ids = [m.id]; by[k] = p; out.push(p); }
+  });
+  return out;
+}
+function msFind(id) { return MSD ? MSD.missions.filter(function (m) { return m.id === id; })[0] : null; }
+function msAlertsFor(ids) { return MSD ? MSD.alerts.filter(function (a) { return a.ms.some(function (x) { return ids.indexOf(x) >= 0; }); }) : []; }
+function msAlertsIn(from, to) {
+  return MSD.alerts.filter(function (a) {
+    if (a.from && a.to) return a.from <= to && a.to >= from;
+    return a.ms.some(function (id) { var m = msFind(id); return m && m.a <= to && m.b >= from; });
+  });
+}
+
+/* ---- dados: memória do telefone primeiro, servidor depois ---- */
+function msCacheGet() { try { var c = JSON.parse(localStorage.getItem(MSK)); return c && S.user && c.u === S.user.id ? c : null; } catch (e) { return null; } }
+function msCacheSet(s) { try { localStorage.setItem(MSK, JSON.stringify({ u: S.user.id, t: Date.now(), s: s })); } catch (e) {} }
+function msLoad(force, done) {
+  var c = msCacheGet();
+  if (c && !force) { MSD = c.s; done(); if (Date.now() - c.t < 20 * 60000) return; }
+  else if (!MSD) loadingPage('Missões', 'A carregar o plano de missões…');
+  call('apiMissions', S.token, { refresh: !!force }).then(function (s) { MSD = s; msCacheSet(s); done(); }).catch(function (e) {
+    if (MSD) { toast(isNet(e.message) ? 'Sem ligação: dados guardados no telefone.' : e.message); return; }
+    errorPage('Missões', '', e.message, function () { msLoad(true, done); });
+  });
+}
+
+function screenMissions() {
+  msLoad(false, function () {
+    if (!MSV.anchor) MSV.anchor = msTodayY();
+    if (!MSV.year) MSV.year = Number(MSV.anchor.slice(0, 4));
+    msRender();
+  });
+}
+function msRender() {
+  if (!MSD) return;
+  var v = MSV.view, h = bhead('Missões', 'CCM ⇄ CHDCP · actualizado ' + tsTxt(MSD.at)) + '<div class="body msbody">';
+  h += '<div class="msseg">' + [['WEEK', 'Semana'], ['MONTH', 'Mês'], ['YEAR', 'Ano · Gantt'], ['ALERTS', 'Alertas']].map(function (x) {
+    var n = x[0] === 'ALERTS' ? MSD.alerts.filter(function (a) { return a.lv !== 'B'; }).length : 0;
+    return '<button class="' + (v === x[0] ? 'on' : '') + '" data-v="' + x[0] + '">' + esc(x[1]) + (n ? ' <b>' + n + '</b>' : '') + '</button>';
+  }).join('') + '</div>';
+  if (v === 'WEEK') h += msWeekHtml();
+  else if (v === 'MONTH') h += msMonthHtml();
+  else if (v === 'YEAR') h += msYearHtml();
+  else h += msAlertsHtml(MSD.alerts, true);
+  h += '<div class="msfoot">Fonte: Operations › Masterplan Missioni (só leitura) · plano anual: CHDCP Mission Planning' + (S.user && S.user.role === 'ADMIN' ? ' · <button class="link" id="msRf">↻ Reler agora</button>' : '') + '</div></div>';
+  page(h, true);
+  $('pg').classList.add('mspage');
+  Array.prototype.forEach.call(document.querySelectorAll('.msseg button'), function (b) { b.onclick = function () { MSV.view = b.dataset.v; msRender(); window.scrollTo(0, 0); }; });
+  Array.prototype.forEach.call(document.querySelectorAll('[data-nav]'), function (b) { b.onclick = function () { msNav(Number(b.dataset.nav)); }; });
+  Array.prototype.forEach.call(document.querySelectorAll('[data-mid]'), function (b) { b.onclick = function () { var m = msFind(b.dataset.mid); if (m) go(function () { msDetail(m, b.dataset.ids ? b.dataset.ids.split(',') : [m.id]); }); }; });
+  Array.prototype.forEach.call(document.querySelectorAll('[data-cell]'), function (b) { b.onclick = function () { var p = b.dataset.cell.split('|'); go(function () { msCellPage(p[0], p[1]); }); }; });
+  Array.prototype.forEach.call(document.querySelectorAll('[data-av]'), function (b) { b.onclick = function () { MSV.view = 'ALERTS'; msRender(); window.scrollTo(0, 0); }; });
+  Array.prototype.forEach.call(document.querySelectorAll('[data-flt]'), function (b) { b.onclick = function () { var p = b.dataset.flt.split(':'); MSV[p[0]] = p[1]; msRender(); }; });
+  if ($('msRf')) $('msRf').onclick = function () { msLoad(true, msRender); };
+}
+function msNav(dir) {
+  if (MSV.view === 'WEEK') MSV.anchor = addDays(msMon(MSV.anchor), 7 * dir);
+  else if (MSV.view === 'MONTH') { var d = ymd(MSV.anchor); d = new Date(d.getFullYear(), d.getMonth() + dir, 1); MSV.anchor = d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-01'; }
+  else if (MSV.view === 'YEAR') MSV.year += dir;
+  msRender();
+}
+function msNavBar(label) { return '<div class="msnav"><button data-nav="-1" aria-label="Anterior">‹</button><b>' + esc(label) + '</b><button data-nav="1" aria-label="Seguinte">›</button></div>'; }
+function msFilters() {
+  var dirs = [['ALL', 'Todos'], ['LUA', 'CCM em Luanda'], ['MIL', 'CHDCP em Milão']];
+  return '<div class="msflt">' + dirs.map(function (x) { return '<button class="' + (MSV.dir === x[0] ? 'on' : '') + '" data-flt="dir:' + x[0] + '">' + esc(x[1]) + '</button>'; }).join('') +
+    '<span class="sp"></span>' + [''].concat(MS_ORDER).map(function (t) { return '<button class="tm' + (MSV.team === t ? ' on' : '') + '" data-flt="team:' + t + '"' + (t ? ' style="--c:' + MS_TC[t] + '"' : '') + '>' + esc(t || 'Todas') + '</button>'; }).join('') + '</div>';
+}
+function msPass(m) { return (MSV.dir === 'ALL' || m.dir === MSV.dir) && (!MSV.team || m.team === MSV.team || (m.dir === 'MIL' && m.ct === MSV.team)); }
+
+/* ---------- SEMANA ---------- */
+function msWeekHtml() {
+  var mon = msMon(MSV.anchor), sun = addDays(mon, 6), K = [], i;
+  for (i = 0; i < 7; i++) K.push(addDays(mon, i));
+  var W = MSD.missions.filter(function (m) { return m.a <= sun && m.b >= mon; });
+  var lu = msMerged(W.filter(function (m) { return m.dir === 'LUA'; })), mi = msMerged(W.filter(function (m) { return m.dir === 'MIL'; }));
+  var cnt = K.map(function (d) { return W.filter(function (m) { return m.dir === 'LUA' && m.clin && msOn(m, d); }).length; });
+  var peak = Math.max.apply(null, cnt), pk = cnt.indexOf(peak), lim = MSD.cfg.MAX_CLINICAL_PER_DAY;
+  var teams = lu.map(function (m) { return m.team; }).filter(function (x, i, l) { return l.indexOf(x) === i; }).sort(function (x, y) { return MS_ORDER.indexOf(x) - MS_ORDER.indexOf(y); });
+  var envN = W.filter(function (m) { var c = msStCls(m.st); return c === 'EN' || c === 'NO'; }).length;
+  var d0 = ymd(mon), d6 = ymd(sun);
+  var h = msNavBar('Sem. ' + msIsoWeek(mon) + ' · ' + d0.getDate() + (d0.getMonth() !== d6.getMonth() ? ' ' + MESES[d0.getMonth()] : '') + ' – ' + d6.getDate() + ' ' + MESES[d6.getMonth()] + ' ' + d6.getFullYear());
+  h += '<div class="msgrid"><div class="mscol">';
+  h += '<div class="mskpi"><div class="k"><div class="l">CCM em Luanda</div><div class="v">' + lu.length + '<small>pessoas</small></div><div class="t">' + teams.map(function (t) { return '<i style="background:' + MS_TC[t] + '">' + esc(t) + '</i>'; }).join('') + '</div></div>';
+  h += '<div class="k"><div class="l">CHDCP em Milão</div><div class="v">' + mi.length + '<small>observers</small></div><div class="t">' + mi.map(function (m) { return m.area; }).filter(function (x, i, l) { return l.indexOf(x) === i; }).map(function (a) { return '<i style="background:' + MS_TC.OBS + '">' + esc(a) + '</i>'; }).join('') + '</div></div>';
+  h += '<div class="k"><div class="l">Pico clínicos / dia</div><div class="v"' + (peak >= lim ? ' style="color:var(--bad)"' : '') + '>' + peak + '<small>' + (peak ? MS_DN[pk].toLowerCase() + ' ' + ymd(K[pk]).getDate() + ' · limite ' + lim : 'limite ' + lim) + '</small></div></div>';
+  h += '<div class="k"><div class="l">Status da semana</div><div class="v"' + (envN ? ' style="color:var(--warn)"' : '') + '>' + envN + '<small>/ ' + W.length + ' por confirmar</small></div></div></div>';
+  var al = msAlertsIn(mon, sun).filter(function (a) { return a.lv !== 'B'; });
+  h += '<div class="sec mssec"><span>Atenção</span><button class="link" data-av="1">ver todos (' + MSD.alerts.length + ')</button></div>';
+  h += al.length ? msAlertsHtml(msGroupAlerts(al), false) : '<div class="noact">Sem alertas nesta semana.</div>';
+  var ev = {};
+  lu.forEach(function (m) { if (m.a >= mon && m.a <= sun) (ev[m.a] = ev[m.a] || { i: [], o: [] }).i.push(m); if (m.b >= mon && m.b <= sun) (ev[m.b] = ev[m.b] || { i: [], o: [] }).o.push(m); });
+  var ek = Object.keys(ev).sort();
+  h += '<div class="sec mssec">Chegadas e partidas · Luanda</div>';
+  h += ek.length ? '<div class="msmv">' + ek.map(function (k) {
+    var e = ev[k], d = ymd(k), p = function (m) { return '<button class="msp" data-mid="' + m.id + '" data-ids="' + m.ids.join(',') + '" style="--c:' + MS_TC[m.team] + '">' + esc(msShort(m.name)) + '</button>'; };
+    return '<div class="d"><div class="dd"><span>' + MS_DN[(d.getDay() + 6) % 7] + '</span><b>' + d.getDate() + '</b></div><div class="x">' +
+      (e.i.length ? '<span class="in">↓ chegam ' + e.i.length + '</span>' + e.i.map(p).join('') : '') +
+      (e.o.length ? '<span class="out">↑ partem ' + e.o.length + '</span>' + e.o.map(p).join('') : '') + '</div></div>';
+  }).join('') + '</div>' : '<div class="noact">Nenhuma chegada ou partida nesta semana.</div>';
+  h += '</div><div class="mscol">';
+  /* quem está onde, dia a dia */
+  h += '<div class="sec mssec">Quem está onde, dia a dia</div><div class="mswk"><div class="msgh"><div>Luanda</div>' + K.map(function (k, i) { return '<div class="' + (MSD.holidays[k] ? 'h' : '') + '" title="' + esc(MSD.holidays[k] || '') + '">' + MS_DN[i] + '<b>' + ymd(k).getDate() + '</b></div>'; }).join('') + '</div>';
+  h += '<div class="mscnt"><div>clínicos / dia</div>' + cnt.map(function (c) { return '<div class="' + (c >= lim ? 'hi' : '') + '">' + c + '</div>'; }).join('') + '</div>';
+  var rows = function (L, t) {
+    if (!L.length) return '';
+    var s = '<div class="mstm" style="background:' + MS_TC[t] + '"><span>' + esc(MS_TN[t] || t) + '</span><span>' + L.length + '</span></div>';
+    L.sort(function (x, y) { return x.a.localeCompare(y.a); }).forEach(function (m) {
+      var c = msStCls(m.st), env = c === 'EN' || c === 'NO';
+      s += '<button class="msgr" data-mid="' + m.id + '" data-ids="' + m.ids.join(',') + '"><div class="nm">' + esc(msShort(m.name)) + '<small>' + esc(m.area + ' · ' + m.days + ' d') + '</small></div>' + K.map(function (k, i) {
+        var on = msOn(m, k), cl = ['c', i > 4 ? 'we' : '', MSD.holidays[k] ? 'h' : '', on ? 'on' : '', on && env ? 'env' : '', on && m.a === k ? 's' : '', on && m.b === k ? 'e' : ''].join(' ');
+        return '<div class="' + cl + '" style="--c:' + MS_TC[t] + '">' + (on && m.a === k ? '<span class="ar">↓</span>' : '') + '</div>';
+      }).join('') + '</button>';
+    });
+    return s;
+  };
+  MS_ORDER.forEach(function (t) { h += rows(lu.filter(function (m) { return m.team === t; }), t); });
+  if (!lu.length) h += '<div class="noact">Ninguém do CCM em Luanda nesta semana.</div>';
+  h += '<div class="msgh mil"><div>Milão (CCM)</div>' + K.map(function () { return '<div></div>'; }).join('') + '</div>';
+  h += mi.length ? rows(mi, 'OBS') : '<div class="noact">Nenhum observer CHDCP em Milão.</div>';
+  h += '<div class="mslg">▨ Envisioned / sem status · ▮ Outlined / Planned · ↓ chegada · rosa = feriado</div></div>';
+  h += '</div></div>';
+  return h;
+}
+
+/* ---------- MÊS ---------- */
+function msMonthHtml() {
+  var d0 = ymd(MSV.anchor), y = d0.getFullYear(), mo = d0.getMonth(), nd = new Date(y, mo + 1, 0).getDate(), K = [], i;
+  for (i = 1; i <= nd; i++) K.push(y + '-' + ('0' + (mo + 1)).slice(-2) + '-' + ('0' + i).slice(-2));
+  var first = K[0], last = K[nd - 1];
+  var M = MSD.missions.filter(function (m) { return m.a <= last && m.b >= first && msPass(m); });
+  var lim = MSD.cfg.MAX_CLINICAL_PER_DAY, today = msTodayY();
+  var cnt = K.map(function (d) { return MSD.missions.filter(function (m) { return m.dir === 'LUA' && m.clin && msOn(m, d); }).length; });
+  var h = msNavBar(MS_MES[mo] + ' ' + y) + msFilters();
+  h += '<div class="msmgrid"><div class="gscroll"><table class="msg" style="min-width:' + (190 + nd * 24) + 'px"><colgroup><col class="lab"><col style="width:34px">' + K.map(function () { return '<col>'; }).join('') + '</colgroup>';
+  h += '<tr><th class="lab">Profissional</th><th>Dias</th>' + K.map(function (k) { var d = ymd(k), w = d.getDay() === 0 || d.getDay() === 6; return '<th class="' + (MSD.holidays[k] ? 'mshol' : w ? 'we' : '') + (k === today ? ' td' : '') + '" title="' + esc(MSD.holidays[k] || '') + '">' + 'DSTQQSS'[d.getDay()] + '<br>' + d.getDate() + '</th>'; }).join('') + '</tr>';
+  h += '<tr class="mscntr"><td class="lab">Clínicos CCM em Luanda / dia</td><td></td>' + cnt.map(function (c) { return '<td class="' + (c >= lim ? 'hi' : '') + '">' + (c || '') + '</td>'; }).join('') + '</tr>';
+  var lane = function (dir, title, teams) {
+    var L = msMerged(M.filter(function (m) { return m.dir === dir; }));
+    if (!L.length) return '';
+    var s = '<tr class="grp"><td class="lab" colspan="' + (nd + 2) + '">▸ ' + esc(title) + ' · ' + L.length + '</td></tr>';
+    teams.forEach(function (t) {
+      var T = L.filter(function (m) { return dir === 'MIL' || m.team === t; });
+      if (!T.length) return;
+      s += '<tr class="sub"><td class="lab" colspan="' + (nd + 2) + '"><i style="background:' + MS_TC[t] + '"></i>' + esc(MS_TN[t] || t) + '</td></tr>';
+      T.sort(function (x, y) { return x.a.localeCompare(y.a); }).forEach(function (m) {
+        var c = msStCls(m.st), cls = c === 'EN' || c === 'NO' ? 'env' : c === 'OU' ? 'out' : '';
+        var al = msAlertsFor(m.ids), red = al.some(function (a) { return a.lv === 'R'; }), yel = al.some(function (a) { return a.lv === 'Y'; });
+        s += '<tr class="row" data-mid="' + m.id + '" data-ids="' + m.ids.join(',') + '"><td class="lab"><b>' + esc(msShort(m.name)) + '</b> <span>· ' + esc(m.role) + '</span>' + (red ? '<i class="ic r">!</i>' : yel ? '<i class="ic">!</i>' : '') + '</td><td class="dn">' + m.days + '</td>' +
+          K.map(function (k) {
+            var on = msOn(m, k), d = ymd(k), w = d.getDay() === 0 || d.getDay() === 6, cl = MSD.holidays[k] ? 'mshol' : w ? 'we' : '';
+            if (!on) return '<td class="' + cl + '"></td>';
+            var st = m.a === k || k === first, en = m.b === k;
+            return '<td class="' + cl + ' b ' + cls + (st ? ' s' : '') + (en ? ' e' : '') + '" style="--c:' + MS_TC[dir === 'MIL' ? 'OBS' : m.team] + '"><span></span>' + (m.a === k ? '<em>' + d.getDate() + '</em>' : '') + '</td>';
+          }).join('') + '</tr>';
+      });
+    });
+    return s;
+  };
+  h += lane('LUA', 'CCM em Luanda', MS_ORDER) + lane('MIL', 'CHDCP em Milão (observership @ CCM)', ['OBS']);
+  if (!M.length) h += '<tr><td class="lab" colspan="' + (nd + 2) + '" style="padding:14px!important;color:var(--muted)">Sem missões neste mês.</td></tr>';
+  h += '</table></div>';
+  var al = msAlertsIn(first, last);
+  h += '<div class="msside"><div class="sec mssec"><span>Alertas · ' + esc(MS_MES[mo]) + '</span><button class="link" data-av="1">todos</button></div>' + (al.length ? msAlertsHtml(msGroupAlerts(al), false) : '<div class="noact">Sem alertas neste mês.</div>') + '</div></div>';
+  h += msLegend();
+  return h;
+}
+function msLegend() {
+  return '<div class="mslegend">' + MS_ORDER.concat(['OBS']).map(function (t) { return '<span><i style="background:' + MS_TC[t] + '"></i>' + esc(MS_TN[t]) + '</span>'; }).join('') +
+    '<span><i class="lenv"></i>Envisioned / sem status</span><span><i class="lout"></i>Outlined</span><span><i style="background:#555"></i>Planned / Reported</span><span><i style="background:#fbe1df"></i>Feriado</span></div>';
+}
+
+/* ---------- ANO · Gantt semanal ---------- */
+function msYearHtml() {
+  var y = MSV.year, weeks = (MSD.plan.weeks || []).filter(function (w) { return w.y === y; });
+  if (!weeks.length) { /* ano sem PLAN_WEEKS: semanas ISO a partir da 1.ª segunda-feira */
+    var m0 = msMon(y + '-01-04'), w;
+    for (w = 0; w < 53; w++) { var mon = addDays(m0, 7 * w); if (Number(addDays(mon, 3).slice(0, 4)) !== y) break; weeks.push({ y: y, w: w + 1, mon: mon, hol: '', team: '' }); }
+  }
+  var rowsP = (MSD.plan.rows || []).filter(function (r) { return r.y === y; });
+  var inWk = function (m, mon) { return m.a <= addDays(mon, 6) && m.b >= mon; };
+  var match = function (m, r) { if (m.dir !== r.dir || !r.areas.length || r.areas.indexOf(m.area) < 0) return false; if (r.rp) { try { return new RegExp(r.rp, 'i').test(m.role); } catch (e) { return false; } } return true; };
+  var M = MSD.missions.filter(function (m) { return m.a.slice(0, 4) <= String(y) && m.b.slice(0, 4) >= String(y) && msPass(m); });
+  var h = msNavBar(String(y)) + msFilters();
+  if (rowsP.length) {
+    var tot = 0, cov = 0;
+    rowsP.forEach(function (r) { if (!r.areas.length) return; Object.keys(r.cells).forEach(function (mon) { tot++; if (M.filter(function (m) { return match(m, r) && inWk(m, mon); }).length >= r.cells[mon]) cov++; }); });
+    h += '<div class="mscov"><b>Cobertura do plano ' + y + '</b>' + cov + ' de ' + tot + ' semanas planeadas já com nomes no Masterplan' + (tot ? ' (' + Math.round(100 * cov / tot) + '%)' : '') + '</div>';
+  }
+  var mcols = [], cur = -1;
+  weeks.forEach(function (w) { var mo = ymd(addDays(w.mon, 3)).getMonth(); if (mo !== cur) { mcols.push([mo, 1]); cur = mo; } else mcols[mcols.length - 1][1]++; });
+  var qcols = [0, 0, 0, 0]; weeks.forEach(function (w) { qcols[Math.floor(ymd(addDays(w.mon, 3)).getMonth() / 3)]++; });
+  var nowMon = msMon(msTodayY());
+  h += '<div class="gscroll"><table class="msg msy" style="min-width:' + (220 + weeks.length * 24 + 44) + 'px"><colgroup><col class="lab">' + weeks.map(function () { return '<col>'; }).join('') + '<col style="width:44px"></colgroup>';
+  h += '<tr class="qh"><th class="lab"></th>' + qcols.map(function (n, i) { return n ? '<th colspan="' + n + '">Q' + (i + 1) + '</th>' : ''; }).join('') + '<th></th></tr>';
+  h += '<tr class="mh"><th class="lab"></th>' + mcols.map(function (c) { return '<th colspan="' + c[1] + '">' + MESES[c[0]] + '</th>'; }).join('') + '<th>Sem.</th></tr>';
+  h += '<tr><th class="lab">Semana</th>' + weeks.map(function (w) { return '<th class="' + (w.hol ? 'mshol' : '') + (w.mon === nowMon ? ' td' : '') + '">' + w.w + '</th>'; }).join('') + '<th></th></tr>';
+  if (weeks.some(function (w) { return w.team || w.hol; })) h += '<tr class="teamrow"><td class="lab">Equipa em Luanda (plano)</td>' + weeks.map(function (w) { return w.team ? '<td style="background:' + (MS_TC[w.team] || (w.team === 'C+I' ? MS_TC.IMG : '#888')) + '"><span class="vt">' + esc(w.team) + '</span></td>' : '<td class="' + (w.hol ? 'mshol' : '') + '"><span class="vh">' + esc(w.hol) + '</span></td>'; }).join('') + '<td></td></tr>';
+  var grpRow = function (t) { return '<tr class="grp"><td class="lab" colspan="' + (weeks.length + 2) + '">▸ ' + esc(t) + '</td></tr>'; };
+  var cellsFor = function (key, planOf, namedOf, color) {
+    var n = 0;
+    var s = weeks.map(function (w) {
+      var p = planOf(w.mon), nm = namedOf(w.mon);
+      if (p || nm) n++;
+      if (!p && !nm) return '<td class="' + (w.hol ? 'mshol' : '') + '"></td>';
+      var full = p && nm >= p, off = !p && nm, txt = p ? (nm ? nm + '/' + p : p) : nm;
+      var st = full ? 'background:' + color + ';color:#fff' : off ? 'background:#fff;color:' + color + ';box-shadow:inset 0 0 0 2px ' + color + ';border-radius:4px' : nm ? 'background:color-mix(in srgb,' + color + ' 55%,#fff);color:#fff' : 'background:color-mix(in srgb,' + color + ' 18%,#fff);color:var(--ink);box-shadow:inset 0 0 0 1.5px ' + color;
+      return '<td class="c" data-cell="' + esc(key) + '|' + w.mon + '" style="' + st + '" title="' + (off ? 'Nomeado fora do plano' : '') + '">' + txt + (off ? '*' : '') + '</td>';
+    }).join('');
+    return s + '<td class="tot">' + n + '</td>';
+  };
+  if (rowsP.length) {
+    var secs = [['MGT', 'Coordenação & management'], ['LUA', 'Equipas CCM em Luanda'], ['MIL', 'CHDCP no CCM – Milão']];
+    secs.forEach(function (sc) {
+      var R = rowsP.filter(function (r) { return r.sec === sc[0] && (!MSV.team || r.team === MSV.team || (sc[0] === 'MIL' && MSV.team)) && (MSV.dir === 'ALL' || r.dir === MSV.dir); });
+      if (!R.length) return;
+      h += grpRow(sc[1]);
+      R.forEach(function (r) {
+        var col = MS_TC[r.team] || '#888';
+        h += '<tr><td class="lab" title="' + esc(r.act || '') + '"><i class="dot" style="background:' + col + '"></i>' + esc(r.line) + '</td>' +
+          cellsFor('P:' + r.y + ':' + r.id, function (mon) { return r.cells[mon] || 0; }, function (mon) { return r.areas.length ? M.filter(function (m) { return match(m, r) && inWk(m, mon); }).length : 0; }, col) + '</tr>';
+      });
+    });
+    /* nomeados sem linha no plano */
+    var extra = M.filter(function (m) { return !rowsP.some(function (r) { return match(m, r); }); });
+    var areas = extra.map(function (m) { return m.dir + '|' + m.team + '|' + m.area; }).filter(function (x, i, l) { return l.indexOf(x) === i; }).sort();
+    if (areas.length) {
+      h += grpRow('Missões nomeadas sem linha no plano');
+      areas.forEach(function (k) { var p = k.split('|'), col = MS_TC[p[1]] || '#888'; h += '<tr><td class="lab"><i class="dot" style="background:' + col + '"></i>' + esc((p[0] === 'MIL' ? 'Milão · ' : '') + p[2]) + '</td>' + cellsFor('A:' + k, function () { return 0; }, function (mon) { return extra.filter(function (m) { return m.dir + '|' + m.team + '|' + m.area === k && inWk(m, mon); }).length; }, col) + '</tr>'; });
+    }
+  } else {
+    /* ano sem plano: linhas por equipa / área a partir das missões */
+    [['LUA', 'CCM em Luanda'], ['MIL', 'CHDCP em Milão (observership @ CCM)']].forEach(function (sc) {
+      var L = M.filter(function (m) { return m.dir === sc[0]; });
+      if (!L.length) return;
+      h += grpRow(sc[1]);
+      (sc[0] === 'MIL' ? ['OBS'] : MS_ORDER).forEach(function (t) {
+        var A = L.filter(function (m) { return sc[0] === 'MIL' || m.team === t; }).map(function (m) { return m.area; }).filter(function (x, i, l) { return l.indexOf(x) === i; }).sort();
+        A.forEach(function (a) { var k = sc[0] + '|' + t + '|' + a, col = MS_TC[t]; h += '<tr><td class="lab"><i class="dot" style="background:' + col + '"></i>' + esc(a) + '</td>' + cellsFor('A:' + k, function () { return 0; }, function (mon) { return L.filter(function (m) { return m.area === a && (sc[0] === 'MIL' || m.team === t) && inWk(m, mon); }).length; }, col) + '</tr>'; });
+      });
+    });
+    if (!M.length) h += '<tr><td class="lab" colspan="' + (weeks.length + 2) + '" style="padding:14px!important;color:var(--muted)">Sem missões neste ano.</td></tr>';
+  }
+  h += '</table></div>';
+  h += '<div class="mslegend"><span><i style="background:#f6dcdc;box-shadow:inset 0 0 0 1.5px #e5484d"></i>Planeada, sem nomes (n.º = pessoas previstas)</span><span><i style="background:#f19a9c"></i>Nomeados em parte (ex. 1/2)</span><span><i style="background:#e5484d"></i>Completa</span><span><i style="background:#fff;box-shadow:inset 0 0 0 2px #e5484d"></i>Nomeado fora do plano *</span><span><i style="background:#fbe1df"></i>Feriado / encerramento</span><span>Toque numa célula → nomes, funções, datas</span></div>';
+  return h;
+}
+/* célula do Gantt anual → lista de pessoas */
+function msCellPage(key, mon) {
+  var p = key.split(':'), sun = addDays(mon, 6), list = [], need = 0, title = '';
+  var inWk = function (m) { return m.a <= sun && m.b >= mon; };
+  if (p[0] === 'P') {
+    var r = (MSD.plan.rows || []).filter(function (x) { return String(x.y) === p[1] && String(x.id) === p.slice(2).join(':'); })[0];
+    if (r) {
+      title = r.line; need = r.cells[mon] || 0;
+      list = MSD.missions.filter(function (m) { if (m.dir !== r.dir || r.areas.indexOf(m.area) < 0) return false; if (r.rp) { try { if (!new RegExp(r.rp, 'i').test(m.role)) return false; } catch (e) { return false; } } return inWk(m); });
+    }
+  } else {
+    var q = p.slice(1).join(':').split('|'); title = q[2];
+    list = MSD.missions.filter(function (m) { return m.dir === q[0] && m.area === q[2] && (q[0] === 'MIL' || m.team === q[1]) && inWk(m); });
+  }
+  var h = bhead(title || 'Semana', 'Semana ' + msIsoWeek(mon) + ' · ' + msF(mon) + ' – ' + msF(sun)) + '<div class="body">';
+  if (need) h += '<div class="mscov"><b>' + list.length + ' / ' + need + ' nomeados</b>' + (r && r.act ? esc(r.act) : '') + '</div>';
+  h += list.length ? msMerged(list).map(msCard).join('') : '<div class="empty">Ainda sem nomes no Masterplan para esta semana.</div>';
+  page(h + '</div>');
+  Array.prototype.forEach.call(document.querySelectorAll('#pg [data-mid]'), function (b) { b.onclick = function () { var m = msFind(b.dataset.mid); if (m) go(function () { msDetail(m, b.dataset.ids.split(',')); }); }; });
+}
+function msCard(m) {
+  var c = msStCls(m.st);
+  return '<button class="mscard" data-mid="' + m.id + '" data-ids="' + m.ids.join(',') + '" style="--c:' + MS_TC[m.team] + '"><div class="n">' + esc(m.name) + '<span class="mschip ' + c + '">' + esc(msStLbl(m.st)) + '</span></div><div class="r">' + esc(m.role + ' · ' + m.area) + '</div><div class="r"><b>' + msF(m.a) + ' → ' + msF(m.b) + ' · ' + m.days + ' dias</b>' + (m.fp ? ' · FP ' + esc(m.fp) : '') + '</div></button>';
+}
+
+/* ---------- ALERTAS ---------- */
+var MS_RULE = { OVERLOAD: 'Sobrecarga', TEAMS: 'Várias equipas', HOLIDAY: 'Feriado', OVERLAP: 'Sobreposição', STATUS: 'Status atrasado', DOCS: 'Documentos observer', NAME: 'Nome em falta', PLAN_GAP: 'Plano sem nomes', OFF_PLAN: 'Fora do plano', CLOSE: 'Fecho pendente', INCOHERENT: 'Incoerência', AGENDA: 'Agenda vs missão', SPLIT: 'Entre dois meses', DATA: 'Qualidade dos dados' };
+/* alertas da mesma regra por pessoa (ex. 14 × "Status atrasado") → um cartão com contagem */
+function msGroupAlerts(list) {
+  var by = {}, out = [];
+  list.forEach(function (a) {
+    if (a.rule === 'STATUS' || a.rule === 'DOCS' || a.rule === 'NAME' || a.rule === 'HOLIDAY' || a.rule === 'AGENDA' || a.rule === 'OFF_PLAN' || a.rule === 'PLAN_GAP') {
+      var g = by[a.rule];
+      if (!g) { g = by[a.rule] = { lv: a.lv, rule: a.rule, t: a.t, n: 0, items: [], ms: [] }; out.push(g); }
+      g.n++; g.items.push(a); g.ms = g.ms.concat(a.ms); if (a.lv === 'R') g.lv = 'R';
+    } else out.push({ lv: a.lv, rule: a.rule, t: a.t, n: 1, items: [a], ms: a.ms });
+  });
+  return out;
+}
+function msAlertsHtml(list, full) {
+  var L = list[0] && list[0].items ? list : msGroupAlerts(list);
+  var ord = { R: 0, Y: 1, B: 2 };
+  L.sort(function (x, y) { return ord[x.lv] - ord[y.lv]; });
+  if (!L.length) return '<div class="noact">Sem alertas. ✓</div>';
+  return L.map(function (g) {
+    var one = g.items.length === 1, a = g.items[0];
+    var title = one ? a.t : (MS_RULE[g.rule] || g.t) + ' · ' + g.n;
+    var det = one ? a.d : full ? '' : g.items.slice(0, full ? 50 : 3).map(function (x) { return x.d.split(' · ')[0]; }).join(' · ') + (g.items.length > (full ? 50 : 3) ? ' · +' + (g.items.length - (full ? 50 : 3)) : '');
+    var list2 = full && !one ? '<div class="msal-l">' + g.items.map(function (x) { return '<button class="link" data-mid="' + (x.ms[0] || '') + '">' + esc(x.d) + '</button>'; }).join('') + '</div>' : '';
+    var tap = one && a.ms.length === 1 ? ' data-mid="' + a.ms[0] + '"' : '';
+    return '<div class="msal ' + g.lv + '"' + tap + '><div class="n">' + (g.n > 1 ? g.n : (g.lv === 'R' ? '!' : g.lv === 'Y' ? '!' : 'i')) + '</div><div class="x"><b>' + esc(title) + '</b>' + esc(det) + list2 + '</div></div>';
+  }).join('');
+}
+
+/* ---------- DETALHE ---------- */
+function msDetail(m0, ids) {
+  var parts = (ids || [m0.id]).map(msFind).filter(Boolean).sort(function (x, y) { return x.a.localeCompare(y.a); });
+  var m = parts[0], a = m.a, b = parts.reduce(function (x, p) { return p.b > x ? p.b : x; }, m.b), today = msTodayY();
+  var dn = function (s) { return MS_DN[(ymd(s).getDay() + 6) % 7].toLowerCase(); };
+  var c = msStCls(m.st), steps = ['EN', 'OU', 'PL', 'RE'], si = steps.indexOf(c);
+  var h = bhead(m.name, m.role + ' · ' + m.area) + '<div class="body"><div class="msdet">';
+  h += '<div class="hd"><span class="tg" style="background:' + MS_TC[m.team] + '">' + esc(m.area + ' · ' + (m.dir === 'MIL' ? 'CHDCP → Milão' : 'CCM → Luanda')) + '</span><span class="mschip ' + c + '">' + esc(msStLbl(m.st)) + '</span></div>';
+  h += '<div class="kv"><div>' + (m.dir === 'MIL' ? 'Chegada a Milão' : 'Partida') + '<b>' + msF(a) + ' (' + dn(a) + ')</b></div><div>' + (m.dir === 'MIL' ? 'Partida de Milão' : 'Regresso') + '<b>' + msF(b) + ' (' + dn(b) + ')</b></div>' +
+    '<div>Duração<b>' + (msDiff(a, b) + 1) + ' dias</b></div><div>Mês de imputação<b>' + esc(m.imp || '') + '</b></div>' +
+    (m.bill ? '<div>Facturação<b>' + esc(m.bill) + '</b></div>' : '') + (m.fp ? '<div>Ponto focal<b>' + esc(m.fp) + '</b></div>' : '') +
+    (m.sa ? '<div>Fora de Luanda<b>' + msF(m.sa) + ' → ' + msF(m.sb) + '</b></div>' : '') + (m.ex ? '<div>Execution<b>' + esc(m.ex) + '</b></div>' : '') + '</div>';
+  h += '<div class="steps">' + ['Envisioned', 'Outlined', 'Planned', 'Reported'].map(function (s, i) { return '<div class="' + (i <= si ? 'on' : '') + '"><i></i>' + s + '</div>'; }).join('') + '</div>';
+  if (parts.length > 1) h += '<div class="sec mssec">' + parts.length + ' missões seguidas</div>' + parts.map(function (p) { return '<div class="msrow">' + msF(p.a) + ' → ' + msF(p.b) + ' · ' + esc(msStLbl(p.st)) + ' · linha ' + p.row + '</div>'; }).join('');
+  /* controlos */
+  var chk = [], alerts = msAlertsFor(parts.map(function (p) { return p.id; }));
+  var has = function (r) { return alerts.filter(function (x) { return x.rule === r; }); };
+  var hol = []; for (var d = a; d <= b; d = addDays(d, 1)) if (MSD.holidays[d] && ymd(d).getDay() % 6) hol.push(msF(d) + ' ' + MSD.holidays[d]);
+  chk.push(['Feriados no período', hol.length ? ['ko', hol.join(', ')] : ['ok', '✓ nenhum']]);
+  if (a >= today) chk.push(['Status a ' + msDiff(today, a) + ' dias da partida', /^(planned|reported)/i.test(m.st) ? ['ok', '✓ ' + m.st] : ['wa', '⚠ ' + msStLbl(m.st)]]);
+  if (m.dir === 'LUA' && m.clin) {
+    var peak = 0; for (d = a; d <= b; d = addDays(d, 1)) { var n = MSD.missions.filter(function (x) { return x.dir === 'LUA' && x.clin && msOn(x, d); }).length; if (n > peak) peak = n; }
+    chk.push(['Clínicos CCM em Luanda ao mesmo tempo', peak >= MSD.cfg.MAX_CLINICAL_PER_DAY ? ['ko', 'até ' + peak] : ['ok', 'até ' + peak]]);
+  }
+  if (m.dir === 'MIL' && m.hasDocs) { chk.push(['Carta convite', m.invRec ? ['ok', '✓ recebida'] : ['ko', 'não recebida' + (m.invDue ? ' · prazo ' + msF(m.invDue) : '')]]); chk.push(['Passaporte', m.pasAv ? ['ok', '✓ disponível'] : ['ko', 'não disponível']]); }
+  if (has('OFF_PLAN').length) chk.push(['Plano anual', ['wa', '⚠ fora do plano']]);
+  if (has('AGENDA').length) chk.push(['Actividades na Agenda', ['wa', '⚠ nenhuma no período']]);
+  if (has('OVERLAP').length) chk.push(['Outras missões da pessoa', ['ko', 'sobreposição']]);
+  if (m.dMp !== null && m.dMp !== undefined && m.dMp !== m.days) chk.push(['Dias no Masterplan', ['wa', m.dMp + ' (calculado ' + m.days + ')']]);
+  h += '<div class="chk">' + chk.map(function (x) { return '<div><span>' + esc(x[0]) + '</span><span class="' + x[1][0] + '">' + esc(x[1][1]) + '</span></div>'; }).join('') + '</div>';
+  if (m.note) h += '<div class="sec mssec">Nota</div><div class="msrow">' + esc(m.note) + '</div>';
+  var other = alerts.filter(function (x) { return ['STATUS', 'HOLIDAY', 'DOCS', 'OFF_PLAN', 'AGENDA', 'OVERLAP'].indexOf(x.rule) < 0; });
+  if (other.length) h += '<div class="sec mssec">Alertas</div>' + msAlertsHtml(other, false);
+  h += '<div class="msbtns"><button class="msbtn" id="msGantt">Ver no mês</button>' + (m.dir === 'LUA' ? '<button class="msbtn" id="msAg">Ver na Agenda</button>' : '') + '</div>';
+  h += '<div class="msfoot">Masterplan Missioni · linha ' + parts.map(function (p) { return p.row; }).join(', ') + (m.pid ? ' · ' + esc(m.pid) : '') + '</div></div></div>';
+  page(h);
+  $('msGantt').onclick = function () { MSV.view = 'MONTH'; MSV.anchor = a.slice(0, 8) + '01'; back(); };
+  if ($('msAg')) $('msAg').onclick = function () { NAV = []; $('layer').innerHTML = ''; S.anchor = a; S.view = 'WEEK'; goAgenda(); };
+}
+
+
+/* ============================================================
+   v0.9.9 · CALENDÁRIO PESSOAL
+   ============================================================ */
+function copyTxt(t) {
+  try { if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(t).then(function () { toast('Link copiado.'); }, function () { prompt('Copie o link:', t); }); return; } } catch (e) {}
+  try { prompt('Copie o link:', t); } catch (e) {}
+}
+function isAndroid() { return /android/i.test(navigator.userAgent); }
+function screenCalAdd(a) {
+  var head = bhead('Adicionar ao calendário', a.title);
+  page(head + '<div class="body"><div class="empty">A preparar…</div></div>');
+  call('apiCalEvent', S.token, a.id).then(function (r) {
+    var o = function (id, ic, t, d) { return '<button class="calopt" id="' + id + '"><span class="ic">' + ic + '</span><span><b>' + esc(t) + '</b><small>' + esc(d) + '</small></span><span class="go">›</span></button>'; };
+    var h = head + '<div class="body">' + ctxBox(a) +
+      '<div class="calnote">É uma <b>cópia</b>: se a actividade mudar de hora ou for cancelada, o seu calendário não se actualiza. Para ter sempre a agenda certa use <b>«O meu calendário»</b> no menu inicial.</div>' +
+      (isIos() ? o('cI', '', 'iPhone / iPad (Calendário)', 'Abre o ficheiro .ics → «Adicionar»') : '') +
+      o('cG', '🟦', 'Google Calendar', 'Abre o Google Calendar com o evento preenchido') +
+      o('cO', '🟧', 'Outlook (Microsoft 365 / trabalho)', 'outlook.office.com') +
+      o('cL', '🟧', 'Outlook.com (pessoal)', 'outlook.live.com') +
+      (!isIos() ? o('cI', '📄', 'Ficheiro .ics (Apple, Outlook de computador…)', 'Descarrega e abre no calendário') : '') + '</div>';
+    page(h);
+    $('cG').onclick = function () { openExt(r.google); };
+    $('cO').onclick = function () { openExt(r.outlook365); };
+    $('cL').onclick = function () { openExt(r.outlookLive); };
+    if ($('cI')) $('cI').onclick = function () { if (r.ics) openExt(r.ics); else toast('Indisponível.'); };
+  }).catch(function (e) { errorPage('Adicionar ao calendário', a.title, e.message, function () { screenCalAdd(a); }); });
+}
+function screenCalFeed(opts) {
+  var head = bhead('O meu calendário', 'A sua agenda no telemóvel ou no computador');
+  if (!opts) page(head + '<div class="body"><div class="empty">A carregar…</div></div>');
+  call('apiCalFeed', S.token, opts || {}).then(function (r) {
+    var h = head + '<div class="body">';
+    h += '<div class="card"><div class="calstate"><span>Link pessoal da agenda</span>' + (r.on ? '<span class="on">● activo</span>' : '<span class="off">○ desactivado</span>') + '</div>';
+    if (!r.on) {
+      h += '<p class="small muted" style="margin-top:8px">Cria um calendário que se actualiza sozinho com as <b>suas</b> actividades (formador, participante, convidado). Funciona com iPhone, Google Calendar e Outlook. Só leitura: as alterações fazem-se no plano.</p>' +
+        '<div class="calbtns"><button class="pri" id="fOn">Activar o meu calendário</button></div>';
+    } else {
+      h += '<div class="calbtns">' + (isIos() || !isAndroid() ? '<button class="pri" id="fSub">Subscrever no iPhone / Mac</button>' : '') + '<button class="pri" id="fG">Adicionar ao Google</button><button id="fCp">Copiar link</button></div>' +
+        '<div class="calurl">' + esc(r.url) + '</div>' +
+        '<div class="calnote">Este link é <b>pessoal</b>: quem o tiver vê a sua agenda. Não o partilhe. Se o enviou por engano, toque em «Gerar novo link».</div>' +
+        '<div class="small muted">' + (r.last ? 'Última leitura pelo calendário: ' + esc(tsTxt(r.last)) : 'Ainda não lido por nenhum calendário.') + '</div>' +
+        '<div class="calbtns"><button id="fNew">Gerar novo link</button><button class="bad" id="fOff">Desactivar</button></div>';
+    }
+    h += '</div>';
+    h += '<div class="sec">Como subscrever</div><div class="calhow">' +
+      '<details' + (isIos() ? ' open' : '') + '><summary>iPhone / iPad</summary><ol><li>Toque em «Subscrever no iPhone / Mac» e confirme «Subscrever».</li><li>Em alternativa: Definições › Calendário › Contas › Adicionar conta › Outra › Adicionar calendário subscrito → cole o link.</li><li>Actualização: Definições › Calendário › Contas › Obter dados (de hora a hora ou mais).</li></ol></details>' +
+      '<details' + (isAndroid() ? ' open' : '') + '><summary>Android</summary><ol><li><b>Google Calendar</b>: a subscrição só se faz no computador → calendar.google.com › Outros calendários › «+» › A partir do URL → cole o link. Depois aparece também no telemóvel (active-o nas definições da app).</li><li>Ou instale a app <b>ICSx⁵</b> (Play Store), toque em «+» e cole o link: actualiza de 15 em 15 minutos.</li></ol></details>' +
+      '<details><summary>Outlook (Monzino / Microsoft 365, Outlook.com)</summary><ol><li>Outlook na web › Calendário › Adicionar calendário › Subscrever a partir da Web → cole o link.</li><li>Pode demorar algumas horas a actualizar. Se a sua organização bloquear calendários externos, use o iPhone ou o Google.</li></ol></details>' +
+      '<details><summary>Mac (Calendário)</summary><ol><li>Arquivo › Nova assinatura de calendário → cole o link.</li><li>Escolha «iCloud» como local: aparece em todos os seus dispositivos. Actualização: a cada 15 minutos.</li></ol></details>' +
+      '</div><div class="calnote" style="background:var(--info-soft);border-color:#c9dbf5">O calendário mostra as actividades dos últimos 14 dias e dos próximos 60. «[Previsto]» = ainda não confirmada; canceladas aparecem como canceladas durante 14 dias. A informação de referência é sempre a da app.</div></div>';
+    page(h, true);
+    if ($('fOn')) $('fOn').onclick = function () { screenCalFeed({ create: true }); };
+    if ($('fSub')) $('fSub').onclick = function () { openExt(r.webcal); };
+    if ($('fG')) $('fG').onclick = function () { openExt(r.google); };
+    if ($('fCp')) $('fCp').onclick = function () { copyTxt(r.url); };
+    if ($('fNew')) $('fNew').onclick = function () { if (confirm('O link antigo deixa de funcionar. Terá de subscrever outra vez. Continuar?')) screenCalFeed({ renew: true }); };
+    if ($('fOff')) $('fOff').onclick = function () { if (confirm('Desactivar o link? O calendário subscrito deixa de receber actividades.')) screenCalFeed({ revoke: true }); };
+  }).catch(function (e) { errorPage('O meu calendário', '', e.message, function () { screenCalFeed(); }); });
+}
 
 boot();
 </script>
