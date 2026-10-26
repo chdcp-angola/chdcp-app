@@ -498,7 +498,7 @@ table.msy .vh{font-size:8.5px;color:var(--bad);font-weight:700}
 .calhow details{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:7px}.calhow summary{font-weight:700;font-size:14px;cursor:pointer}
 .calhow ol{margin:8px 0 2px 18px;font-size:13px;line-height:1.5}
 .calstate{display:flex;justify-content:space-between;align-items:center;gap:10px}.calstate .on{color:var(--ok);font-weight:800}.calstate .off{color:var(--muted);font-weight:700}
-.calbtns{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.calbtns button{flex:1;min-width:140px;padding:11px;border-radius:11px;font-weight:700;font-size:13.5px;background:var(--bg);border:1px solid var(--line)}.calbtns button.pri{background:var(--brand);color:#fff;border-color:var(--brand)}.calbtns button.bad{color:var(--bad)}
+.calbtns{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.calbtns button{flex:1;min-width:140px;padding:11px;border-radius:11px;font-weight:700;font-size:13.5px;background:var(--bg);border:1px solid var(--line)}.calbtns button.pri,.calbtns a.pri{background:var(--brand);color:#fff;border-color:var(--brand)}.calbtns a.calbtnlink{flex:1;min-width:140px;padding:11px;border-radius:11px;font-weight:700;font-size:13.5px;text-align:center;text-decoration:none;border:1px solid var(--brand);display:block}.calbtns button.bad{color:var(--bad)}
 </style>
 </head>
 <body>
@@ -2049,7 +2049,7 @@ function renderHome() {
     return '<button class="tile" data-k="' + t.k + '"><span class="ic">' + t.ic + '</span><b>' + esc(t.t) + '</b><small>' + esc(t.d) + '</small></button>';
   }).join('') + '</div></div><div class="htoday"><div class="sec hsec">As minhas actividades de hoje · ' + esc(fmtDate(today, true)) + '</div>' +
     (mine.length ? mine.map(function (a) { return hrow(a, today); }).join('') : '<div class="noact">Sem actividades suas hoje.</div>') + '</div></div>';
-  h += '<div class="foot">CHDCP Conecta · v0.9.10' + (pushOn() ? ' · <button class="link" id="pushOff" style="margin:0">🔔 Desactivar notificações</button>' : '') + '</div></div>';
+  h += '<div class="foot">CHDCP Conecta · v0.9.10b' + (pushOn() ? ' · <button class="link" id="pushOff" style="margin:0">🔔 Desactivar notificações</button>' : '') + '</div></div>';
   $('app').innerHTML = h;
   $('app').classList.remove('weekwide');
   $('app').classList.add('homewide');
@@ -2981,7 +2981,7 @@ function screenCalFeed(opts) {
       h += '<p class="small muted" style="margin-top:8px">Cria um calendário que se actualiza sozinho com as <b>suas</b> actividades (formador, participante, convidado). Funciona com iPhone, Google Calendar e Outlook. Só leitura: as alterações fazem-se no plano.</p>' +
         '<div class="calbtns"><button class="pri" id="fOn">Activar o meu calendário</button></div>';
     } else {
-      h += '<div class="calbtns">' + (isIos() || !isAndroid() ? '<button class="pri" id="fSub">Subscrever no iPhone / Mac</button>' : '') + '<button class="pri" id="fG">Adicionar ao Google</button><button id="fCp">Copiar link</button></div>' +
+      h += '<div class="calbtns">' + (isIos() || !isAndroid() ? '<a class="pri calbtnlink" id="fSub" href="' + esc(r.webcal) + '">Subscrever no iPhone / Mac</a>' : '') + '<button class="pri" id="fG">Adicionar ao Google</button><button id="fCp">Copiar link</button></div>' +
         '<div class="calurl">' + esc(r.url) + '</div>' +
         '<div class="calnote">Este link é <b>pessoal</b>: quem o tiver vê a sua agenda. Não o partilhe. Se o enviou por engano, toque em «Gerar novo link».</div>' +
         '<div class="small muted">' + (r.last ? 'Última leitura pelo calendário: ' + esc(tsTxt(r.last)) : 'Ainda não lido por nenhum calendário.') + '</div>' +
@@ -2989,14 +2989,15 @@ function screenCalFeed(opts) {
     }
     h += '</div>';
     h += '<div class="sec">Como subscrever</div><div class="calhow">' +
-      '<details' + (isIos() ? ' open' : '') + '><summary>iPhone / iPad</summary><ol><li>Toque em «Subscrever no iPhone / Mac» e confirme «Subscrever».</li><li>Em alternativa: Definições › Calendário › Contas › Adicionar conta › Outra › Adicionar calendário subscrito → cole o link.</li><li>Actualização: Definições › Calendário › Contas › Obter dados (de hora a hora ou mais).</li></ol></details>' +
+      '<details' + (isIos() ? ' open' : '') + '><summary>iPhone / iPad</summary><ol><li>Toque em «Subscrever no iPhone / Mac» e confirme «Subscrever».</li><li>Se não abrir nada: toque em «Copiar link», depois <b>Definições › Apps › Calendário › Contas de calendário › Adicionar conta › Outra › Adicionar calendário subscrito</b> → cole o link → Seguinte → Guardar.</li><li>Actualização: Definições › Calendário › Contas › Obter dados (de hora a hora ou mais).</li></ol></details>' +
       '<details' + (isAndroid() ? ' open' : '') + '><summary>Android</summary><ol><li><b>Google Calendar</b>: a subscrição só se faz no computador → calendar.google.com › Outros calendários › «+» › A partir do URL → cole o link. Depois aparece também no telemóvel (active-o nas definições da app).</li><li>Ou instale a app <b>ICSx⁵</b> (Play Store), toque em «+» e cole o link: actualiza de 15 em 15 minutos.</li></ol></details>' +
       '<details><summary>Outlook (Monzino / Microsoft 365, Outlook.com)</summary><ol><li>Outlook na web › Calendário › Adicionar calendário › Subscrever a partir da Web → cole o link.</li><li>Pode demorar algumas horas a actualizar. Se a sua organização bloquear calendários externos, use o iPhone ou o Google.</li></ol></details>' +
       '<details><summary>Mac (Calendário)</summary><ol><li>Arquivo › Nova assinatura de calendário → cole o link.</li><li>Escolha «iCloud» como local: aparece em todos os seus dispositivos. Actualização: a cada 15 minutos.</li></ol></details>' +
       '</div><div class="calnote" style="background:var(--info-soft);border-color:#c9dbf5">O calendário mostra as actividades dos últimos 14 dias e dos próximos 60. «[Previsto]» = ainda não confirmada; canceladas aparecem como canceladas durante 14 dias. A informação de referência é sempre a da app.</div></div>';
     page(h, true);
     if ($('fOn')) $('fOn').onclick = function () { screenCalFeed({ create: true }); };
-    if ($('fSub')) $('fSub').onclick = function () { openExt(r.webcal); };
+    /* v0.9.10b: link vero (webcal://): sul telefono apre direttamente Calendário › Subscrever; window.open non funziona nell'app installata */
+    if ($('fSub')) $('fSub').onclick = function (e) { try { e.preventDefault(); window.location.href = r.webcal; } catch (x) {} };
     if ($('fG')) $('fG').onclick = function () { openExt(r.google); };
     if ($('fCp')) $('fCp').onclick = function () { copyTxt(r.url); };
     if ($('fNew')) $('fNew').onclick = function () { if (confirm('O link antigo deixa de funcionar. Terá de subscrever outra vez. Continuar?')) screenCalFeed({ renew: true }); };
