@@ -2049,7 +2049,7 @@ function renderHome() {
     return '<button class="tile" data-k="' + t.k + '"><span class="ic">' + t.ic + '</span><b>' + esc(t.t) + '</b><small>' + esc(t.d) + '</small></button>';
   }).join('') + '</div></div><div class="htoday"><div class="sec hsec">As minhas actividades de hoje · ' + esc(fmtDate(today, true)) + '</div>' +
     (mine.length ? mine.map(function (a) { return hrow(a, today); }).join('') : '<div class="noact">Sem actividades suas hoje.</div>') + '</div></div>';
-  h += '<div class="foot">CHDCP Conecta · v0.9.12b' + (pushOn() ? ' · <button class="link" id="pushOff" style="margin:0">🔔 Desactivar notificações</button>' : '') + '</div></div>';
+  h += '<div class="foot">CHDCP Conecta · v0.9.12c' + (pushOn() ? ' · <button class="link" id="pushOff" style="margin:0">🔔 Desactivar notificações</button>' : '') + '</div></div>';
   $('app').innerHTML = h;
   $('app').classList.remove('weekwide');
   $('app').classList.add('homewide');
