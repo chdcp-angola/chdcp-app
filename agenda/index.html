@@ -2049,7 +2049,7 @@ function renderHome() {
     return '<button class="tile" data-k="' + t.k + '"><span class="ic">' + t.ic + '</span><b>' + esc(t.t) + '</b><small>' + esc(t.d) + '</small></button>';
   }).join('') + '</div></div><div class="htoday"><div class="sec hsec">As minhas actividades de hoje · ' + esc(fmtDate(today, true)) + '</div>' +
     (mine.length ? mine.map(function (a) { return hrow(a, today); }).join('') : '<div class="noact">Sem actividades suas hoje.</div>') + '</div></div>';
-  h += '<div class="foot">CHDCP Conecta · v0.9.12c' + (pushOn() ? ' · <button class="link" id="pushOff" style="margin:0">🔔 Desactivar notificações</button>' : '') + '</div></div>';
+  h += '<div class="foot">CHDCP Conecta · v0.9.12d' + (pushOn() ? ' · <button class="link" id="pushOff" style="margin:0">🔔 Desactivar notificações</button>' : '') + '</div></div>';
   $('app').innerHTML = h;
   $('app').classList.remove('weekwide');
   $('app').classList.add('homewide');
@@ -2987,20 +2987,28 @@ function screenCalFeed(opts) {
         '<div class="calbtns"><button class="pri" id="fOn">Activar o meu calendário</button></div>' +
         '<p class="small muted" style="margin-top:8px">Não precisa de conta Google. Só leitura: as alterações fazem-se no plano.</p>';
     } else {
+      var win = !ios && !and && /windows/i.test(navigator.userAgent);
       var main = and ? '<a class="pri calbtnlink" id="fG" href="' + esc(r.google) + '">📲 Adicionar ao meu calendário</a>'
+        : win ? '<button class="pri" id="fO365">📅 Adicionar ao Outlook / Teams</button>'
         : '<a class="pri calbtnlink" id="fSub" href="' + esc(r.webcal) + '">📲 Adicionar ao meu calendário</a>';
       h += '<div class="calstate"><span>O meu calendário</span><span class="on">● activo</span></div>' +
         '<div class="calbtns">' + main + '</div>' +
         '<ol class="small" style="margin:10px 0 0 18px;padding:0">' + (and
-          ? '<li>Toque no botão: abre o Google Calendar.</li><li>Toque em «Adicionar».</li>'
-          : '<li>Toque no botão.</li><li>Toque em «Subscrever» e depois em «Adicionar».</li>') + '<li>Pronto: aparece em poucos minutos.</li></ol>' +
+          ? '<li>Toque no botão: abre o Google Calendar.</li><li>Toque em «Adicionar».</li><li>Pronto: aparece em poucos minutos.</li>'
+          : win ? '<li>Clique no botão: o link fica copiado e abre o Outlook.</li><li>Escolha «Subscrever a partir da Web», cole o link (Ctrl+V), dê o nome «CHDCP Conecta» e clique em «Importar».</li>'
+          : '<li>Toque no botão.</li><li>Toque em «Subscrever» e depois em «Adicionar».</li><li>Pronto: aparece em poucos minutos.</li>') + '</ol>' +
+        /* v0.9.12d: Outlook / Teams (Microsoft 365) e Outlook.com, da qualsiasi dispositivo */
+        '<div class="sec" style="margin-top:12px">Usa o Outlook ou o Teams?</div>' +
+        '<div class="calbtns">' + (win ? '' : '<button id="fO365">Outlook / Teams (trabalho)</button>') + '<button id="fOlive">Outlook.com (pessoal)</button>' + (and ? '' : '<button id="fG2">Google</button>') + '</div>' +
+        '<div class="small muted" id="fOhow" style="display:none;margin-top:6px">Link copiado ✓ No Outlook: <b>Adicionar calendário › Subscrever a partir da Web</b> › cole o link › nome «CHDCP Conecta» › <b>Importar</b>. ' +
+        'O Outlook actualiza de ~3 em ~3 horas (por vezes mais). No <b>Teams</b> o separador Calendário mostra só o calendário principal: o «CHDCP Conecta» vê-se no Outlook (web, aplicação ou telemóvel). Se a sua organização bloquear calendários da Web, use o iPhone/Android.</div>' +
         (r.bridge ? '' : '<div class="calnote">Modo de reserva' + (r.err ? ' (' + esc(r.err) + ')' : '') + ': no iPhone pode não funcionar. Avise o administrador.</div>') +
         '<details class="calhow" style="margin-top:12px"><summary>Não funcionou? Outras formas</summary><ol>' +
         '<li><button id="fCp">Copiar link</button></li>' +
         '<li><b>iPhone</b>: app Calendário › Calendários › Adicionar calendário › Adicionar calendário subscrito › cole o link › Conta: iCloud.</li>' +
         '<li><b>Mac</b>: Calendário › Arquivo › Nova assinatura de calendário › cole o link › Local: iCloud.</li>' +
         '<li><b>Android</b>: toque no botão com o Google Calendar instalado, ou use a app ICSx⁵ e cole o link.</li>' +
-        '<li><b>Outlook</b>: Calendário › Adicionar calendário › Subscrever a partir da Web › cole o link.</li></ol></details>' +
+        '<li><b>Outlook / Teams</b> (web ou aplicação nova): Calendário › Adicionar calendário › Subscrever a partir da Web › cole o link › Importar. No Outlook clássico do Windows: Calendário › Adicionar calendário › Da Internet.</li></ol></details>' +
         '<div class="calnote">O link é <b>pessoal</b>: quem o tiver vê as suas actividades. Se o enviou por engano: «Novo link».</div>' +
         '<div class="calbtns"><button id="fNew">Novo link</button><button class="bad" id="fOff">Desactivar</button></div>';
     }
@@ -3011,6 +3019,10 @@ function screenCalFeed(opts) {
     if ($('fSub')) $('fSub').onclick = function (e) { try { e.preventDefault(); window.location.href = r.webcal; } catch (x) {} };
     if ($('fG')) $('fG').onclick = function (e) { try { e.preventDefault(); } catch (x) {} openExt(r.google); };
     if ($('fCp')) $('fCp').onclick = function () { copyTxt(r.url); };
+    var outlook = function (u) { copyTxt(r.url); if ($('fOhow')) $('fOhow').style.display = 'block'; setTimeout(function () { openExt(u); }, 600); };
+    if ($('fO365')) $('fO365').onclick = function () { outlook(r.o365); };
+    if ($('fOlive')) $('fOlive').onclick = function () { outlook(r.olive); };
+    if ($('fG2')) $('fG2').onclick = function () { openExt(r.google); };
     if ($('fNew')) $('fNew').onclick = function () { if (confirm('O link antigo deixa de funcionar e terá de adicionar o calendário outra vez. Continuar?')) screenCalFeed({ renew: true }); };
     if ($('fOff')) $('fOff').onclick = function () { if (confirm('Desactivar? O calendário no telemóvel fica vazio.')) screenCalFeed({ revoke: true }); };
   }).catch(function (e) { errorPage('O meu calendário', '', e.message, function () { screenCalFeed(); }); });
