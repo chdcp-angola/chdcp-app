@@ -2049,7 +2049,7 @@ function renderHome() {
     return '<button class="tile" data-k="' + t.k + '"><span class="ic">' + t.ic + '</span><b>' + esc(t.t) + '</b><small>' + esc(t.d) + '</small></button>';
   }).join('') + '</div></div><div class="htoday"><div class="sec hsec">As minhas actividades de hoje · ' + esc(fmtDate(today, true)) + '</div>' +
     (mine.length ? mine.map(function (a) { return hrow(a, today); }).join('') : '<div class="noact">Sem actividades suas hoje.</div>') + '</div></div>';
-  h += '<div class="foot">CHDCP Conecta · v0.9.11' + (pushOn() ? ' · <button class="link" id="pushOff" style="margin:0">🔔 Desactivar notificações</button>' : '') + '</div></div>';
+  h += '<div class="foot">CHDCP Conecta · v0.9.12b' + (pushOn() ? ' · <button class="link" id="pushOff" style="margin:0">🔔 Desactivar notificações</button>' : '') + '</div></div>';
   $('app').innerHTML = h;
   $('app').classList.remove('weekwide');
   $('app').classList.add('homewide');
@@ -2976,36 +2976,43 @@ function screenCalAdd(a) {
   }).catch(function (e) { errorPage('Adicionar ao calendário', a.title, e.message, function () { screenCalAdd(a); }); });
 }
 function screenCalFeed(opts) {
-  var head = bhead('O meu calendário', 'A sua agenda no telemóvel ou no computador');
-  if (!opts) page(head + '<div class="body"><div class="empty">A carregar…</div></div>');
+  var head = bhead('O meu calendário', 'As suas actividades no calendário do telemóvel');
+  if (!opts || opts.create || opts.renew) page(head + '<div class="body"><div class="empty">' + (opts && (opts.create || opts.renew) ? 'A preparar o seu calendário… (até 30 segundos)' : 'A carregar…') + '</div></div>');
   call('apiCalFeed', S.token, opts || {}).then(function (r) {
-    var h = head + '<div class="body">';
-    h += '<div class="card"><div class="calstate"><span>Link pessoal da agenda</span>' + (r.on ? '<span class="on">● activo</span>' : '<span class="off">○ desactivado</span>') + '</div>';
+    var ios = isIos(), and = isAndroid();
+    var h = head + '<div class="body"><div class="card">';
     if (!r.on) {
-      h += '<p class="small muted" style="margin-top:8px">Cria um calendário que se actualiza sozinho com as <b>suas</b> actividades (formador, participante, convidado). Funciona com iPhone, Google Calendar e Outlook. Só leitura: as alterações fazem-se no plano.</p>' +
-        '<div class="calbtns"><button class="pri" id="fOn">Activar o meu calendário</button></div>';
+      /* v0.9.12b: un solo passo per attivare */
+      h += '<p style="margin:0 0 10px">Veja as <b>suas</b> actividades no calendário do telemóvel, ao lado dos seus compromissos. Actualiza-se sozinho.</p>' +
+        '<div class="calbtns"><button class="pri" id="fOn">Activar o meu calendário</button></div>' +
+        '<p class="small muted" style="margin-top:8px">Não precisa de conta Google. Só leitura: as alterações fazem-se no plano.</p>';
     } else {
-      h += '<div class="calbtns">' + (isIos() || !isAndroid() ? '<a class="pri calbtnlink" id="fSub" href="' + esc(r.webcal) + '">Subscrever no iPhone / Mac</a>' : '') + '<button class="pri" id="fG">Adicionar ao Google</button><button id="fCp">Copiar link</button></div>' +
-        '<div class="calurl">' + esc(r.url) + '</div>' +
-        '<div class="calnote">Este link é <b>pessoal</b>: quem o tiver vê a sua agenda. Não o partilhe. Se o enviou por engano, toque em «Gerar novo link».</div>' +
-        '<div class="small muted">' + (r.last ? 'Última leitura pelo calendário: ' + esc(tsTxt(r.last)) : 'Ainda não lido por nenhum calendário.') + '</div>' +
-        '<div class="calbtns"><button id="fNew">Gerar novo link</button><button class="bad" id="fOff">Desactivar</button></div>';
+      var main = and ? '<a class="pri calbtnlink" id="fG" href="' + esc(r.google) + '">📲 Adicionar ao meu calendário</a>'
+        : '<a class="pri calbtnlink" id="fSub" href="' + esc(r.webcal) + '">📲 Adicionar ao meu calendário</a>';
+      h += '<div class="calstate"><span>O meu calendário</span><span class="on">● activo</span></div>' +
+        '<div class="calbtns">' + main + '</div>' +
+        '<ol class="small" style="margin:10px 0 0 18px;padding:0">' + (and
+          ? '<li>Toque no botão: abre o Google Calendar.</li><li>Toque em «Adicionar».</li>'
+          : '<li>Toque no botão.</li><li>Toque em «Subscrever» e depois em «Adicionar».</li>') + '<li>Pronto: aparece em poucos minutos.</li></ol>' +
+        (r.bridge ? '' : '<div class="calnote">Modo de reserva' + (r.err ? ' (' + esc(r.err) + ')' : '') + ': no iPhone pode não funcionar. Avise o administrador.</div>') +
+        '<details class="calhow" style="margin-top:12px"><summary>Não funcionou? Outras formas</summary><ol>' +
+        '<li><button id="fCp">Copiar link</button></li>' +
+        '<li><b>iPhone</b>: app Calendário › Calendários › Adicionar calendário › Adicionar calendário subscrito › cole o link › Conta: iCloud.</li>' +
+        '<li><b>Mac</b>: Calendário › Arquivo › Nova assinatura de calendário › cole o link › Local: iCloud.</li>' +
+        '<li><b>Android</b>: toque no botão com o Google Calendar instalado, ou use a app ICSx⁵ e cole o link.</li>' +
+        '<li><b>Outlook</b>: Calendário › Adicionar calendário › Subscrever a partir da Web › cole o link.</li></ol></details>' +
+        '<div class="calnote">O link é <b>pessoal</b>: quem o tiver vê as suas actividades. Se o enviou por engano: «Novo link».</div>' +
+        '<div class="calbtns"><button id="fNew">Novo link</button><button class="bad" id="fOff">Desactivar</button></div>';
     }
-    h += '</div>';
-    h += '<div class="sec">Como subscrever</div><div class="calhow">' +
-      '<details' + (isIos() ? ' open' : '') + '><summary>iPhone / iPad</summary><ol><li>Toque em «Subscrever no iPhone / Mac» e confirme «Subscrever».</li><li>Se não abrir nada: toque em «Copiar link», depois <b>Definições › Apps › Calendário › Contas de calendário › Adicionar conta › Outra › Adicionar calendário subscrito</b> → cole o link → Seguinte → Guardar.</li><li>Actualização: Definições › Calendário › Contas › Obter dados (de hora a hora ou mais).</li></ol></details>' +
-      '<details' + (isAndroid() ? ' open' : '') + '><summary>Android</summary><ol><li><b>Google Calendar</b>: a subscrição só se faz no computador → calendar.google.com › Outros calendários › «+» › A partir do URL → cole o link. Depois aparece também no telemóvel (active-o nas definições da app).</li><li>Ou instale a app <b>ICSx⁵</b> (Play Store), toque em «+» e cole o link: actualiza de 15 em 15 minutos.</li></ol></details>' +
-      '<details><summary>Outlook (Monzino / Microsoft 365, Outlook.com)</summary><ol><li>Outlook na web › Calendário › Adicionar calendário › Subscrever a partir da Web → cole o link.</li><li>Pode demorar algumas horas a actualizar. Se a sua organização bloquear calendários externos, use o iPhone ou o Google.</li></ol></details>' +
-      '<details><summary>Mac (Calendário)</summary><ol><li>Arquivo › Nova assinatura de calendário → cole o link.</li><li>Escolha «iCloud» como local: aparece em todos os seus dispositivos. Actualização: a cada 15 minutos.</li></ol></details>' +
-      '</div><div class="calnote" style="background:var(--info-soft);border-color:#c9dbf5">O calendário mostra as actividades dos últimos 14 dias e dos próximos 60. «[Previsto]» = ainda não confirmada; canceladas aparecem como canceladas durante 14 dias. A informação de referência é sempre a da app.</div></div>';
+    h += '</div><div class="calnote" style="background:var(--info-soft);border-color:#c9dbf5">Mostra as actividades dos últimos 14 dias e dos próximos meses. «[Previsto]» = ainda não confirmada. As alterações chegam ao telemóvel em 1–2 horas. A referência é sempre a app.</div></div>';
     page(h, true);
     if ($('fOn')) $('fOn').onclick = function () { screenCalFeed({ create: true }); };
-    /* v0.9.11: link vero (webcal://): sul telefono apre direttamente Calendário › Subscrever; window.open non funziona nell'app installata */
+    /* link vero: sul telefono apre direttamente Calendário › Subscrever (window.open non funziona nell'app installata) */
     if ($('fSub')) $('fSub').onclick = function (e) { try { e.preventDefault(); window.location.href = r.webcal; } catch (x) {} };
-    if ($('fG')) $('fG').onclick = function () { openExt(r.google); };
+    if ($('fG')) $('fG').onclick = function (e) { try { e.preventDefault(); } catch (x) {} openExt(r.google); };
     if ($('fCp')) $('fCp').onclick = function () { copyTxt(r.url); };
-    if ($('fNew')) $('fNew').onclick = function () { if (confirm('O link antigo deixa de funcionar. Terá de subscrever outra vez. Continuar?')) screenCalFeed({ renew: true }); };
-    if ($('fOff')) $('fOff').onclick = function () { if (confirm('Desactivar o link? O calendário subscrito deixa de receber actividades.')) screenCalFeed({ revoke: true }); };
+    if ($('fNew')) $('fNew').onclick = function () { if (confirm('O link antigo deixa de funcionar e terá de adicionar o calendário outra vez. Continuar?')) screenCalFeed({ renew: true }); };
+    if ($('fOff')) $('fOff').onclick = function () { if (confirm('Desactivar? O calendário no telemóvel fica vazio.')) screenCalFeed({ revoke: true }); };
   }).catch(function (e) { errorPage('O meu calendário', '', e.message, function () { screenCalFeed(); }); });
 }
 
