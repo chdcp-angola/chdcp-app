@@ -92,6 +92,9 @@ tr.click{cursor:pointer}tr.click:hover td{background:#f4f8fd}
 .top .out{color:#fff;border:1.5px solid rgba(255,255,255,.55);border-radius:20px;padding:6px 11px;font-weight:800;font-size:11.5px;flex:none}
 .top .tabs{background:#fff;max-width:none;padding:0 max(12px,calc((100% - 1100px)/2));border-bottom:1px solid var(--line)}
 @media (max-width:600px){.top .lang{display:none}.bar1{padding-left:10px;padding-right:10px}}
+.prt{display:none;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:8px;padding:6px 11px;font-weight:700;font-size:12px;cursor:pointer;flex:none}
+@media (hover:hover) and (pointer:fine) and (min-width:900px){.prt{display:inline-block}}
+@media print{@page{size:A4 portrait;margin:10mm}html,body{background:#fff!important}.top{position:static!important;border:0}.band,.tabs,.lang,.out,.prt,#hmw,#rsBk,select,.fl,.filters{display:none!important}.box,.card,.sec,tr{break-inside:avoid}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 </style>
 <title>Resultados</title></head>
 <body>
@@ -264,6 +267,7 @@ if (document.readyState === 'loading') document.addEventListener('DOMContentLoad
     <img class="star" src="star.png" alt=""><div class="ttl" id="ttl"></div>
     <div class="who" id="who"></div>
     <span id="hmw"></span><div class="lang" id="lang"></div>
+    <button class="prt" id="prt" onclick="window.print()">🖨 Imprimir</button>
     <button class="out" id="out"></button>
   </div>
   <div class="tabs" id="tabs"></div>
@@ -383,6 +387,7 @@ function chrome(){document.getElementById('top').style.display='';var u=S.user;
  document.getElementById('lang').innerHTML=['PT','EN','IT'].map(function(l){return'<button class="'+(S.lang===l?'on':'')+'" data-l="'+l+'">'+l+'</button>'}).join('');
  document.querySelectorAll('[data-l]').forEach(function(b){b.onclick=function(){S.lang=b.getAttribute('data-l');save();chrome();go(true)}});
  var out=document.getElementById('out');out.textContent=t('logout');out.onclick=function(){logout()};
+ var pr=document.getElementById('prt');if(pr)pr.textContent='🖨 '+({PT:'Imprimir',EN:'Print',IT:'Stampa'}[S.lang]||'Imprimir');
  var tabs=u.role==='SELF'?[]:(u.role==='SUPER'?['general']:[]).concat(['area','people','sat']);
  document.getElementById('tabs').innerHTML=tabs.map(function(k){return'<button class="'+(S.tab===k?'on':'')+'" data-tab="'+k+'">'+t(k==='area'?'areas':k)+'</button>'}).join('');
  document.querySelectorAll('[data-tab]').forEach(function(b){b.onclick=function(){S.tab=b.getAttribute('data-tab');if(S.tab==='people')S.pid='';rsPush();chrome();go()}})}

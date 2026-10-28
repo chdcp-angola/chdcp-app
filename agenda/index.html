@@ -499,6 +499,18 @@ table.msy .vh{font-size:8.5px;color:var(--bad);font-weight:700}
 .calhow ol{margin:8px 0 2px 18px;font-size:13px;line-height:1.5}
 .calstate{display:flex;justify-content:space-between;align-items:center;gap:10px}.calstate .on{color:var(--ok);font-weight:800}.calstate .off{color:var(--muted);font-weight:700}
 .calbtns{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.calbtns button{flex:1;min-width:140px;padding:11px;border-radius:11px;font-weight:700;font-size:13.5px;background:var(--bg);border:1px solid var(--line)}.calbtns button.pri,.calbtns a.pri{background:var(--brand);color:#fff;border-color:var(--brand)}.calbtns a.calbtnlink{flex:1;min-width:140px;padding:11px;border-radius:11px;font-weight:700;font-size:13.5px;text-align:center;text-decoration:none;border:1px solid var(--brand);display:block}.calbtns button.bad{color:var(--bad)}
+/* v0.9.17 · stampa dei report: pulsante solo su computer (mouse + schermo largo) */
+.prtbar{display:none;justify-content:flex-end;margin:10px 0 0}
+.prtbtn{padding:9px 16px;border-radius:10px;border:1px solid var(--line);background:#fff;font-weight:700;font-size:13.5px;cursor:pointer}
+@media (hover:hover) and (pointer:fine) and (min-width:900px){.prtbar{display:flex}}
+@media print{
+  @page{size:A4 landscape;margin:10mm}
+  html,body{background:#fff!important}
+  .prtbar,.msseg,.msbtns,.back,.hm,#bk,#hm,.link,.msnav button,nav,.tabbar{display:none!important}
+  .top{position:static!important;box-shadow:none!important}
+  .card,.mscard,.msrow,table,tr{break-inside:avoid}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
 </style>
 </head>
 <body>
@@ -2049,7 +2061,7 @@ function renderHome() {
     return '<button class="tile" data-k="' + t.k + '"><span class="ic">' + t.ic + '</span><b>' + esc(t.t) + '</b><small>' + esc(t.d) + '</small></button>';
   }).join('') + '</div></div><div class="htoday"><div class="sec hsec">As minhas actividades de hoje · ' + esc(fmtDate(today, true)) + '</div>' +
     (mine.length ? mine.map(function (a) { return hrow(a, today); }).join('') : '<div class="noact">Sem actividades suas hoje.</div>') + '</div></div>';
-  h += '<div class="foot">CHDCP Conecta · v0.9.15' + (pushOn() ? ' · <button class="link" id="pushOff" style="margin:0">🔔 Desactivar notificações</button>' : '') + '</div></div>';
+  h += '<div class="foot">CHDCP Conecta · v0.9.17' + (pushOn() ? ' · <button class="link" id="pushOff" style="margin:0">🔔 Desactivar notificações</button>' : '') + '</div></div>';
   $('app').innerHTML = h;
   $('app').classList.remove('weekwide');
   $('app').classList.add('homewide');
@@ -2647,6 +2659,8 @@ function msRender() {
   else if (v === 'MONTH') h += msMonthHtml();
   else if (v === 'YEAR') h += msYearHtml();
   else h += msAlertsHtml(MSD.alerts, true);
+  /* v0.9.17: stampa del report (solo computer) */
+  h += '<div class="prtbar"><button class="prtbtn" id="msPrt">🖨️ Imprimir</button></div>';
   h += '<div class="msfoot">Fonte: Operations › Masterplan Missioni (só leitura) · plano anual: CHDCP Mission Planning' + (S.user && S.user.role === 'ADMIN' ? ' · <button class="link" id="msRf">↻ Reler agora</button>' : '') + '</div></div>';
   page(h, true);
   $('pg').classList.add('mspage');
@@ -2657,6 +2671,7 @@ function msRender() {
   Array.prototype.forEach.call(document.querySelectorAll('[data-av]'), function (b) { b.onclick = function () { MSV.view = 'ALERTS'; msRender(); window.scrollTo(0, 0); }; });
   Array.prototype.forEach.call(document.querySelectorAll('[data-flt]'), function (b) { b.onclick = function () { var p = b.dataset.flt.split(':'); MSV[p[0]] = p[1]; msRender(); }; });
   if ($('msRf')) $('msRf').onclick = function () { msLoad(true, msRender); };
+  if ($('msPrt')) $('msPrt').onclick = function () { window.print(); };
 }
 function msNav(dir) {
   if (MSV.view === 'WEEK') MSV.anchor = addDays(msMon(MSV.anchor), 7 * dir);
