@@ -478,6 +478,32 @@ function vSat(d){var k=d.k,isT=S.user.role==='TRAINER';
 /* ---------- v39 · Dashboard di monitoraggio: KPI per categoria, grafici collegati, filtri globali e drill-down ---------- */
 (function(){var L={
  explore:['Monitoring dashboard','Painel de monitorização','Dashboard di monitoraggio'],
+ xl_title:['Are they learning?', 'Estão a aprender?', 'Stanno imparando?'],
+ xl_sub:['autonomy in clinical skills · data at {d}', 'autonomia nas competências clínicas · dados a {d}', 'autonomia nelle competenze cliniche · dati al {d}'],
+ xl_kpi:['KPI · trainees progressing', 'KPI · formandos em progresso', 'KPI · formandi in progresso'],
+ xl_a:['{o} of {n} re-assessed trainees are learning:', '{o} de {n} formandos reavaliados estão a aprender:', '{o} formandi su {n} rivalutati stanno imparando:'],
+ xl_b:['they moved up in autonomy level or are already autonomous', 'subiram de nível de autonomia ou já são autónomos', 'sono saliti di livello di autonomia o sono già autonomi'],
+ xl_tg:['target {t}%', 'meta {t}%', 'target {t}%'],
+ xl_miss:['{m} points to reach the target','faltam {m} pontos para a meta','mancano {m} punti al target'],
+ xl_hit:['target reached', 'meta atingida', 'target raggiunto'],
+ xl_trend:['trend by quarter · dotted line = target', 'evolução por trimestre · tracejado = meta', 'andamento per trimestre · tratteggio = target'],
+ xl_g:['average autonomy level vs first assessment', 'nível médio de autonomia face à primeira avaliação', 'livello medio di autonomia rispetto alla prima valutazione'],
+ xl_gn:['from {a} to {b} out of 5', 'de {a} a {b} em 5', 'da {a} a {b} su 5'],
+ xl_q:['of trainees are nearly or fully autonomous', 'dos formandos são quase autónomos ou autónomos', 'dei formandi è quasi autonomo o autonomo'],
+ xl_qn:['at first assessment: {p}%', 'na primeira avaliação: {p}%', 'alla prima valutazione: {p}%'],
+ xl_c:['Learning', 'Aprendizagem', 'Apprendimento'],
+ xl_area:['Trainees progressing, area by area', 'Formandos em progresso, área a área', 'Formandi in progresso, area per area'],
+ xl_areas:['re-assessed trainees who moved up or are autonomous · black mark = {t}% target', 'formandos reavaliados que subiram ou são autónomos · traço preto = meta {t}%', 'formandi rivalutati saliti di livello o già autonomi · tratto nero = target {t}%'],
+ xl_all:['Whole project', 'Todo o projecto', 'Tutto il progetto'],
+ xl_lv:['level {a} → {b}', 'nível {a} → {b}', 'livello {a} → {b}'],
+ xl_lvt:['Autonomy level of trainees', 'Nível de autonomia dos formandos', 'Livello di autonomia dei formandi'],
+ xl_first:['First assessment', 'Primeira avaliação', 'Prima valutazione'],
+ xl_now:['Today', 'Hoje', 'Oggi'],
+ xl_b0:['Starting (1–2)', 'Início (1–2)', 'Inizio (1–2)'],
+ xl_b1:['Growing (2–3)', 'Em crescimento (2–3)', 'In crescita (2–3)'],
+ xl_b2:['Nearly autonomous (3–4)', 'Quase autónomo (3–4)', 'Quasi autonomo (3–4)'],
+ xl_b3:['Autonomous (4–5)', 'Autónomo (4–5)', 'Autonomo (4–5)'],
+ xl_how:['Autonomy level from 1 to 5 as in TOJ, adjusted with the theory tests. Progressing = assessed on at least two days and moved up since the first assessment, or already autonomous (level 4 or more).', 'Nível de autonomia de 1 a 5 como no TOJ, corrigido com as provas teóricas. Em progresso = avaliado em pelo menos dois dias e subiu desde a primeira avaliação, ou já autónomo (nível 4 ou mais).', 'Livello di autonomia da 1 a 5 come nei TOJ, corretto con le prove teoriche. In progresso = valutato in almeno due giorni e salito dalla prima valutazione, oppure già autonomo (livello 4 o più).'],
  x_hint:['Tap a bar, slice, day or row to filter the whole page · tap again to remove · Ctrl/⌘ adds values','Toque numa barra, fatia, dia ou linha para filtrar a página · toque de novo para tirar · Ctrl/⌘ soma valores','Tocca una barra, una fetta, un giorno o una riga per filtrare la pagina · tocca di nuovo per togliere · Ctrl/⌘ somma valori'],
  x_all:['All','Tudo','Tutto'],x_filters:['Filters','Filtros','Filtri'],x_clear:['Clear all','Limpar tudo','Togli tutti'],x_none:['No filter','Sem filtros','Nessun filtro'],
  x_y:['Year','Ano','Anno'],x_ym:['Month','Mês','Mese'],x_d:['Day','Dia','Giorno'],x_a:['Area','Área','Area'],x_t:['Type','Tipo','Tipo'],x_m:['Mode','Modalidade','Modalità'],x_tr:['Trainer','Formador','Formatore'],x_c:['Cohort','Coorte','Coorte'],x_p:['Trainee','Formando','Formando'],x_s:['TOJ level','Nível TOJ','Livello TOJ'],
@@ -570,6 +596,23 @@ var XC={cls:'#2a78d6',toj:'#256abf',th:'#c98500',el:'#13946a',fb:'#137a46',pl:'#
  '.xps{font-size:10.5px;color:var(--mut);margin:0 0 4px}',
  '.xdots{display:flex;gap:5px}.xdots i{width:12px;height:12px;border-radius:50%;border:2px solid #b5bdc3;display:block;box-sizing:border-box}.xdots i.on{background:'+XC.fb+';border-color:'+XC.fb+'}',
  '.xsv text{font-family:Inter,system-ui,sans-serif}.xclk{cursor:pointer}',
+ '.xlh{display:grid;grid-template-columns:minmax(0,230px) minmax(0,1fr);gap:28px;background:#fff;border:1px solid var(--line);border-top:4px solid #13946a;border-radius:10px;padding:16px 22px 14px}',
+ '.xll .e{font-size:10px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:#13946a}.xll .v{font-size:60px;font-weight:800;line-height:1;margin:10px 0 8px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}',
+ '.xlsp{width:100%;height:40px;display:block}.xlsn{font-size:10px;color:var(--mut);margin-top:3px}',
+ '.xlr .a{font-size:15px;margin-top:12px}.xlr .b{font-size:15px;font-weight:700;margin:4px 0 30px}',
+ '.xlbar{position:relative;display:block;height:16px;background:#e9edf0;border-radius:4px}.xlbar i{display:block;height:100%;border-radius:4px}',
+ '.xlbar u{position:absolute;top:-6px;bottom:-6px;width:3px;margin-left:-1.5px;background:var(--ink);text-decoration:none}.xlbar u em{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);font-style:normal;font-size:11px;font-weight:800;white-space:nowrap;margin-bottom:3px;color:var(--ink)}',
+ '.xlbl{font-size:11.5px;font-weight:700;margin-top:8px}',
+ '.xls{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}.xlc{background:#fff;border:1px solid var(--line);border-radius:8px;padding:11px 16px;display:flex;gap:16px;align-items:center}',
+ '.xlc b{font-size:26px;font-weight:800;white-space:nowrap;font-variant-numeric:tabular-nums}.xlc span{font-size:12.5px;line-height:1.35}.xlc em{display:block;font-style:normal;color:var(--mut);font-size:11px;margin-top:2px}',
+ '.xls2{font-size:11px;color:var(--mut);margin:-6px 0 6px}',
+ '.xlar{display:grid;grid-template-columns:118px minmax(0,1fr) 44px 104px;gap:10px;align-items:center;margin:9px 0;cursor:pointer;border-radius:5px}.xlar:hover{background:#f4f8fd}.xlar.tot{cursor:default;margin-bottom:14px}.xlar.tot:hover{background:none}',
+ '.xlar .n{font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.xlar.tot .n{font-weight:800}.xlar b{font-size:14px;text-align:right;font-variant-numeric:tabular-nums}.xlar em{font-style:normal;font-size:11px;color:var(--mut);white-space:nowrap}',
+ '.xlbar.sm{height:12px}.xlbar.sm u{top:-4px;bottom:-4px;width:2px;margin-left:-1px}',
+ '.xlst{display:grid;grid-template-columns:104px minmax(0,1fr);gap:10px;align-items:center;margin:12px 0}.xlst .l{font-size:12px}.xlst .l.b{font-weight:800}',
+ '.xlst .s{display:flex;height:30px;border-radius:4px;overflow:hidden}.xlst .s i{display:flex;align-items:center;justify-content:center;font-style:normal;font-size:11.5px;font-weight:700;border-right:2px solid #fff;min-width:0}.xlst .s i:last-child{border-right:0}',
+ '.xlnote{font-size:11px;color:var(--mut);margin-top:8px}',
+ '@media (max-width:640px){.xlh{grid-template-columns:minmax(0,1fr);gap:4px;padding:14px 16px}.xll .v{font-size:48px}.xls{grid-template-columns:minmax(0,1fr)}.xlar{grid-template-columns:104px minmax(0,1fr) 40px}.xlar .n{font-size:12px}.xlar em{display:none}.xlr .a{margin-top:6px}}',
  'tr.xon td{background:var(--soft)!important}',
  '#xtip{position:fixed;z-index:60;pointer-events:none;background:var(--ink);color:#fff;font-size:11.5px;padding:5px 8px;border-radius:6px;opacity:0;transition:opacity .1s;max-width:260px}',
  '@media print{.xbar,.xchips{display:none!important}.xpn,.xt{break-inside:avoid}.xg{grid-template-columns:repeat(2,minmax(0,1fr))}}'
@@ -672,6 +715,53 @@ function exCal(){var rows=exRows('P','d'),cnt={};rows.forEach(function(r){cnt[r.
   out+=s+'</svg></div>'});return out+'<div class="xleg" style="margin:8px 0 0;justify-content:flex-end;gap:3px;align-items:center">'+t('x_less')+' '+C.map(function(c){return'<i style="background:'+c+';margin:0"></i>'}).join('')+' '+t('x_more')+'</div>'}
 function exDD(k,vals){var n=EX.F[k].length;return'<details class="xdd" data-xdd="'+k+'"><summary>'+t('x_'+k)+(n?'<b>'+n+'</b>':'')+' ▾</summary><div class="xpop">'+vals.map(function(v){return'<label><input type="checkbox" data-xck="'+k+'" value="'+esc(v)+'"'+(exHas(k,exNorm(k,v))?' checked':'')+'> '+esc(exLab(k,v))+'</label>'}).join('')+'</div></details>'}
 function exUniq(src,k){var m={},o=[];src.forEach(function(r){var v=r[k];if(v===undefined||(k==='tr'&&v<0))return;if(!m[v]){m[v]=1;o.push(v)}});return o}
+/* ---------- v39 · «Stanno imparando?» (KPI formandi in progresso, target 80%) ----------
+   Livello di autonomia per persona = 60% pratica (ultimo livello TOJ per competenza, 1→0 … 5→100)
+   + 40% teoria a peso crescente ((somma prove + 3 × pratica) / (n prove + 3)); serve ≥ 3 competenze valutate.
+   In progresso = valutato in ≥ 2 giorni e salito di oltre 3 punti (0–100) dalla prima valutazione, oppure già autonomo (≥ 75).
+   Calcolo a una data (fine dell'anno filtrato o oggi), filtro area sull'area principale della persona. */
+var XL={T:80,MIN:4,C:['#e4e2dd','#bcd5f3','#5b9be6','#1d5aa8']};
+function exLearnAsOf(){var D=EX.d,y=EX.F.y.length?Math.max.apply(null,EX.F.y):null;if(!y)return D.today;var e=Math.round((Date.UTC(y,11,31)-Date.UTC(2025,0,1))/864e5);return Math.min(e,D.today)}
+function exLearnPeople(asOf){var D=EX.d,P={};
+ function get(p){return P[p]=P[p]||{t:[],h:[],ac:{},m:{}}}
+ D.T.forEach(function(r){if(r.d>asOf)return;var o=get(r.p);o.t.push(r);o.ac[r.a]=(o.ac[r.a]||0)+1;o.m[r.d]=1});
+ (D.TH||[]).forEach(function(r){if(r.d>asOf)return;var o=get(r.p);o.h.push(r);o.ac[r.a]=(o.ac[r.a]||0)+1;o.m[r.d]=1});
+ function st(o,d){var last={};o.t.forEach(function(r){if(r.d<=d){var x=last[r.k];if(!x||r.d>=x.d)last[r.k]=r}});var ks=Object.keys(last);if(ks.length<3)return null;
+  var pr=ks.reduce(function(a,k){return a+(last[k].s-1)*25},0)/ks.length,tv=o.h.filter(function(r){return r.d<=d}),n=tv.length,tt=(tv.reduce(function(a,r){return a+r.v},0)+3*pr)/(n+3);return 0.6*pr+0.4*tt}
+ var out=[];Object.keys(P).forEach(function(p){var o=P[p],ms=Object.keys(o.m).map(Number).sort(function(a,b){return a-b}),f=null,fd=null;
+  for(var i=0;i<ms.length;i++){var s=st(o,ms[i]);if(s!==null){f=s;fd=ms[i];break}}if(f===null)return;
+  var a=+Object.keys(o.ac).sort(function(x,y){return o.ac[y]-o.ac[x]})[0];if(EX.F.a.length&&EX.F.a.indexOf(a)<0)return;
+  var nw=st(o,asOf),re=ms.some(function(m){return m>fd});out.push({a:a,f:f,n:nw,re:re,ok:re&&(nw-f>3||nw>=75)})});return out}
+function exLearnKpi(L){var r=L.filter(function(x){return x.re});return{n:r.length,ok:r.filter(function(x){return x.ok}).length,p:r.length?r.filter(function(x){return x.ok}).length/r.length*100:null}}
+function exLv(v){return 1+v/25}
+function exLearnCol(p){return p>=XL.T?'#13946a':p>=XL.T-25?'#c27f00':'#b8322f'}
+function exLearn(){var D=EX.d,asOf=exLearnAsOf(),L=exLearnPeople(asOf);if(!L.length)return'';var K=exLearnKpi(L);if(!K.n)return'';
+ var re=L.filter(function(x){return x.re}),avg=function(l,k){return l.reduce(function(a,x){return a+exLv(x[k])},0)/l.length},B=avg(re,'f'),N=avg(re,'n'),G=(N/B-1)*100;
+ var q=function(l,k){return Math.round(l.filter(function(x){return x[k]>=50}).length*100/l.length)},col=exLearnCol(K.p);
+ /* andamento a fine trimestre */
+ var dates=[],d0=Math.min.apply(null,D.T.map(function(r){return r.d})),y0=D.dy(d0).getFullYear();
+ for(var y=y0;y<=D.dy(asOf).getFullYear();y++)[2,5,8,11].forEach(function(mo){var e=Math.round((Date.UTC(y,mo+1,0)-Date.UTC(2025,0,1))/864e5);if(e>=d0&&e<asOf)dates.push(e)});dates.push(asOf);
+ var tr=dates.map(function(e){return exLearnKpi(exLearnPeople(e)).p}).filter(function(v){return v!==null});
+ var sp='';if(tr.length>1){var W=200,H=44,pts=tr.map(function(v,i){return(i*W/(tr.length-1)).toFixed(1)+','+(H-v/100*H).toFixed(1)}).join(' ');
+  sp='<svg class="xlsp" viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none"><line x1="0" x2="'+W+'" y1="'+(H-XL.T/100*H)+'" y2="'+(H-XL.T/100*H)+'" stroke="#1b2124" stroke-dasharray="2 3" stroke-width="1"/><polyline points="'+pts+'" fill="none" stroke="'+col+'" stroke-width="2.2" vector-effect="non-scaling-stroke"/></svg><div class="xlsn">'+t('xl_trend')+'</div>'}
+ var h='<section class="xlh"><div class="xll"><div class="e">'+t('xl_kpi')+'</div><div class="v" style="color:'+col+'">'+Math.round(K.p)+'%</div>'+sp+'</div>'+
+  '<div class="xlr"><div class="a">'+t('xl_a',{o:K.ok,n:K.n})+'</div><div class="b">'+t('xl_b')+'</div>'+
+  '<div class="xlbar"><i style="width:'+K.p+'%;background:'+col+'"></i><u style="left:'+XL.T+'%"><em>'+t('xl_tg',{t:XL.T})+'</em></u></div>'+
+  '<div class="xlbl" style="color:'+(K.p<XL.T?'#b8322f':'#13946a')+'">'+(K.p<XL.T?t('xl_miss',{m:Math.round(XL.T-K.p)}):t('xl_hit'))+'</div></div></section>';
+ h+='<div class="xls"><div class="xlc"><b style="color:#2a78d6">'+(G>=0?'+':'')+Math.round(G)+'%</b><span>'+t('xl_g')+'<em>'+t('xl_gn',{a:num(B,1),b:num(N,1)})+'</em></span></div>'+
+  '<div class="xlc"><b style="color:#1d5aa8">'+q(L,'n')+'%</b><span>'+t('xl_q')+'<em>'+t('xl_qn',{p:q(L,'f')})+'</em></span></div></div>';
+ /* area per area */
+ var by={};re.forEach(function(x){(by[x.a]=by[x.a]||[]).push(x)});
+ var rows=Object.keys(by).filter(function(a){return by[a].length>=XL.MIN}).map(function(a){var l=by[a],k=exLearnKpi(l);return{a:+a,p:k.p,b:avg(l,'f'),n:avg(l,'n')}}).sort(function(x,y){return y.p-x.p});
+ var ar='';[{a:-1,p:K.p,b:B,n:N}].concat(rows).forEach(function(r,i){var c=exLearnCol(r.p);
+  ar+='<div class="xlar'+(i?'':' tot')+'"'+(i?exAt('a',r.a,D.A[r.a]):'')+'><span class="n">'+esc(i?D.A[r.a]:t('xl_all'))+'</span><span class="xlbar sm"><i style="width:'+r.p+'%;background:'+c+'"></i><u style="left:'+XL.T+'%"></u></span><b style="color:'+c+'">'+Math.round(r.p)+'%</b><em>'+t('xl_lv',{a:num(r.b,1),b:num(r.n,1)})+'</em></div>'});
+ /* livelli */
+ var lv=function(k){var c=[0,0,0,0];L.forEach(function(x){c[Math.min(3,Math.floor(x[k]/25))]++});return c.map(function(v){return v*100/L.length})};
+ var st=function(lab,arr,b){return'<div class="xlst"><span class="l'+(b?' b':'')+'">'+lab+'</span><span class="s">'+arr.map(function(w,i){return'<i style="width:'+w+'%;background:'+XL.C[i]+';color:'+(i>=2?'#fff':'#1b2124')+'">'+(w>=7?Math.round(w)+'%':'')+'</i>'}).join('')+'</span></div>'};
+ var lg='<div class="xleg" style="margin-top:8px">'+[0,1,2,3].map(function(i){return'<span><i style="background:'+XL.C[i]+'"></i>'+t('xl_b'+i)+'</span>'}).join('')+'</div>';
+ h+='<div class="xg" style="margin-top:10px">'+exPanel(t('xl_c'),'#13946a',t('xl_area'),'<div class="xls2">'+t('xl_areas',{t:XL.T})+'</div>'+ar,'','s2')+
+  exPanel(t('xl_c'),'#1d5aa8',t('xl_lvt'),st(t('xl_first'),lv('f'))+st(t('xl_now'),lv('n'),1)+lg,'')+'</div>';
+ return'<div class="sec xlw"><h2>'+t('xl_title')+'<span>'+t('xl_sub',{d:exD(asOf)})+'</span></h2>'+h+'<div class="xlnote">'+t('xl_how')+'</div></div>'}
 /* ---------- pagina ---------- */
 function exRender(){if(S.tab!=='explore')return;var D=EX.d,lim=D.lim;
  var rp=exRows('P'),rt=exRows('T'),rth=exRows('TH'),rfb=exRows('FB'),rpl=D.PL?exRows('PL'):null,rel=exRows('EL');
@@ -704,6 +794,7 @@ function exRender(){if(S.tab!=='explore')return;var D=EX.d,lim=D.lim;
   exTile(t('c_prc'),XC.gov,pr.length?Math.round(prAvg)+'%':'–',t('k_prc'),pr.length?t('k_prcn',{n:pr.length,d:prNext!=null?exD(prNext).slice(0,5):'–'}):'',EX.F.a.length?t('g_noareaS'):''),
   exTile(t('c_prt'),XC.gov,ptT?ptD+' / '+ptT:'–',t('k_prt'),ptT?t('k_prtn',{n:pt.length,d:ptNext!=null?exD(ptNext).slice(0,5):'–'}):'',EX.F.a.length?t('g_noareaS'):'')].filter(Boolean);
  h+='<div class="xkp odd" style="--n:5">'+k1+'</div><div class="xkp'+(k2.length%2?' odd':'')+'" style="--n:'+k2.length+'">'+k2.join('')+'</div>';
+ h+=exLearn();
  /* pannelli */
  var noA=EX.F.a.length?t('g_noarea'):'';
  h+='<div class="xg">'+exPanel(t('c_cls'),XC.cls,t('g_months'),exMonths(),t('hmf_'+(EX.hm||'e'))+' · '+t('g_monthsf'),'s2')+exPanel(t('c_cls'),XC.cls,t('g_areas'),exAreasDonut())+
