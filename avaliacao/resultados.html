@@ -587,6 +587,7 @@ function exPrep(d){var B=new Date(2025,0,1,12);function dy(i){var x=new Date(B);
   PL:d.PL?d.PL.map(function(r){return ext(o(r[0]),{a:r[1],k:r[2],ok:r[3]})}):null,
   EL:(d.EL||[]).map(function(r){return ext(o(r[0]),{a:r[1],k:r[2]})}),
   MOB:(d.MOB||[]).map(function(r){return ext(o(r[0]),{b:r[1],dir:r[2],who:r[3],g:r[4]})}),
+  TE:(d.TE||[]).map(function(r){return ext(o(r[0]),{a:r[1],tr:r[2],t:'TOJ',m:'LIVE',h:r[3]/10})}),
   PRC:d.PRC||{proc:[],prot:[]}}}
 function exLab(k,v){var D=EX.d;
  if(k==='a')return D.A[v];if(k==='tr')return D.Tr[v];if(k==='c')return D.C[v]==='n.d.'?'–':D.C[v];if(k==='p')return D.N[v]||D.I[v];
@@ -595,8 +596,9 @@ function exIso(i){var x=EX.d.dy(i);return x.getFullYear()+'-'+('0'+(x.getMonth()
 function exHas(k,v){return EX.F[k].indexOf(v)>=0}
 function exNorm(k,v){return(k==='ym'||k==='t'||k==='m')?String(v):+v}
 /* filtro: ogni insieme di dati risponde solo alle dimensioni che possiede */
-var EXDIM={P:['y','ym','d','a','t','m','tr','c','p'],T:['y','ym','d','a','tr','p','s'],TH:['y','ym','d','a','p'],FB:['y','ym','a','tr'],PL:['y','ym','a'],EL:['y','ym','a']};
-function exRows(set,skip){var dims=EXDIM[set],src=EX.d[set]||[];return src.filter(function(r){for(var i=0;i<dims.length;i++){var k=dims[i],f=EX.F[k];if(k===skip||(skip&&skip.indexOf&&skip.indexOf(k)>=0&&typeof skip!=='string')||!f.length)continue;if(f.indexOf(r[k])<0)return false}return true})}
+var EXDIM={P:['y','ym','d','a','t','m','tr','c','p'],T:['y','ym','d','a','tr','p','s'],TH:['y','ym','d','a','p'],FB:['y','ym','a','tr'],PL:['y','ym','a'],EL:['y','ym','a'],TE:['y','ym','d','a','tr','t','m']};
+function exRows(set,skip){var dims=EXDIM[set],src=EX.d[set]||[];if(set==='TE'&&(EX.F.p.length||EX.F.c.length||EX.F.s.length))return[];return src.filter(function(r){for(var i=0;i<dims.length;i++){var k=dims[i],f=EX.F[k];if(k===skip||(skip&&skip.indexOf&&skip.indexOf(k)>=0&&typeof skip!=='string')||!f.length)continue;if(f.indexOf(r[k])<0)return false}return true})}
+function exTeBy(skip,key){var m={};exRows('TE',skip).forEach(function(r){var k=key(r);m[k]=(m[k]||0)+r.h});return m}
 function exTog(k,v,add){v=exNorm(k,v);var f=EX.F[k],i=f.indexOf(v);if(add){if(i>=0)f.splice(i,1);else f.push(v)}else{if(f.length===1&&i===0)f.length=0;else{f.length=0;f.push(v)}}exRender()}
 function exGrp(rows,key){var m={},o=[];rows.forEach(function(r){var k=key(r),x=m[k];if(!x){x=m[k]={k:k,n:0,h:0,e:0,p:{},np:0,ac:{},na:0,s:0};o.push(x)}x.n++;x.h+=r.h||0;x.s+=r.s||0;if(!x.p[r.p]){x.p[r.p]=1;x.np++}if(r.sk!==undefined){var q=x.ac[r.sk];if(q===undefined){x.ac[r.sk]=r.h||0;x.na++;x.e+=r.h||0}else if((r.h||0)>q){x.e+=r.h-q;x.ac[r.sk]=r.h}}});return o}
 function exAt(k,v,tip){return' data-xk="'+k+'" data-xv="'+esc(v)+'" role="button" tabindex="0"'+(tip?' data-tip="'+esc(tip)+'"':'')}
@@ -616,8 +618,8 @@ function exDonut(items,k,center,sub){var tot=items.reduce(function(a,x){return a
  return'<div class="xdn">'+s+'<div class="lgs">'+lg+'</div></div>'}
 /* ---------- grafici ---------- */
 function exMonths(){var D=EX.d,rows=exRows('P',['ym','t']),all={},m={};
- var base=D.P.filter(function(r){return!EX.F.y.length||EX.F.y.indexOf(r.y)>=0});base.forEach(function(r){all[r.ym]=1});var ks=Object.keys(all).sort();if(!ks.length)return exEmpty();
- var hm=EX.hm||'e',seen={};rows.forEach(function(r){var o=m[r.ym]=m[r.ym]||{LESSON:0,HANDS:0,TOJ:0,OTHER:0,tot:0};var k=(r.t==='HANDS'||r.t==='TOJ'||r.t==='LESSON')?r.t:'OTHER',v=r.h;if(hm==='e'){var q=seen[r.sk];if(q===undefined){seen[r.sk]=v}else if(v>q){seen[r.sk]=v;v=v-q}else v=0}o[k]+=v;o.tot+=v});
+ var base=D.P.concat(D.TE||[]).filter(function(r){return!EX.F.y.length||EX.F.y.indexOf(r.y)>=0});base.forEach(function(r){all[r.ym]=1});var ks=Object.keys(all).sort();if(!ks.length)return exEmpty();
+ var hm=EX.hm||'e',seen={};rows.forEach(function(r){var o=m[r.ym]=m[r.ym]||{LESSON:0,HANDS:0,TOJ:0,OTHER:0,tot:0};var k=(r.t==='HANDS'||r.t==='TOJ'||r.t==='LESSON')?r.t:'OTHER',v=r.h;if(hm==='e'){var q=seen[r.sk];if(q===undefined){seen[r.sk]=v}else if(v>q){seen[r.sk]=v;v=v-q}else v=0}o[k]+=v;o.tot+=v});if(hm==='e')exRows('TE',['ym','t']).forEach(function(r){var o=m[r.ym]=m[r.ym]||{LESSON:0,HANDS:0,TOJ:0,OTHER:0,tot:0};o.TOJ+=r.h;o.tot+=r.h});
  var mx=Math.max.apply(null,ks.map(function(k){return m[k]?m[k].tot:0}).concat([1]));var TC={LESSON:XC.cls,HANDS:XC.hands,TOJ:XC.tojc,OTHER:XC.gray};var every=ks.length>14?2:1;
  var h='<div class="xhm"><button class="'+(hm==='e'?'on':'')+'" data-xhm="e">'+t('hm_e')+'</button><button class="'+(hm==='f'?'on':'')+'" data-xhm="f">'+t('hm_f')+'</button></div><div class="xleg">'+['LESSON','HANDS','TOJ','OTHER'].map(function(k){return'<span>'+'<i style="background:'+TC[k]+'"></i>'+t(k==='OTHER'?'xt_OTHER':'xt_'+k)+'</span>'}).join('')+'</div><div class="xsc"><div class="xcols" style="min-width:'+(ks.length*30)+'px">';
  ks.forEach(function(k,i){var o=m[k]||{tot:0},H=140,ft=EX.F.t;h+='<div class="xcol'+exDim('ym',k)+'"'+exAt('ym',k,mlab(k)+': '+num(o.tot)+' h')+'><div class="tot">'+(o.tot?num(o.tot):'')+'</div><div class="xstk">';
@@ -692,7 +694,7 @@ function exRender(){if(S.tab!=='explore')return;var D=EX.d,lim=D.lim;
  var prAvg=pr.length?pr.reduce(function(a,o){return a+o.pct},0)/pr.length:0,prNext=pr.map(function(o){return o.next}).filter(function(x){return x!=null}).sort()[0];
  var ptD=pt.reduce(function(a,o){return a+o.done},0),ptT=pt.reduce(function(a,o){return a+o.tot},0),ptNext=pt.map(function(o){return o.next}).filter(function(x){return x!=null}).sort()[0];
  var pla=rpl?rpl.filter(function(r){return r.k==='A'}):[],plt=rpl?rpl.filter(function(r){return r.k==='T'}):[],pOk=function(a){return a.filter(function(r){return r.ok}).length};
- var g0=exGrp(rp,function(){return 0})[0]||{e:0,h:0,na:0,np:0};var k1=exTile(t('c_cls'),XC.cls,num(Math.round(g0.e)),t('k_hours'),t('k_ppl',{f:num(Math.round(g0.h)),p:num(g0.np),a:num(g0.na)}))+
+ var g0=exGrp(rp,function(){return 0})[0]||{e:0,h:0,na:0,np:0};g0.e+=exTeBy(null,function(){return 0})[0]||0;var k1=exTile(t('c_cls'),XC.cls,num(Math.round(g0.e)),t('k_hours'),t('k_ppl',{f:num(Math.round(g0.h)),p:num(g0.np),a:num(g0.na)}))+
   exTile(t('c_toj'),XC.toj,num(rt.length),t('k_rated'),rt.length?t('k_tojn',{p:num(Object.keys(tp).length),v:num(ts/rt.length,1)}):'')+
   exTile(t('c_th'),XC.th,rth.length?pct(thp/rth.length):'–',t('k_pass'),rth.length?t('k_thn',{n:num(rth.length),v:num(tha)}):'')+
   exTile(t('c_el'),XC.el,num(rel.length),t('k_el'),t('k_eln',{u:elU,k:elK}))+
@@ -713,13 +715,13 @@ function exRender(){if(S.tab!=='explore')return;var D=EX.d,lim=D.lim;
  var ga=exGrp(exRows('P','a'),function(r){return r.a}),ta={},tha2={},fba={},pla2={};exRows('T','a').forEach(function(r){var o=ta[r.a]=ta[r.a]||{n:0,s:0};o.n++;o.s+=r.s});
  exRows('TH','a').forEach(function(r){var o=tha2[r.a]=tha2[r.a]||{n:0,ok:0};o.n++;if(r.v>=70)o.ok++});exRows('FB','a').forEach(function(r){var o=fba[r.a]=fba[r.a]||{r:0,s:0};o.r+=r.resp;o.s+=r.sum});
  if(rpl)exRows('PL','a').forEach(function(r){if(r.k!=='A')return;var o=pla2[r.a]=pla2[r.a]||{n:0,ok:0};o.n++;if(r.ok)o.ok++});
- var arAll={};ga.forEach(function(x){arAll[x.k]=1});[ta,tha2,fba].forEach(function(o){for(var k in o)arAll[k]=1});
- var rowsA=Object.keys(arAll).map(Number).map(function(k){var g=ga.filter(function(x){return x.k===k})[0]||{np:0,h:0,e:0};return{k:k,g:g}}).sort(function(a,b){return b.g.e-a.g.e});
+ var teA=exTeBy('a',function(r){return r.a});ga.forEach(function(x){x.e+=teA[x.k]||0});var arAll={};ga.forEach(function(x){arAll[x.k]=1});[ta,tha2,fba,teA].forEach(function(o){for(var k in o)arAll[k]=1});
+ var rowsA=Object.keys(arAll).map(Number).map(function(k){var g=ga.filter(function(x){return x.k===k})[0]||{np:0,h:0,e:teA[k]||0};return{k:k,g:g}}).sort(function(a,b){return b.g.e-a.g.e});
  var head=[{t:t('x_a')},{t:t('x_k1'),r:1},{t:t('x_k2'),r:1},{t:t('x_k2f'),r:1},{t:t('x_k5'),r:1},{t:t('x_k6'),r:1},{t:t('x_k7'),r:1},{t:t('x_k8'),r:1}].concat(rpl?[{t:t('x_k9'),r:1}]:[]);
  h+='<div class="sec" style="margin-top:22px"><h2>'+t('x_cmp')+'<span>'+t('x_cmpf')+'</span></h2>'+table(head,rowsA.map(function(x){var k=x.k,a=ta[k],th=tha2[k],f=fba[k],p=pla2[k];
   return{c:['<span class="lk">'+esc(D.A[k])+'</span>',x.g.np?num(x.g.np):'–',x.g.e?num(Math.round(x.g.e)):'–',x.g.h?num(Math.round(x.g.h)):'–',a?num(a.n):'–',a?lvChip(a.s/a.n):lvChip(''),th?pct(th.ok/th.n):'–',f&&f.r?num(f.s/f.r,1):'–'].concat(rpl?[p?pct(p.ok/p.n):'–']:[]),xk:'a',xv:k}}))+'</div>';
  h+=sec(t('x_cal'),t('x_caln'),'<div class="box" style="padding:6px 12px 10px">'+exCal()+'</div>');
- if(!lim){var tg=exGrp(exRows('P','tr'),function(r){return r.tr}).sort(function(a,b){return b.e-a.e}).slice(0,20);
+ if(!lim){var tg=exGrp(exRows('P','tr'),function(r){return r.tr});var teT=exTeBy('tr',function(r){return r.tr});tg.forEach(function(x){x.e+=teT[x.k]||0});Object.keys(teT).forEach(function(k){k=+k;if(k>=0&&!tg.some(function(x){return x.k===k}))tg.push({k:k,na:0,np:0,h:0,e:teT[k]})});tg=tg.sort(function(a,b){return b.e-a.e}).slice(0,20);
   h+=sec(t('x_trs'),'',table([{t:t('x_tr')},{t:t('x_k3'),r:1},{t:t('x_k1'),r:1},{t:t('x_k2'),r:1},{t:t('x_k2f'),r:1}],tg.map(function(x){return{c:['<span class="lk">'+esc(D.Tr[x.k])+'</span>',num(x.na),num(x.np),num(Math.round(x.e)),num(Math.round(x.h))],xk:'tr',xv:x.k}})))}
  var pg=exGrp(exRows('P','p'),function(r){return r.p}),tj={};exRows('T','p').forEach(function(r){var o=tj[r.p]=tj[r.p]||{n:0,s:0};o.n++;o.s+=r.s});
  var tot=pg.length;pg.sort(function(a,b){return b.h-a.h});pg=pg.slice(0,50);
