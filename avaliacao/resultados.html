@@ -484,7 +484,7 @@ function vSat(d){var k=d.k,isT=S.user.role==='TRAINER';
  x_allp:['whole period','todo o período','tutto il periodo'],x_upd:['data of {d}','dados de {d}','dati al {d}'],
  c_cls:['Classroom & practice','Aula e prática','Aula e pratica'],c_toj:['On the job (TOJ)','No posto (TOJ)','Sul campo (TOJ)'],c_th:['Theory','Teoria','Teoria'],c_el:['E-learning','E-learning','E-learning'],c_fb:['Satisfaction','Satisfação','Gradimento'],c_pl:['Plan','Plano','Piano'],
  c_lua:['CCM in Luanda','CCM em Luanda','CCM a Luanda'],c_mil:['CHDCP at Monzino','CHDCP no Monzino','CHDCP al Monzino'],c_prc:['Procedures','Procedimentos','Procedure'],c_prt:['Protocols','Protocolos','Protocolli'],c_mob:['Mobility','Mobilidade','Mobilità'],c_mode:['Delivery','Modalidade','Modalità'],
- k_hours:['training hours','horas de formação','ore di formazione'],k_ppl:['{p} trainees · {a} activities','{p} formandos · {a} actividades','{p} formandi · {a} attività'],
+ k_hours:['training hours delivered','horas de formação dadas','ore di formazione erogate'],k_ppl:['{f} trainee-hours · {p} trainees','{f} horas-formando · {p} formandos','{f} ore-formando · {p} formandi'],
  k_rated:['skills rated','competências avaliadas','skill valutate'],k_tojn:['{p} people · average {v}','{p} pessoas · média {v}','{p} persone · media {v}'],
  k_pass:['tests ≥ 70%','provas ≥ 70%','prove ≥ 70%'],k_thn:['{n} tests · average {v}%','{n} provas · média {v}%','{n} prove · media {v}%'],
  k_el:['contents and sessions','conteúdos e sessões','contenuti e sessioni'],k_eln:['{u} uploaded · {k} Skilla','{u} carregados · {k} Skilla','{u} caricati · {k} Skilla'],
@@ -493,7 +493,7 @@ function vSat(d){var k=d.k,isT=S.user.role==='TRAINER';
  k_lua:['CCM professionals','profissionais do CCM','professionisti CCM'],k_mil:['CHDCP professionals','profissionais do CHDCP','professionisti CHDCP'],k_mobn:['{d} days · +{f} planned','{d} dias · +{f} previstos','{d} giorni · +{f} previsti'],
  k_prc:['average progress','progresso médio','avanzamento medio'],k_prcn:['{n} procedures · next {d}','{n} procedimentos · próxima {d}','{n} procedure · prossima {d}'],
  k_prt:['steps done','fases feitas','fasi svolte'],k_prtn:['{n} protocols · next {d}','{n} protocolos · próxima {d}','{n} protocolli · prossima {d}'],
- g_months:['Training hours by month and type','Horas de formação por mês e tipo','Ore di formazione per mese e tipo'],g_monthsf:['tap a month or a colour','toque num mês ou numa cor','tocca un mese o un colore'],
+ g_months:['Training hours by month and type','Horas de formação por mês e tipo','Ore di formazione per mese e tipo'],g_monthsf:['tap a month or a colour','toque num mês ou numa cor','tocca un mese o un colore'],hm_e:['delivered','dadas','erogate'],hm_f:['per trainee','por formando','per formando'],hmf_e:['delivered: each session counted once, with its duration','dadas: cada sessão contada uma vez, com a sua duração','erogate: ogni sessione contata una volta, con la sua durata'],hmf_f:['per trainee: duration × people present','por formando: duração × pessoas presentes','per formando: durata × persone presenti'],
  g_areas:['Trainees by area','Formandos por área','Formandi per area'],g_toj:['Levels of the rated skills, by area','Níveis das competências avaliadas, por área','Livelli delle skill valutate, per area'],g_tojf:['1 = not independent · 5 = independent · skills not rated excluded','1 = não independente · 5 = independente · competências não avaliadas excluídas','1 = non autonomo · 5 = autonomo · skill non valutate escluse'],
  g_th:['Theory test results','Resultados das provas teóricas','Risultati delle prove teoriche'],g_thf:['{n} tests · {p} above the 70% threshold','{n} provas · {p} acima de 70%','{n} prove · {p} sopra la soglia del 70%'],g_thr:['70% threshold','limiar 70%','soglia 70%'],
  g_fb:['Average score by question','Média por pergunta','Punteggio medio per domanda'],g_pl:['Weekly plan: done / planned','Plano semanal: feito / previsto','Piano settimanale: fatto / previsto'],
@@ -504,7 +504,7 @@ function vSat(d){var k=d.k,isT=S.user.role==='TRAINER';
  x_det:['Detail','Detalhe','Dettaglio'],x_cmp:['Areas compared','Comparação entre áreas','Confronto tra aree'],x_cmpf:['tap a row to filter','toque numa linha para filtrar','tocca una riga per filtrare'],
  x_cal:['Attendance calendar','Calendário das presenças','Calendario delle presenze'],x_caln:['one square per day · colour = attendances','um quadrado por dia · cor = presenças','un quadrato per giorno · colore = presenze'],x_less:['fewer','menos','meno'],x_more:['more','mais','più'],
  x_trs:['Trainers','Formadores','Formatori'],x_ppl:['Trainees','Formandos','Formandi'],x_pn:['first {n} by hours · {t} in total','primeiros {n} por horas · {t} no total','primi {n} per ore · {t} in totale'],
- x_acts:['Activities','Actividades','Attività'],x_open:['profile ›','ficha ›','scheda ›'],x_k1:['Trainees','Formandos','Formandi'],x_k2:['Hours','Horas','Ore'],x_k3:['Activities','Actividades','Attività'],x_k4:['Attendances','Presenças','Presenze'],
+ x_acts:['Activities','Actividades','Attività'],x_open:['profile ›','ficha ›','scheda ›'],x_k1:['Trainees','Formandos','Formandi'],x_k2:['Hours delivered','Horas dadas','Ore erogate'],x_k2f:['Trainee-hours','Horas-formando','Ore-formando'],x_dur:['Duration (h)','Duração (h)','Durata (h)'],x_k3:['Activities','Actividades','Attività'],x_k4:['Attendances','Presenças','Presenze'],
  x_k5:['TOJ rated','TOJ avaliadas','TOJ valutate'],x_k6:['TOJ level','Nível TOJ','Livello TOJ'],x_k7:['Tests ≥ 70%','Provas ≥ 70%','Prove ≥ 70%'],x_k8:['Satisfaction','Satisfação','Gradimento'],x_k9:['Plan','Plano','Piano'],
  x_nodata:['No data with these filters.','Sem dados com estes filtros.','Nessun dato con questi filtri.'],x_other:['Other areas','Outras áreas','Altre aree'],
  xt_LESSON:['Lectures','Aulas teóricas','Lezioni frontali'],xt_HANDS:['Hands-on','Prática (hands-on)','Hands-on'],xt_TOJ:['Training on the Job','Training on the Job','Training on the Job'],xt_ELEARN:['E-learning','E-learning','E-learning'],xt_WORKSHOP:['Workshop / cases','Workshop / casos','Workshop / casi'],xt_OTHER:['Other','Outro','Altro'],
@@ -534,12 +534,12 @@ var XC={cls:'#2a78d6',toj:'#256abf',th:'#c98500',el:'#13946a',fb:'#137a46',pl:'#
  '.xt .xw{display:inline-block;font-size:10px;color:#9a6400;background:#fff6dc;border-radius:5px;padding:0 5px;font-weight:600;white-space:nowrap}.xt .e{font-size:9.5px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--c);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}',
  '.xt .v{font-size:26px;font-weight:800;margin-top:5px;letter-spacing:-.01em;font-variant-numeric:tabular-nums;line-height:1.1}.xt .l{font-size:11.5px;font-weight:600;margin-top:2px;color:var(--ink)}.xt .n{font-size:11px;color:var(--mut);margin-top:3px;line-height:1.35}',
  '.xg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:12px;grid-auto-flow:row dense}.xg .s2{grid-column:span 2}.xg .s3{grid-column:1/-1}',
- '@media (max-width:980px){.xg{grid-template-columns:repeat(2,minmax(0,1fr))}}.xbar{position:relative}@media (max-width:640px){.xg~.sec td,.xg~.sec th{white-space:nowrap;padding-left:9px;padding-right:9px}.xhint{display:block;margin-top:2px}.xhint::before{content:none}details.xdd{position:static}.xpop{left:0;right:0;min-width:0}.xg{grid-template-columns:minmax(0,1fr)}.xg .s2,.xg .s3{grid-column:auto}.xkp{grid-template-columns:repeat(2,minmax(0,1fr))}.xkp.odd>.xt:first-child{grid-column:span 2}.xt .v{font-size:22px}}',
+ '@media (max-width:980px){.xg{grid-template-columns:repeat(2,minmax(0,1fr))}}.xbar{position:relative}@media (max-width:640px){.xhm{position:static;margin:0 0 8px;align-self:flex-start}.xg~.sec td,.xg~.sec th{white-space:nowrap;padding-left:9px;padding-right:9px}.xhint{display:block;margin-top:2px}.xhint::before{content:none}details.xdd{position:static}.xpop{left:0;right:0;min-width:0}.xg{grid-template-columns:minmax(0,1fr)}.xg .s2,.xg .s3{grid-column:auto}.xkp{grid-template-columns:repeat(2,minmax(0,1fr))}.xkp.odd>.xt:first-child{grid-column:span 2}.xt .v{font-size:22px}}',
  '.xpn{background:#fff;border:1px solid var(--line);border-radius:8px;padding:12px 14px 13px;min-width:0;display:flex;flex-direction:column}',
  '.xpn .e{font-size:9.5px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--c)}.xpn h3{font-size:13.5px;margin:2px 0 10px;line-height:1.3}',
  '.xpn .f{font-size:11px;color:var(--mut);margin-top:auto;padding-top:8px}.xpn .w{font-size:10.5px;color:#9a6400;background:#fff6dc;border-radius:5px;padding:1px 6px;margin-left:6px;font-weight:600;letter-spacing:0;text-transform:none}',
  '.xleg{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:11px;color:var(--mut);margin:-4px 0 8px}.xleg i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:-1px}',
- '.xsc{overflow-x:auto;overflow-y:hidden;margin:0 -4px;padding:0 4px}.xhint::before{content:"·";margin:0 6px}.xcols{display:flex;align-items:flex-end;gap:3px;height:190px;padding-top:16px}',
+ '.xhm{position:absolute;top:10px;right:12px;z-index:1;display:inline-flex;border:1px solid var(--line);border-radius:14px;overflow:hidden}.xhm button{border:0;background:#fff;font-size:11px;font-weight:700;padding:3px 9px;color:var(--ink2);cursor:pointer}.xhm button.on{background:var(--ink);color:#fff}.xpn{position:relative}.xsc{overflow-x:auto;overflow-y:hidden;margin:0 -4px;padding:0 4px}.xhint::before{content:"·";margin:0 6px}.xcols{display:flex;align-items:flex-end;gap:3px;height:190px;padding-top:16px}',
  '.xcol{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;cursor:pointer;position:relative}',
  '.xcol .tot{flex:none;font-size:10px;font-weight:700;color:var(--ink);margin-bottom:2px;white-space:nowrap}.xcol .xstk{flex:none;width:72%;max-width:38px;display:flex;flex-direction:column-reverse;border-radius:3px;overflow:hidden}',
  '.xcol .xstk i{flex:none;display:block;width:100%;border-top:1.5px solid #fff}.xcol .xstk i:last-child{border-top:0}.xcol .ml{flex:none;font-size:9.5px;color:var(--mut);margin-top:4px;white-space:nowrap;height:12px}',
@@ -580,7 +580,7 @@ function exPrep(d){var B=new Date(2025,0,1,12);function dy(i){var x=new Date(B);
  function o(i){return{d:i,ym:ym(i),y:dy(i).getFullYear()}}
  function ext(a,b){for(var k in b)a[k]=b[k];return a}
  return{raw:d,lim:!!d.lim,dy:dy,ym:ym,A:d.A,Tr:d.Tr,C:d.C,Ac:d.Ac,K:d.K,Kd:d.Kd,N:d.N,I:d.I,updated:d.updated,today:d.today,
-  P:d.P.map(function(r){return ext(o(r[0]),{a:r[1],t:r[2],m:r[3],tr:r[4],p:r[5],c:r[6],h:r[7]/10,ac:r[8]})}),
+  P:d.P.map(function(r,i){var al=String(d.Ac[r[8]]||'');return ext(o(r[0]),{a:r[1],t:r[2],m:r[3],tr:r[4],p:r[5],c:r[6],h:r[7]/10,ac:r[8],sk:(!al||al.charAt(0)==='|')?'r'+i:r[8]})}),
   T:d.T.map(function(r){return ext(o(r[0]),{a:r[1],p:r[2],k:r[3],s:r[4],tr:r[5]})}),
   TH:(d.TH||[]).map(function(r){return ext(o(r[0]),{a:r[1],p:r[2],v:r[3]})}),
   FB:(d.FB||[]).map(function(r){return ext(o(r[0]),{a:r[1],tr:r[2],part:r[3],resp:r[4],sum:r[5],q:r.slice(6,11)})}),
@@ -598,7 +598,7 @@ function exNorm(k,v){return(k==='ym'||k==='t'||k==='m')?String(v):+v}
 var EXDIM={P:['y','ym','d','a','t','m','tr','c','p'],T:['y','ym','d','a','tr','p','s'],TH:['y','ym','d','a','p'],FB:['y','ym','a','tr'],PL:['y','ym','a'],EL:['y','ym','a']};
 function exRows(set,skip){var dims=EXDIM[set],src=EX.d[set]||[];return src.filter(function(r){for(var i=0;i<dims.length;i++){var k=dims[i],f=EX.F[k];if(k===skip||(skip&&skip.indexOf&&skip.indexOf(k)>=0&&typeof skip!=='string')||!f.length)continue;if(f.indexOf(r[k])<0)return false}return true})}
 function exTog(k,v,add){v=exNorm(k,v);var f=EX.F[k],i=f.indexOf(v);if(add){if(i>=0)f.splice(i,1);else f.push(v)}else{if(f.length===1&&i===0)f.length=0;else{f.length=0;f.push(v)}}exRender()}
-function exGrp(rows,key){var m={},o=[];rows.forEach(function(r){var k=key(r),x=m[k];if(!x){x=m[k]={k:k,n:0,h:0,p:{},np:0,ac:{},na:0,s:0};o.push(x)}x.n++;x.h+=r.h||0;x.s+=r.s||0;if(!x.p[r.p]){x.p[r.p]=1;x.np++}if(r.ac!==undefined&&!x.ac[r.ac]){x.ac[r.ac]=1;x.na++}});return o}
+function exGrp(rows,key){var m={},o=[];rows.forEach(function(r){var k=key(r),x=m[k];if(!x){x=m[k]={k:k,n:0,h:0,e:0,p:{},np:0,ac:{},na:0,s:0};o.push(x)}x.n++;x.h+=r.h||0;x.s+=r.s||0;if(!x.p[r.p]){x.p[r.p]=1;x.np++}if(r.sk!==undefined){var q=x.ac[r.sk];if(q===undefined){x.ac[r.sk]=r.h||0;x.na++;x.e+=r.h||0}else if((r.h||0)>q){x.e+=r.h-q;x.ac[r.sk]=r.h}}});return o}
 function exAt(k,v,tip){return' data-xk="'+k+'" data-xv="'+esc(v)+'" role="button" tabindex="0"'+(tip?' data-tip="'+esc(tip)+'"':'')}
 function exDim(k,v){var f=EX.F[k];return f.length?(f.indexOf(exNorm(k,v))>=0?' on':' dim'):''}
 function exD(i){return i==null?'–':fdate(exIso(i))}
@@ -617,9 +617,9 @@ function exDonut(items,k,center,sub){var tot=items.reduce(function(a,x){return a
 /* ---------- grafici ---------- */
 function exMonths(){var D=EX.d,rows=exRows('P',['ym','t']),all={},m={};
  var base=D.P.filter(function(r){return!EX.F.y.length||EX.F.y.indexOf(r.y)>=0});base.forEach(function(r){all[r.ym]=1});var ks=Object.keys(all).sort();if(!ks.length)return exEmpty();
- rows.forEach(function(r){var o=m[r.ym]=m[r.ym]||{LESSON:0,HANDS:0,TOJ:0,OTHER:0,tot:0};var k=(r.t==='HANDS'||r.t==='TOJ'||r.t==='LESSON')?r.t:'OTHER';o[k]+=r.h;o.tot+=r.h});
+ var hm=EX.hm||'e',seen={};rows.forEach(function(r){var o=m[r.ym]=m[r.ym]||{LESSON:0,HANDS:0,TOJ:0,OTHER:0,tot:0};var k=(r.t==='HANDS'||r.t==='TOJ'||r.t==='LESSON')?r.t:'OTHER',v=r.h;if(hm==='e'){var q=seen[r.sk];if(q===undefined){seen[r.sk]=v}else if(v>q){seen[r.sk]=v;v=v-q}else v=0}o[k]+=v;o.tot+=v});
  var mx=Math.max.apply(null,ks.map(function(k){return m[k]?m[k].tot:0}).concat([1]));var TC={LESSON:XC.cls,HANDS:XC.hands,TOJ:XC.tojc,OTHER:XC.gray};var every=ks.length>14?2:1;
- var h='<div class="xleg">'+['LESSON','HANDS','TOJ','OTHER'].map(function(k){return'<span>'+'<i style="background:'+TC[k]+'"></i>'+t(k==='OTHER'?'xt_OTHER':'xt_'+k)+'</span>'}).join('')+'</div><div class="xsc"><div class="xcols" style="min-width:'+(ks.length*30)+'px">';
+ var h='<div class="xhm"><button class="'+(hm==='e'?'on':'')+'" data-xhm="e">'+t('hm_e')+'</button><button class="'+(hm==='f'?'on':'')+'" data-xhm="f">'+t('hm_f')+'</button></div><div class="xleg">'+['LESSON','HANDS','TOJ','OTHER'].map(function(k){return'<span>'+'<i style="background:'+TC[k]+'"></i>'+t(k==='OTHER'?'xt_OTHER':'xt_'+k)+'</span>'}).join('')+'</div><div class="xsc"><div class="xcols" style="min-width:'+(ks.length*30)+'px">';
  ks.forEach(function(k,i){var o=m[k]||{tot:0},H=140,ft=EX.F.t;h+='<div class="xcol'+exDim('ym',k)+'"'+exAt('ym',k,mlab(k)+': '+num(o.tot)+' h')+'><div class="tot">'+(o.tot?num(o.tot):'')+'</div><div class="xstk">';
   ['LESSON','HANDS','TOJ','OTHER'].forEach(function(tk){var v=o[tk]||0;if(!v)return;var dim=ft.length&&ft.indexOf(tk)<0&&tk!=='OTHER'?';opacity:.28':'';h+='<i style="height:'+Math.max(2,v/mx*H)+'px;background:'+TC[tk]+dim+'"'+(tk!=='OTHER'?exAt('t',tk,mlab(k)+' · '+t('xt_'+tk)+': '+num(v)+' h'):' data-tip="'+num(v)+' h"')+'></i>'});
   h+='</div><div class="ml">'+(i%every===0?mlab(k):'')+'</div></div>'});
@@ -692,7 +692,7 @@ function exRender(){if(S.tab!=='explore')return;var D=EX.d,lim=D.lim;
  var prAvg=pr.length?pr.reduce(function(a,o){return a+o.pct},0)/pr.length:0,prNext=pr.map(function(o){return o.next}).filter(function(x){return x!=null}).sort()[0];
  var ptD=pt.reduce(function(a,o){return a+o.done},0),ptT=pt.reduce(function(a,o){return a+o.tot},0),ptNext=pt.map(function(o){return o.next}).filter(function(x){return x!=null}).sort()[0];
  var pla=rpl?rpl.filter(function(r){return r.k==='A'}):[],plt=rpl?rpl.filter(function(r){return r.k==='T'}):[],pOk=function(a){return a.filter(function(r){return r.ok}).length};
- var k1=exTile(t('c_cls'),XC.cls,num(hrs),t('k_hours'),t('k_ppl',{p:num(Object.keys(pp).length),a:num(Object.keys(ac).length)}))+
+ var g0=exGrp(rp,function(){return 0})[0]||{e:0,h:0,na:0,np:0};var k1=exTile(t('c_cls'),XC.cls,num(Math.round(g0.e)),t('k_hours'),t('k_ppl',{f:num(Math.round(g0.h)),p:num(g0.np),a:num(g0.na)}))+
   exTile(t('c_toj'),XC.toj,num(rt.length),t('k_rated'),rt.length?t('k_tojn',{p:num(Object.keys(tp).length),v:num(ts/rt.length,1)}):'')+
   exTile(t('c_th'),XC.th,rth.length?pct(thp/rth.length):'–',t('k_pass'),rth.length?t('k_thn',{n:num(rth.length),v:num(tha)}):'')+
   exTile(t('c_el'),XC.el,num(rel.length),t('k_el'),t('k_eln',{u:elU,k:elK}))+
@@ -704,7 +704,7 @@ function exRender(){if(S.tab!=='explore')return;var D=EX.d,lim=D.lim;
  h+='<div class="xkp odd" style="--n:5">'+k1+'</div><div class="xkp'+(k2.length%2?' odd':'')+'" style="--n:'+k2.length+'">'+k2.join('')+'</div>';
  /* pannelli */
  var noA=EX.F.a.length?t('g_noarea'):'';
- h+='<div class="xg">'+exPanel(t('c_cls'),XC.cls,t('g_months'),exMonths(),t('g_monthsf'),'s2')+exPanel(t('c_cls'),XC.cls,t('g_areas'),exAreasDonut())+
+ h+='<div class="xg">'+exPanel(t('c_cls'),XC.cls,t('g_months'),exMonths(),t('hmf_'+(EX.hm||'e'))+' · '+t('g_monthsf'),'s2')+exPanel(t('c_cls'),XC.cls,t('g_areas'),exAreasDonut())+
   exPanel(t('c_toj'),XC.toj,t('g_toj'),exToj(),t('g_tojf'),'s2')+exPanel(t('c_th'),XC.th,t('g_th'),exTheory(rth),rth.length?t('g_thf',{n:num(rth.length),p:thp}):'')+
   exPanel(t('c_fb'),XC.fb,t('g_fb'),exFbQ(rfb),fR?(lim?t('k_fbl',{r:num(fR)}):t('k_fbn',{r:num(fR),c:pct(fA?fW/fA:0)})):'')+
   (rpl?exPanel(t('c_pl'),XC.pl,t('g_pl'),exPlan(rpl)):'')+exPanel(t('c_mode'),XC.cls,t('g_mode'),exModeDonut())+
@@ -714,23 +714,23 @@ function exRender(){if(S.tab!=='explore')return;var D=EX.d,lim=D.lim;
  exRows('TH','a').forEach(function(r){var o=tha2[r.a]=tha2[r.a]||{n:0,ok:0};o.n++;if(r.v>=70)o.ok++});exRows('FB','a').forEach(function(r){var o=fba[r.a]=fba[r.a]||{r:0,s:0};o.r+=r.resp;o.s+=r.sum});
  if(rpl)exRows('PL','a').forEach(function(r){if(r.k!=='A')return;var o=pla2[r.a]=pla2[r.a]||{n:0,ok:0};o.n++;if(r.ok)o.ok++});
  var arAll={};ga.forEach(function(x){arAll[x.k]=1});[ta,tha2,fba].forEach(function(o){for(var k in o)arAll[k]=1});
- var rowsA=Object.keys(arAll).map(Number).map(function(k){var g=ga.filter(function(x){return x.k===k})[0]||{np:0,h:0};return{k:k,g:g}}).sort(function(a,b){return b.g.h-a.g.h});
- var head=[{t:t('x_a')},{t:t('x_k1'),r:1},{t:t('x_k2'),r:1},{t:t('x_k5'),r:1},{t:t('x_k6'),r:1},{t:t('x_k7'),r:1},{t:t('x_k8'),r:1}].concat(rpl?[{t:t('x_k9'),r:1}]:[]);
+ var rowsA=Object.keys(arAll).map(Number).map(function(k){var g=ga.filter(function(x){return x.k===k})[0]||{np:0,h:0,e:0};return{k:k,g:g}}).sort(function(a,b){return b.g.e-a.g.e});
+ var head=[{t:t('x_a')},{t:t('x_k1'),r:1},{t:t('x_k2'),r:1},{t:t('x_k2f'),r:1},{t:t('x_k5'),r:1},{t:t('x_k6'),r:1},{t:t('x_k7'),r:1},{t:t('x_k8'),r:1}].concat(rpl?[{t:t('x_k9'),r:1}]:[]);
  h+='<div class="sec" style="margin-top:22px"><h2>'+t('x_cmp')+'<span>'+t('x_cmpf')+'</span></h2>'+table(head,rowsA.map(function(x){var k=x.k,a=ta[k],th=tha2[k],f=fba[k],p=pla2[k];
-  return{c:['<span class="lk">'+esc(D.A[k])+'</span>',x.g.np?num(x.g.np):'–',x.g.h?num(x.g.h):'–',a?num(a.n):'–',a?lvChip(a.s/a.n):lvChip(''),th?pct(th.ok/th.n):'–',f&&f.r?num(f.s/f.r,1):'–'].concat(rpl?[p?pct(p.ok/p.n):'–']:[]),xk:'a',xv:k}}))+'</div>';
+  return{c:['<span class="lk">'+esc(D.A[k])+'</span>',x.g.np?num(x.g.np):'–',x.g.e?num(Math.round(x.g.e)):'–',x.g.h?num(Math.round(x.g.h)):'–',a?num(a.n):'–',a?lvChip(a.s/a.n):lvChip(''),th?pct(th.ok/th.n):'–',f&&f.r?num(f.s/f.r,1):'–'].concat(rpl?[p?pct(p.ok/p.n):'–']:[]),xk:'a',xv:k}}))+'</div>';
  h+=sec(t('x_cal'),t('x_caln'),'<div class="box" style="padding:6px 12px 10px">'+exCal()+'</div>');
- if(!lim){var tg=exGrp(exRows('P','tr'),function(r){return r.tr}).sort(function(a,b){return b.h-a.h}).slice(0,20);
-  h+=sec(t('x_trs'),'',table([{t:t('x_tr')},{t:t('x_k3'),r:1},{t:t('x_k1'),r:1},{t:t('x_k2'),r:1}],tg.map(function(x){return{c:['<span class="lk">'+esc(D.Tr[x.k])+'</span>',num(x.na),num(x.np),num(x.h)],xk:'tr',xv:x.k}})))}
+ if(!lim){var tg=exGrp(exRows('P','tr'),function(r){return r.tr}).sort(function(a,b){return b.e-a.e}).slice(0,20);
+  h+=sec(t('x_trs'),'',table([{t:t('x_tr')},{t:t('x_k3'),r:1},{t:t('x_k1'),r:1},{t:t('x_k2'),r:1},{t:t('x_k2f'),r:1}],tg.map(function(x){return{c:['<span class="lk">'+esc(D.Tr[x.k])+'</span>',num(x.na),num(x.np),num(Math.round(x.e)),num(Math.round(x.h))],xk:'tr',xv:x.k}})))}
  var pg=exGrp(exRows('P','p'),function(r){return r.p}),tj={};exRows('T','p').forEach(function(r){var o=tj[r.p]=tj[r.p]||{n:0,s:0};o.n++;o.s+=r.s});
  var tot=pg.length;pg.sort(function(a,b){return b.h-a.h});pg=pg.slice(0,50);
  h+=sec(t('x_ppl'),t('x_pn',{n:pg.length,t:tot}),table([{t:t('name')},{t:t('x_k3'),r:1},{t:t('tl_hours'),r:1},{t:t('x_k5'),r:1},{t:t('avg'),r:1},{t:''}],pg.map(function(x){var o=tj[x.k];
   return{c:['<span class="lk">'+esc(D.N[x.k]||D.I[x.k])+'</span>',num(x.na),num(x.h,1),o?o.n:'–',o?lvChip(o.s/o.n):lvChip(''),'<span class="lk" style="cursor:pointer" data-go="person:'+esc(D.I[x.k])+'">'+t('x_open')+'</span>'],xk:'p',xv:x.k}})));
- if(EX.F.p.length||EX.F.d.length||EX.F.ym.length){var ag=exGrp(rp,function(r){return r.ac}).map(function(x){var r0=rp.filter(function(r){return r.ac===x.k})[0];x.d=r0.d;x.a=r0.a;return x}).sort(function(a,b){return b.d-a.d}).slice(0,40);
-  h+=sec(t('x_acts'),'',table([{t:t('date')},{t:t('course')},{t:t('area')},{t:t('x_k4'),r:1},{t:t('tl_hours'),r:1}],ag.map(function(x){return{c:[fdate(exIso(x.d)),esc(D.Ac[x.k]||''),esc(D.A[x.a]),num(x.n),num(x.h,1)],xk:'d',xv:x.d}})))}
+ if(EX.F.p.length||EX.F.d.length||EX.F.ym.length){var ag=exGrp(rp,function(r){return r.sk}).map(function(x){var r0=rp.filter(function(r){return r.sk===x.k})[0];x.d=r0.d;x.a=r0.a;x.ac0=r0.ac;x.t=r0.t;return x}).sort(function(a,b){return b.d-a.d}).slice(0,40);
+  h+=sec(t('x_acts'),'',table([{t:t('date')},{t:t('course')},{t:t('area')},{t:t('x_k4'),r:1},{t:t('x_dur'),r:1},{t:t('x_k2f'),r:1}],ag.map(function(x){var al=String(D.Ac[x.ac0]||''),ti=al.indexOf('|')>=0?al.slice(al.indexOf('|')+1):al;return{c:[fdate(exIso(x.d)),esc(ti||t('xt_'+x.t)),esc(D.A[x.a]),num(x.n),num(x.e,1),num(x.h,1)],xk:'d',xv:x.d}})))}
  show(h);[].forEach.call(document.querySelectorAll('.xsc'),function(e){e.scrollLeft=e.scrollWidth});
  open.forEach(function(k){var e=document.querySelector('details.xdd[data-xdd="'+k+'"]');if(e)e.open=true});
  [].forEach.call(document.querySelectorAll('[data-xck]'),function(c){c.onchange=function(){var k=c.getAttribute('data-xck'),v=exNorm(k,c.value),f=EX.F[k],i=f.indexOf(v);if(c.checked&&i<0)f.push(v);if(!c.checked&&i>=0)f.splice(i,1);exRender()}});
- var ya=document.querySelector('[data-xya]');if(ya)ya.onclick=function(){EX.F.y.length=0;exRender()};var cl=document.getElementById('xclr');if(cl)cl.onclick=function(){EXK.forEach(function(k){EX.F[k].length=0});exRender()};
+ [].forEach.call(document.querySelectorAll('[data-xhm]'),function(b){b.onclick=function(){EX.hm=b.getAttribute('data-xhm');exRender()}}); var ya=document.querySelector('[data-xya]');if(ya)ya.onclick=function(){EX.F.y.length=0;exRender()};var cl=document.getElementById('xclr');if(cl)cl.onclick=function(){EXK.forEach(function(k){EX.F[k].length=0});exRender()};
  [].forEach.call(document.querySelectorAll('[data-xrm]'),function(b){b.onclick=function(){var k=b.getAttribute('data-xrm'),v=exNorm(k,b.getAttribute('data-xv')),f=EX.F[k],i=f.indexOf(v);if(i>=0)f.splice(i,1);exRender()}});
  bindFilters()}
 /* righe di tabella cliccabili: table() di base non conosce xk/xv → le aggiungo dopo */
