@@ -2062,7 +2062,7 @@ function renderHome() {
     return '<button class="tile" data-k="' + t.k + '"><span class="ic">' + t.ic + '</span><b>' + esc(t.t) + '</b><small>' + esc(t.d) + '</small></button>';
   }).join('') + '</div></div><div class="htoday"><div class="sec hsec">As minhas actividades de hoje · ' + esc(fmtDate(today, true)) + '</div>' +
     (mine.length ? mine.map(function (a) { return hrow(a, today); }).join('') : '<div class="noact">Sem actividades suas hoje.</div>') + '</div></div>';
-  h += '<div class="foot">CHDCP Conecta · v0.9.18' + (pushOn() ? ' · <button class="link" id="pushOff" style="margin:0">🔔 Desactivar notificações</button>' : '') + '</div></div>';
+  h += '<div class="foot">CHDCP Conecta · v0.9.19' + (pushOn() ? ' · <button class="link" id="pushOff" style="margin:0">🔔 Desactivar notificações</button>' : '') + '</div></div>';
   $('app').innerHTML = h;
   $('app').classList.remove('weekwide');
   $('app').classList.add('homewide');
@@ -3028,9 +3028,17 @@ function screenCalFeed(opts) {
         '<div class="calnote">O link é <b>pessoal</b>: quem o tiver vê as suas actividades. Se o enviou por engano: «Novo link».</div>' +
         '<div class="calbtns"><button id="fNew">Novo link</button><button class="bad" id="fOff">Desactivar</button></div>';
     }
+    /* v0.9.19: il Teams mostra solo il calendario principale → file da importare (copia ferma) */
+    h += '</div><div class="card" style="margin-top:10px"><div class="sec" style="margin-top:0">Quer as actividades no calendário do Teams?</div>' +
+      '<p class="small" style="margin:4px 0 10px">O Teams só mostra o calendário principal do Outlook. Descarregue o ficheiro e importe-o no calendário principal: fica uma cópia fixa das suas actividades das próximas 8 semanas (não se actualiza sozinha).</p>' +
+      '<div class="calbtns"><button class="pri" id="fTeams">⬇️ Descarregar ficheiro para o Teams</button></div>' +
+      '<ol class="small" style="margin:10px 0 0 18px;padding:0"><li>Clique no botão: descarrega o ficheiro CHDCP_Conecta_….ics.</li><li>Outlook web ou novo Outlook: Calendário › Adicionar calendário › Carregar a partir de ficheiro › escolha o ficheiro e, em «Importar para», o calendário principal «Calendário» › Importar.</li><li>Outlook clássico: Ficheiro › Abrir e Exportar › Importar/Exportar › Importar um ficheiro iCalendar (.ics) › Importar.</li><li>As actividades aparecem no Teams.</li></ol>' +
+      '<p class="small muted" style="margin:8px 0 0">Para actualizar: apague as actividades importadas antes (procure a categoria «CHDCP Conecta») e volte a importar, para não ficarem duplicadas.</p>';
     h += '</div><div class="calnote" style="background:var(--info-soft);border-color:#c9dbf5">Mostra as actividades dos últimos 14 dias e dos próximos meses. «[Previsto]» = ainda não confirmada. As alterações chegam ao telemóvel em 1–2 horas. A referência é sempre a app.</div></div>';
     page(h, true);
     if ($('fOn')) $('fOn').onclick = function () { screenCalFeed({ create: true }); };
+    if ($('fTeams')) $('fTeams').onclick = function () { var bt = $('fTeams'); bt.disabled = true; bt.textContent = 'A preparar…';
+      call('apiCalExport', S.token).then(function (x) { bt.disabled = false; bt.textContent = '⬇️ Descarregar ficheiro para o Teams'; openExt(x.url); }, function (e) { bt.disabled = false; bt.textContent = '⬇️ Descarregar ficheiro para o Teams'; toast((e && e.message) || 'Erro.'); }); };
     /* link vero: sul telefono apre direttamente Calendário › Subscrever (window.open non funziona nell'app installata) */
     if ($('fSub')) $('fSub').onclick = function (e) { try { e.preventDefault(); window.location.href = r.webcal; } catch (x) {} };
     if ($('fG')) $('fG').onclick = function (e) { try { e.preventDefault(); } catch (x) {} openExt(r.google); };
