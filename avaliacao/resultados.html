@@ -346,13 +346,13 @@ function stack(d){var tot=(d||[]).reduce(function(a,b){return a+b},0);if(!tot)re
 function mini(f,c){if(f===''||f==null)return'';return'<span class="mini"><i style="width:'+Math.min(100,f*100)+'%;background:'+c+'"></i></span>'}
 function card(o){return'<div class="card'+(o.st?' st '+o.st:'')+'"><div class="l">'+esc(o.l)+'</div><div class="v" style="'+(o.c?'color:'+o.c:'')+'">'+o.v+'</div>'+(o.f!=null&&o.f!==''?'<div class="trk"><i style="width:'+Math.min(100,o.f*100)+'%;background:'+(o.bc||col(o.st))+'"></i></div>':'')+(o.n?'<div class="n">'+o.n+'</div>':'')+'</div>'}
 function delta(c,p,y,dec){if(c===''||p===''||p==null||c==null)return'';var d=c-p;if(Math.abs(d)<(dec?0.05:0.5))return'= '+t('vs',{y:y});return(d>0?'<span style="color:var(--ok)">▲ +':'<span style="color:var(--bad)">▼ −')+(dec?num(Math.abs(d),1):num(Math.abs(d)))+'</span> '+t('vs',{y:y})}
-function mainCards(k,kp,fb,y){var L=k.plan===undefined;var lf=!L&&k.avail?k.lessons/k.avail:'';var ll=L?'':lvl(lf,'LESSONS'),lp=L?'':lvl(k.plan,'PLAN'),lt=lvl(k.avg,'TOJ_LEVEL'),ls=fb&&!L?lvl(fb.cov,'FB_RATE'):'';
+function mainCards(k,kp,fb,y){var L=k.plan===undefined;var lf=!L&&k.avail?k.lessons/k.avail:'';var ll=L?'':lvl(lf,'LESSONS'),lp=L?'':lvl(k.plan,'PLAN'),lt=lvl(k.avg,'TOJ_LEVEL'),ls=fb&&fb.cov!==undefined?lvl(fb.cov,'FB_RATE'):'';
  return'<div class="grid">'+
  card({l:t('trainees'),v:num(k.trainees),n:kp?delta(k.trainees,kp.trainees,y):''})+
  (L?card({l:t('lessons_done'),v:num(k.lessons)}):card({l:t('lessons'),v:k.lessons+(k.avail?' / '+k.avail:''),st:ll,f:lf,n:(lf===''?'':pct(lf)+' · '+t('target',{t:pct(SET.TARGET_LESSONS)}))+(kp?'<br>'+delta(k.lessons,kp.lessons,y):'')}))+
  (L?'':card({l:t('plan'),v:pct(k.plan),st:lp,f:k.plan,c:lp==='bad'?'var(--bad)':'',n:k.plan===''?'':t('target',{t:pct(SET.TARGET_PLAN)})}))+
  card({l:t('toj'),v:k.avg===''?'–':num(k.avg,1),st:lt,f:k.avg===''?'':k.avg/5,bc:'var(--l5)',n:k.ratings?t('ratings',{r:num(k.ratings),p:k.assessed,a:pct(k.autonomy)})+(kp?'<br>'+delta(k.avg,kp.avg,y,1):''):''})+
- (L?card({l:t('satk'),v:fb&&fb.avg!==''&&fb.avg!=null?num(fb.avg,1):'–',n:fb&&fb.acts?'':t('noq')}):card({l:t('satk'),v:fb&&fb.avg!==''?num(fb.avg,1):'–',st:ls,f:fb?fb.cov:'',c:fb&&fb.avg!==''&&fb.avg>=4?'var(--ok)':'',n:fb&&fb.acts?t('satn',{c:pct(fb.cov),r:pct(fb.rate)}):t('noq')}))+
+ ((!fb||fb.cov===undefined)?card({l:t('satk'),v:fb&&fb.avg!==''&&fb.avg!=null?num(fb.avg,1):'–',n:fb&&fb.acts?'':t('noq')}):card({l:t('satk'),v:fb&&fb.avg!==''?num(fb.avg,1):'–',st:ls,f:fb?fb.cov:'',c:fb&&fb.avg!==''&&fb.avg>=4?'var(--ok)':'',n:fb&&fb.acts?t('satn',{c:pct(fb.cov),r:pct(fb.rate)}):t('noq')}))+
  '</div>'}
 function table(head,rows,cls){var rt=head.length>=4;var h='<div class="box"><table'+(rt?' class="rt"':'')+'><tr>'+head.map(function(x){return'<th'+(x.r?' class="r"':'')+'>'+esc(x.t)+'</th>'}).join('')+'</tr>';rows.forEach(function(r){h+='<tr'+(r.on?' class="click" data-go="'+esc(r.on)+'"':'')+'>'+r.c.map(function(c,i){return'<td'+(head[i]&&head[i].r?' class="r"':'')+(rt&&head[i]&&head[i].t?' data-l="'+esc(head[i].t)+'"':'')+'>'+c+'</td>'}).join('')+'</tr>'});return h+'</table></div>'}
 function sec(title,note,body){return'<div class="sec"><h2>'+esc(title)+(note?'<span>'+esc(note)+'</span>':'')+'</h2>'+body+'</div>'}
@@ -491,7 +491,7 @@ function vSat(d){var k=d.k,isT=S.user.role==='TRAINER';
  xl_title:['Are they learning?', 'Estão a aprender?', 'Stanno imparando?'],
  xl_sub:['autonomy in clinical skills · data at {d}', 'autonomia nas competências clínicas · dados a {d}', 'autonomia nelle competenze cliniche · dati al {d}'],
  xl_kpi:['KPI · trainees progressing', 'KPI · formandos em progresso', 'KPI · formandi in progresso'],
- xl_a:['{o} of {n} re-assessed trainees are learning:', '{o} de {n} formandos reavaliados estão a aprender:', '{o} formandi su {n} rivalutati stanno imparando:'],
+ xl_a:['{p}% of re-assessed trainees are learning:','{p}% dos formandos reavaliados estão a aprender:','Il {p}% dei formandi rivalutati sta imparando:'],
  xl_b:['they moved up in autonomy level or are already autonomous', 'subiram de nível de autonomia ou já são autónomos', 'sono saliti di livello di autonomia o sono già autonomi'],
  xl_tg:['target {t}%', 'meta {t}%', 'target {t}%'],
  xl_miss:['{m} points to reach the target','faltam {m} pontos para a meta','mancano {m} punti al target'],
@@ -504,6 +504,7 @@ function vSat(d){var k=d.k,isT=S.user.role==='TRAINER';
  xl_c:['Learning', 'Aprendizagem', 'Apprendimento'],
  xl_area:['Trainees progressing, area by area', 'Formandos em progresso, área a área', 'Formandi in progresso, area per area'],
  xl_areas:['re-assessed trainees who moved up or are autonomous · black mark = {t}% target', 'formandos reavaliados que subiram ou são autónomos · traço preto = meta {t}%', 'formandi rivalutati saliti di livello o già autonomi · tratto nero = target {t}%'],
+ xl_nore:['not re-assessed yet','ainda sem reavaliação','ancora nessuna rivalutazione'],
  xl_all:['Whole project', 'Todo o projecto', 'Tutto il progetto'],
  xl_lv:['level {a} → {b}', 'nível {a} → {b}', 'livello {a} → {b}'],
  xl_lvt:['Autonomy level of trainees', 'Nível de autonomia dos formandos', 'Livello di autonomia dei formandi'],
@@ -529,7 +530,7 @@ function vSat(d){var k=d.k,isT=S.user.role==='TRAINER';
  k_lua:['CCM professionals','profissionais do CCM','professionisti CCM'],k_mil:['CHDCP professionals','profissionais do CHDCP','professionisti CHDCP'],k_mobn:['{d} days · +{f} planned','{d} dias · +{f} previstos','{d} giorni · +{f} previsti'],
  k_prc:['average progress','progresso médio','avanzamento medio'],k_prcn:['{n} procedures · next {d}','{n} procedimentos · próxima {d}','{n} procedure · prossima {d}'],
  k_prt:['steps done','fases feitas','fasi svolte'],k_prtn:['{n} protocols · next {d}','{n} protocolos · próxima {d}','{n} protocolli · prossima {d}'],
- g_months:['Training hours by month and type','Horas de formação por mês e tipo','Ore di formazione per mese e tipo'],g_monthsf:['tap a month or a colour','toque num mês ou numa cor','tocca un mese o un colore'],hm_e:['delivered','dadas','erogate'],hm_f:['per trainee','por formando','per formando'],hmf_e:['delivered: each session counted once, with its duration','dadas: cada sessão contada uma vez, com a sua duração','erogate: ogni sessione contata una volta, con la sua durata'],hmf_f:['per trainee: duration × people present','por formando: duração × pessoas presentes','per formando: durata × persone presenti'],
+ g_months:['Training hours by month and type','Horas de formação por mês e tipo','Ore di formazione per mese e tipo'],g_monthsf:['tap a month or a colour','toque num mês ou numa cor','tocca un mese o un colore'],hm_e:['delivered','dadas','erogate'],hm_f:['per trainee','por formando','per formando'],hmf_e:['delivered: each session counted once, with its duration','dadas: cada sessão contada uma vez, com a sua duração','erogate: ogni sessione contata una volta, con la sua durata'],hmf_f:['per trainee: duration × people present','por formando: duração × pessoas presentes','per formando: durata × persone presenti'],r25:['2025 hours: Capacity Building Report 2023–2025','horas 2025: Capacity Building Report 2023–2025','ore 2025: Capacity Building Report 2023–2025'],
  g_areas:['Trainees by area','Formandos por área','Formandi per area'],g_toj:['Levels of the rated skills, by area','Níveis das competências avaliadas, por área','Livelli delle skill valutate, per area'],g_tojf:['1 = not independent · 5 = independent · skills not rated excluded','1 = não independente · 5 = independente · competências não avaliadas excluídas','1 = non autonomo · 5 = autonomo · skill non valutate escluse'],
  g_th:['Theory test results','Resultados das provas teóricas','Risultati delle prove teoriche'],g_thf:['{n} tests · {p} above the 70% threshold','{n} provas · {p} acima de 70%','{n} prove · {p} sopra la soglia del 70%'],g_thr:['70% threshold','limiar 70%','soglia 70%'],
  g_fb:['Average score by question','Média por pergunta','Punteggio medio per domanda'],g_pl:['Weekly plan: done / planned','Plano semanal: feito / previsto','Piano settimanale: fatto / previsto'],
@@ -616,12 +617,12 @@ var XC={cls:'#2a78d6',toj:'#256abf',th:'#c98500',el:'#13946a',fb:'#137a46',pl:'#
  '.xls{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}.xlc{background:#fff;border:1px solid var(--line);border-radius:8px;padding:11px 16px;display:flex;gap:16px;align-items:center}',
  '.xlc b{font-size:26px;font-weight:800;white-space:nowrap;font-variant-numeric:tabular-nums}.xlc span{font-size:12.5px;line-height:1.35}.xlc em{display:block;font-style:normal;color:var(--mut);font-size:11px;margin-top:2px}',
  '.xls2{font-size:11px;color:var(--mut);margin:-6px 0 6px}',
- '.xlar{display:grid;grid-template-columns:118px minmax(0,1fr) 44px 104px;gap:10px;align-items:center;margin:9px 0;cursor:pointer;border-radius:5px}.xlar:hover{background:#f4f8fd}.xlar.tot{cursor:default;margin-bottom:14px}.xlar.tot:hover{background:none}',
+ '.xlar{display:grid;grid-template-columns:118px minmax(0,1fr) 44px 104px;gap:10px;align-items:center;margin:9px 0;cursor:pointer;border-radius:5px}.xlar:hover{background:#f4f8fd}.xlar.na b,.xlar.na .n{color:var(--mut)}.xlar.tot{cursor:default;margin-bottom:14px}.xlar.tot:hover{background:none}',
  '.xlar .n{font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.xlar.tot .n{font-weight:800}.xlar b{font-size:14px;text-align:right;font-variant-numeric:tabular-nums}.xlar em{font-style:normal;font-size:11px;color:var(--mut);white-space:nowrap}',
  '.xlbar.sm{height:12px}.xlbar.sm u{top:-4px;bottom:-4px;width:2px;margin-left:-1px}',
  '.xlst{display:grid;grid-template-columns:104px minmax(0,1fr);gap:10px;align-items:center;margin:12px 0}.xlst .l{font-size:12px}.xlst .l.b{font-weight:800}',
  '.xlst .s{display:flex;height:30px;border-radius:4px;overflow:hidden}.xlst .s i{display:flex;align-items:center;justify-content:center;font-style:normal;font-size:11.5px;font-weight:700;border-right:2px solid #fff;min-width:0}.xlst .s i:last-child{border-right:0}',
- '.xlnote{font-size:11px;color:var(--mut);margin-top:8px}',
+ '.xllt{width:100%;border-collapse:collapse;margin-top:10px;font-size:12px}.xllt th{font-size:10.5px;color:var(--mut);font-weight:700;text-align:right;padding:3px 4px}.xllt td{padding:4px;border-top:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums}.xllt td:first-child{text-align:left}.xllt td i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}.xlnote{font-size:11px;color:var(--mut);margin-top:8px}',
  '@media (max-width:640px){.xlh{grid-template-columns:minmax(0,1fr);gap:4px;padding:14px 16px}.xll .v{font-size:48px}.xls{grid-template-columns:minmax(0,1fr)}.xlar{grid-template-columns:104px minmax(0,1fr) 40px}.xlar .n{font-size:12px}.xlar em{display:none}.xlr .a{margin-top:6px}}',
  'tr.xon td{background:var(--soft)!important}',
  '#xtip{position:fixed;z-index:60;pointer-events:none;background:var(--ink);color:#fff;font-size:11.5px;padding:5px 8px;border-radius:6px;opacity:0;transition:opacity .1s;max-width:260px}',
@@ -633,14 +634,14 @@ function exPrep(d){var B=new Date(2025,0,1,12);function dy(i){var x=new Date(B);
  function o(i){return{d:i,ym:ym(i),y:dy(i).getFullYear()}}
  function ext(a,b){for(var k in b)a[k]=b[k];return a}
  return{raw:d,lim:!!d.lim,dy:dy,ym:ym,A:d.A,Tr:d.Tr,C:d.C,Ac:d.Ac,K:d.K,Kd:d.Kd,N:d.N,I:d.I,updated:d.updated,today:d.today,
-  P:d.P.map(function(r,i){var al=String(d.Ac[r[8]]||'');return ext(o(r[0]),{a:r[1],t:r[2],m:r[3],tr:r[4],p:r[5],c:r[6],h:r[7]/10,ac:r[8],sk:(!al||al.charAt(0)==='|')?'r'+i:r[8]})}),
+  P:d.P.map(function(r,i){var al=String(d.Ac[r[8]]||'');return ext(o(r[0]),{a:r[1],t:r[2],m:r[3],tr:r[4],p:r[5],c:r[6],h:r[7]/10,he:r[9]!==undefined?r[7]/10*r[9]/1000:undefined,ac:r[8],sk:r[2]==='TOJ'?'T'+r[0]+'|'+r[1]+'|'+r[4]:(!al||al.charAt(0)==='|')?'r'+i:r[8]})}),
   T:d.T.map(function(r){return ext(o(r[0]),{a:r[1],p:r[2],k:r[3],s:r[4],tr:r[5]})}),
   TH:(d.TH||[]).map(function(r){return ext(o(r[0]),{a:r[1],p:r[2],v:r[3]})}),
   FB:(d.FB||[]).map(function(r){return ext(o(r[0]),{a:r[1],tr:r[2],part:r[3],resp:r[4],sum:r[5],q:r.slice(6,11)})}),
   PL:d.PL?d.PL.map(function(r){return ext(o(r[0]),{a:r[1],k:r[2],ok:r[3]})}):null,
   EL:(d.EL||[]).map(function(r){return ext(o(r[0]),{a:r[1],k:r[2]})}),
   MOB:(d.MOB||[]).map(function(r){return ext(o(r[0]),{b:r[1],dir:r[2],who:r[3],g:r[4]})}),
-  TE:(d.TE||[]).map(function(r){return ext(o(r[0]),{a:r[1],tr:r[2],t:'TOJ',m:'LIVE',h:r[3]/10})}),
+  TE:(d.TE||[]).map(function(r){return ext(o(r[0]),{a:r[1],tr:r[2],t:r[4]||'TOJ',m:'LIVE',h:r[3]/10})}),
   PRC:d.PRC||{proc:[],prot:[]}}}
 function exLab(k,v){var D=EX.d;
  if(k==='a')return D.A[v];if(k==='tr')return D.Tr[v];if(k==='c')return D.C[v]==='n.d.'?'–':D.C[v];if(k==='p')return D.N[v]||D.I[v];
@@ -655,7 +656,7 @@ function exTeBy(skip,key){var m={};exRows('TE',skip).forEach(function(r){var k=k
 function exPh(){try{return window.matchMedia('(max-width:640px)').matches}catch(e){return false}}
 function exMore(k,n){return'<button class="xmore" data-xmore="'+k+'">'+t('x_more2',{n:n})+'</button>'}
 function exTog(k,v,add){v=exNorm(k,v);var f=EX.F[k],i=f.indexOf(v);if(add){if(i>=0)f.splice(i,1);else f.push(v)}else{if(f.length===1&&i===0)f.length=0;else{f.length=0;f.push(v)}}exRender()}
-function exGrp(rows,key){var m={},o=[];rows.forEach(function(r){var k=key(r),x=m[k];if(!x){x=m[k]={k:k,n:0,h:0,e:0,p:{},np:0,ac:{},na:0,s:0};o.push(x)}x.n++;x.h+=r.h||0;x.s+=r.s||0;if(!x.p[r.p]){x.p[r.p]=1;x.np++}if(r.sk!==undefined){var q=x.ac[r.sk];if(q===undefined){x.ac[r.sk]=r.h||0;x.na++;x.e+=r.h||0}else if((r.h||0)>q){x.e+=r.h-q;x.ac[r.sk]=r.h}}});return o}
+function exGrp(rows,key){var m={},o=[];rows.forEach(function(r){var k=key(r),x=m[k];if(!x){x=m[k]={k:k,n:0,h:0,e:0,p:{},np:0,ac:{},na:0,s:0};o.push(x)}x.n++;x.h+=r.h||0;x.s+=r.s||0;if(!x.p[r.p]){x.p[r.p]=1;x.np++}if(r.sk!==undefined){var v=(r.he!==undefined?r.he:r.h)||0,q=x.ac[r.sk];if(q===undefined){x.ac[r.sk]=v;x.na++;x.e+=v}else if(v>q){x.e+=v-q;x.ac[r.sk]=v}}});return o}
 function exAt(k,v,tip){return' data-xk="'+k+'" data-xv="'+esc(v)+'" role="button" tabindex="0"'+(tip?' data-tip="'+esc(tip)+'"':'')}
 function exDim(k,v){var f=EX.F[k];return f.length?(f.indexOf(exNorm(k,v))>=0?' on':' dim'):''}
 function exD(i){return i==null?'–':fdate(exIso(i))}
@@ -674,7 +675,7 @@ function exDonut(items,k,center,sub){var tot=items.reduce(function(a,x){return a
 /* ---------- grafici ---------- */
 function exMonths(){var D=EX.d,rows=exRows('P',['ym','t']),all={},m={};
  var base=D.P.concat(D.TE||[]).filter(function(r){return!EX.F.y.length||EX.F.y.indexOf(r.y)>=0});base.forEach(function(r){all[r.ym]=1});var ks=Object.keys(all).sort();if(!ks.length)return exEmpty();
- var hm=EX.hm||'e',seen={};rows.forEach(function(r){var o=m[r.ym]=m[r.ym]||{LESSON:0,HANDS:0,TOJ:0,OTHER:0,tot:0};var k=(r.t==='HANDS'||r.t==='TOJ'||r.t==='LESSON')?r.t:'OTHER',v=r.h;if(hm==='e'){var q=seen[r.sk];if(q===undefined){seen[r.sk]=v}else if(v>q){seen[r.sk]=v;v=v-q}else v=0}o[k]+=v;o.tot+=v});if(hm==='e')exRows('TE',['ym','t']).forEach(function(r){var o=m[r.ym]=m[r.ym]||{LESSON:0,HANDS:0,TOJ:0,OTHER:0,tot:0};o.TOJ+=r.h;o.tot+=r.h});
+ var hm=EX.hm||'e',seen={};rows.forEach(function(r){var o=m[r.ym]=m[r.ym]||{LESSON:0,HANDS:0,TOJ:0,OTHER:0,tot:0};var k=(r.t==='HANDS'||r.t==='TOJ'||r.t==='LESSON')?r.t:'OTHER',v=(hm==='e'&&r.he!==undefined)?r.he:r.h;if(hm==='e'){var q=seen[r.sk];if(q===undefined){seen[r.sk]=v}else if(v>q){seen[r.sk]=v;v=v-q}else v=0}o[k]+=v;o.tot+=v});if(hm==='e')exRows('TE',['ym','t']).forEach(function(r){var o=m[r.ym]=m[r.ym]||{LESSON:0,HANDS:0,TOJ:0,OTHER:0,tot:0};o[r.t==='LESSON'?'LESSON':'TOJ']+=r.h;o.tot+=r.h});
  var mx=Math.max.apply(null,ks.map(function(k){return m[k]?m[k].tot:0}).concat([1]));var TC={LESSON:XC.cls,HANDS:XC.hands,TOJ:XC.tojc,OTHER:XC.gray};var every=ks.length>14?2:1;
  var h='<div class="xhm"><button class="'+(hm==='e'?'on':'')+'" data-xhm="e">'+t('hm_e')+'</button><button class="'+(hm==='f'?'on':'')+'" data-xhm="f">'+t('hm_f')+'</button></div><div class="xleg">'+['LESSON','HANDS','TOJ','OTHER'].map(function(k){return'<span>'+'<i style="background:'+TC[k]+'"></i>'+t(k==='OTHER'?'xt_OTHER':'xt_'+k)+'</span>'}).join('')+'</div><div class="xsc"><div class="xcols" style="min-width:'+(ks.length*30)+'px">';
  ks.forEach(function(k,i){var o=m[k]||{tot:0},H=140,ft=EX.F.t;h+='<div class="xcol'+exDim('ym',k)+'"'+exAt('ym',k,mlab(k)+': '+num(o.tot)+' h')+'><div class="tot">'+(o.tot?num(o.tot):'')+'</div><div class="xstk">';
@@ -757,20 +758,20 @@ function exLearn(){var D=EX.d,asOf=exLearnAsOf(),L=exLearnPeople(asOf);if(!L.len
  var sp='';if(tr.length>1){var W=200,H=44,pts=tr.map(function(v,i){return(i*W/(tr.length-1)).toFixed(1)+','+(H-v/100*H).toFixed(1)}).join(' ');
   sp='<svg class="xlsp" viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none"><line x1="0" x2="'+W+'" y1="'+(H-XL.T/100*H)+'" y2="'+(H-XL.T/100*H)+'" stroke="#1b2124" stroke-dasharray="2 3" stroke-width="1"/><polyline points="'+pts+'" fill="none" stroke="'+col+'" stroke-width="2.2" vector-effect="non-scaling-stroke"/></svg><div class="xlsn">'+t('xl_trend')+'</div>'}
  var h='<section class="xlh"><div class="xll"><div class="e">'+t('xl_kpi')+'</div><div class="v" style="color:'+col+'">'+Math.round(K.p)+'%</div>'+sp+'</div>'+
-  '<div class="xlr"><div class="a">'+t('xl_a',{o:K.ok,n:K.n})+'</div><div class="b">'+t('xl_b')+'</div>'+
+  '<div class="xlr"><div class="a">'+t('xl_a',{p:Math.round(K.p)})+'</div><div class="b">'+t('xl_b')+'</div>'+
   '<div class="xlbar"><i style="width:'+K.p+'%;background:'+col+'"></i><u style="left:'+XL.T+'%"><em>'+t('xl_tg',{t:XL.T})+'</em></u></div>'+
   '<div class="xlbl" style="color:'+(K.p<XL.T?'#b8322f':'#13946a')+'">'+(K.p<XL.T?t('xl_miss',{m:Math.round(XL.T-K.p)}):t('xl_hit'))+'</div></div></section>';
  h+='<div class="xls"><div class="xlc"><b style="color:#2a78d6">'+(G>=0?'+':'')+Math.round(G)+'%</b><span>'+t('xl_g')+'<em>'+t('xl_gn',{a:num(B,1),b:num(N,1)})+'</em></span></div>'+
   '<div class="xlc"><b style="color:#1d5aa8">'+q(L,'n')+'%</b><span>'+t('xl_q')+'<em>'+t('xl_qn',{p:q(L,'f')})+'</em></span></div></div>';
  /* area per area */
  var by={};re.forEach(function(x){(by[x.a]=by[x.a]||[]).push(x)});
- var rows=Object.keys(by).filter(function(a){return by[a].length>=XL.MIN}).map(function(a){var l=by[a],k=exLearnKpi(l);return{a:+a,p:k.p,b:avg(l,'f'),n:avg(l,'n')}}).sort(function(x,y){return y.p-x.p});
- var ar='';[{a:-1,p:K.p,b:B,n:N}].concat(rows).forEach(function(r,i){var c=exLearnCol(r.p);
+ var rows=Object.keys(by).map(function(a){var l=by[a],k=exLearnKpi(l);return{a:+a,p:k.p,b:avg(l,'f'),n:avg(l,'n')}}).sort(function(x,y){return y.p-x.p});var seen={};L.forEach(function(x){seen[x.a]=1});Object.keys(seen).filter(function(a){return!by[a]}).sort(function(x,y){return D.A[x].localeCompare(D.A[y])}).forEach(function(a){rows.push({a:+a,p:null})});
+ var ar='';[{a:-1,p:K.p,b:B,n:N}].concat(rows).forEach(function(r,i){if(r.p===null){ar+='<div class="xlar na"'+exAt('a',r.a,D.A[r.a])+'><span class="n">'+esc(D.A[r.a])+'</span><span class="xlbar sm"><u style="left:'+XL.T+'%"></u></span><b>–</b><em>'+t('xl_nore')+'</em></div>';return}var c=exLearnCol(r.p);
   ar+='<div class="xlar'+(i?'':' tot')+'"'+(i?exAt('a',r.a,D.A[r.a]):'')+'><span class="n">'+esc(i?D.A[r.a]:t('xl_all'))+'</span><span class="xlbar sm"><i style="width:'+r.p+'%;background:'+c+'"></i><u style="left:'+XL.T+'%"></u></span><b style="color:'+c+'">'+Math.round(r.p)+'%</b><em>'+t('xl_lv',{a:num(r.b,1),b:num(r.n,1)})+'</em></div>'});
  /* livelli */
  var lv=function(k){var c=[0,0,0,0];L.forEach(function(x){c[Math.min(3,Math.floor(x[k]/25))]++});return c.map(function(v){return v*100/L.length})};
- var st=function(lab,arr,b){return'<div class="xlst"><span class="l'+(b?' b':'')+'">'+lab+'</span><span class="s">'+arr.map(function(w,i){return'<i style="width:'+w+'%;background:'+XL.C[i]+';color:'+(i>=2?'#fff':'#1b2124')+'">'+(w>=7?Math.round(w)+'%':'')+'</i>'}).join('')+'</span></div>'};
- var lg='<div class="xleg" style="margin-top:8px">'+[0,1,2,3].map(function(i){return'<span><i style="background:'+XL.C[i]+'"></i>'+t('xl_b'+i)+'</span>'}).join('')+'</div>';
+ var st=function(lab,arr,b){return'<div class="xlst"><span class="l'+(b?' b':'')+'">'+lab+'</span><span class="s">'+arr.map(function(w,i){return'<i style="width:'+w+'%;background:'+XL.C[i]+';color:'+(i>=2?'#fff':'#1b2124')+'">'+(w>=14?Math.round(w)+'%':'')+'</i>'}).join('')+'</span></div>'};
+ var lf=lv('f'),ln=lv('n'),lg='<table class="xllt"><tr><th></th><th>'+t('xl_first')+'</th><th>'+t('xl_now')+'</th></tr>'+[0,1,2,3].map(function(i){return'<tr><td><i style="background:'+XL.C[i]+'"></i>'+t('xl_b'+i)+'</td><td>'+Math.round(lf[i])+'%</td><td><b>'+Math.round(ln[i])+'%</b></td></tr>'}).join('')+'</table>';
  h+='<div class="xg" style="margin-top:10px">'+exPanel(t('xl_c'),'#13946a',t('xl_area'),'<div class="xls2">'+t('xl_areas',{t:XL.T})+'</div>'+ar,'','s2')+
   exPanel(t('xl_c'),'#1d5aa8',t('xl_lvt'),st(t('xl_first'),lv('f'))+st(t('xl_now'),lv('n'),1)+lg,'')+'</div>';
  return'<div class="sec xlw"><h2>'+t('xl_title')+'<span>'+t('xl_sub',{d:exD(asOf)})+'</span></h2>'+h+'<div class="xlnote">'+t('xl_how')+'</div></div>'}
@@ -809,7 +810,7 @@ function exRender(){if(S.tab!=='explore')return;var D=EX.d,lim=D.lim;
  h+=exLearn();
  /* pannelli */
  var noA=EX.F.a.length?t('g_noarea'):'';
- h+='<div class="xg">'+exPanel(t('c_cls'),XC.cls,t('g_months'),exMonths(),t('hmf_'+(EX.hm||'e'))+' · '+t('g_monthsf'),'s2')+exPanel(t('c_cls'),XC.cls,t('g_areas'),exAreasDonut())+
+ h+='<div class="xg">'+exPanel(t('c_cls'),XC.cls,t('g_months'),exMonths(),t('hmf_'+(EX.hm||'e'))+' · '+t('g_monthsf')+(EX.d.raw.R25&&(EX.hm||'e')==='e'?' · '+t('r25'):''),'s2')+exPanel(t('c_cls'),XC.cls,t('g_areas'),exAreasDonut())+
   exPanel(t('c_toj'),XC.toj,t('g_toj'),exToj(),t('g_tojf'),'s2')+exPanel(t('c_th'),XC.th,t('g_th'),exTheory(rth),rth.length?t('g_thf',{n:num(rth.length),p:thp}):'')+
   exPanel(t('c_fb'),XC.fb,t('g_fb'),exFbQ(rfb),fR?(lim?t('k_fbl',{r:num(fR)}):t('k_fbn',{r:num(fR),c:pct(fA?fW/fA:0)})):'')+
   (rpl?exPanel(t('c_pl'),XC.pl,t('g_pl'),exPlan(rpl)):'')+exPanel(t('c_mode'),XC.cls,t('g_mode'),exModeDonut())+
@@ -824,8 +825,7 @@ function exRender(){if(S.tab!=='explore')return;var D=EX.d,lim=D.lim;
  h+='<div class="sec" style="margin-top:22px"><h2>'+t('x_cmp')+'<span>'+t('x_cmpf')+'</span></h2>'+table(head,rowsA.map(function(x){var k=x.k,a=ta[k],th=tha2[k],f=fba[k],p=pla2[k];
   return{c:['<span class="lk">'+esc(D.A[k])+'</span>',x.g.np?num(x.g.np):'–',x.g.e?num(Math.round(x.g.e)):'–',x.g.h?num(Math.round(x.g.h)):'–',a?num(a.n):'–',a?lvChip(a.s/a.n):lvChip(''),th?pct(th.ok/th.n):'–',f&&f.r?num(f.s/f.r,1):'–'].concat(rpl?[p?pct(p.ok/p.n):'–']:[]),xk:'a',xv:k}}))+'</div>';
  h+=sec(t('x_cal'),t('x_caln'),'<div class="box" style="padding:6px 12px 10px">'+exCal()+'</div>');
- if(!lim){var tg=exGrp(exRows('P','tr'),function(r){return r.tr});var teT=exTeBy('tr',function(r){return r.tr});tg.forEach(function(x){x.e+=teT[x.k]||0});Object.keys(teT).forEach(function(k){k=+k;if(k>=0&&!tg.some(function(x){return x.k===k}))tg.push({k:k,na:0,np:0,h:0,e:teT[k]})});tg=tg.sort(function(a,b){return b.e-a.e}).slice(0,20);var tgN=tg.length;if(exPh()&&!EX.mt)tg=tg.slice(0,6);
-  h+=sec(t('x_trs'),'',table([{t:t('x_tr')},{t:t('x_k3'),r:1},{t:t('x_k1'),r:1},{t:t('x_k2'),r:1},{t:t('x_k2f'),r:1}],tg.map(function(x){return{c:['<span class="lk">'+esc(D.Tr[x.k])+'</span>',num(x.na),num(x.np),num(Math.round(x.e)),num(Math.round(x.h))],xk:'tr',xv:x.k}}))+(tg.length<tgN?exMore('mt',tgN):''))}
+ /* v39: tabella formatori tolta (decisione di Andrea, 30/10/2026) */
  var pg=exGrp(exRows('P','p'),function(r){return r.p}),tj={};exRows('T','p').forEach(function(r){var o=tj[r.p]=tj[r.p]||{n:0,s:0};o.n++;o.s+=r.s});
  var tot=pg.length;pg.sort(function(a,b){return b.h-a.h});pg=pg.slice(0,50);var pgN=pg.length;if(exPh()&&!EX.mp)pg=pg.slice(0,8);
  h+=sec(t('x_ppl'),t('x_pn',{n:pg.length,t:tot}),table([{t:t('name')},{t:t('x_k3'),r:1},{t:t('tl_hours'),r:1},{t:t('x_k5'),r:1},{t:t('avg'),r:1},{t:''}],pg.map(function(x){var o=tj[x.k];
