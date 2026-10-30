@@ -511,6 +511,24 @@ table.msy .vh{font-size:8.5px;color:var(--bad);font-weight:700}
   .card,.mscard,.msrow,table,tr{break-inside:avoid}
   *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
+/* v0.9.20 · Missões no telemóvel */
+.msps{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 12px 18px;margin-bottom:10px}
+.msps .t{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:12.5px;margin-bottom:7px}.msps .t span{color:var(--muted)}.msps .t em{font-style:normal;color:var(--bad);font-weight:800}
+.msps .st{display:flex;gap:1px;height:22px}.msps .st i{flex:1;background:#eef1f3;border-radius:2px}.msps .st i.we{background:#e4e7ea}
+.msps .st i.c1{background:#bcd5f3}.msps .st i.c2{background:#6fa3e3}.msps .st i.c3{background:#2f6fc0}.msps .st i.hi{background:var(--bad)}.msps .st i.td{box-shadow:0 0 0 2px var(--ink);position:relative;z-index:1}
+.msps .dd{position:relative;height:12px;margin-top:3px}.msps .dd span{position:absolute;transform:translateX(-50%);font-size:10px;color:var(--muted)}
+.msplane{background:var(--brand);color:#fff;font-weight:800;font-size:13px;border-radius:9px;padding:8px 12px;margin:14px 0 6px}
+.msptm{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin:10px 2px 4px}.msptm i{width:10px;height:10px;border-radius:3px}
+.msprow{display:block;width:100%;text-align:left;background:#fff;border:1px solid var(--line);border-left:4px solid var(--c);border-radius:10px;padding:9px 11px 10px;margin-bottom:6px}
+.msprow .h{display:flex;align-items:center;gap:6px;font-size:14px}.msprow .h .d{margin-left:auto;font-size:12px;color:var(--muted);font-weight:700;white-space:nowrap}
+.msprow .ro{display:block;font-size:12px;color:var(--muted);margin:1px 0 7px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.msprow .tr{display:block;position:relative;height:10px;background:#eef1f3;border-radius:5px}
+.msprow .bar{position:absolute;top:0;bottom:0;border-radius:5px;background:var(--c)}.msprow .bar.out{background:color-mix(in srgb,var(--c) 45%,#fff)}.msprow .bar.env{background:repeating-linear-gradient(45deg,var(--c) 0 3px,#fff 3px 6px)}
+.msprow .now{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--ink);margin-left:-1px}
+.mspyh,.mspyr .g{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:3px}
+.mspyh{position:sticky;top:46px;z-index:2;background:var(--bg);padding:4px 0;margin-left:0}.mspyh span{display:none}.mspyh b{text-align:center;font-size:11px;color:var(--muted)}.mspyh b.td{color:var(--brand)}
+.mspyr{background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 9px 9px;margin-bottom:6px}.mspyr .l{font-size:13px;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.mspyr .c{height:30px;border-radius:5px;background:#f6f7f8;font-size:10.5px;font-weight:800;padding:0;min-width:0;color:var(--ink)}.mspyr .c.td{outline:2px solid var(--ink);outline-offset:1px}
 </style>
 </head>
 <body>
@@ -2062,7 +2080,7 @@ function renderHome() {
     return '<button class="tile" data-k="' + t.k + '"><span class="ic">' + t.ic + '</span><b>' + esc(t.t) + '</b><small>' + esc(t.d) + '</small></button>';
   }).join('') + '</div></div><div class="htoday"><div class="sec hsec">As minhas actividades de hoje · ' + esc(fmtDate(today, true)) + '</div>' +
     (mine.length ? mine.map(function (a) { return hrow(a, today); }).join('') : '<div class="noact">Sem actividades suas hoje.</div>') + '</div></div>';
-  h += '<div class="foot">CHDCP Conecta · v0.9.19' + (pushOn() ? ' · <button class="link" id="pushOff" style="margin:0">🔔 Desactivar notificações</button>' : '') + '</div></div>';
+  h += '<div class="foot">CHDCP Conecta · v0.9.20' + (pushOn() ? ' · <button class="link" id="pushOff" style="margin:0">🔔 Desactivar notificações</button>' : '') + '</div></div>';
   $('app').innerHTML = h;
   $('app').classList.remove('weekwide');
   $('app').classList.add('homewide');
@@ -2669,6 +2687,8 @@ function msRender() {
   Array.prototype.forEach.call(document.querySelectorAll('[data-nav]'), function (b) { b.onclick = function () { msNav(Number(b.dataset.nav)); }; });
   Array.prototype.forEach.call(document.querySelectorAll('[data-mid]'), function (b) { b.onclick = function () { var m = msFind(b.dataset.mid); if (m) go(function () { msDetail(m, b.dataset.ids ? b.dataset.ids.split(',') : [m.id]); }); }; });
   Array.prototype.forEach.call(document.querySelectorAll('[data-cell]'), function (b) { b.onclick = function () { var p = b.dataset.cell.split('|'); go(function () { msCellPage(p[0], p[1]); }); }; });
+  Array.prototype.forEach.call(document.querySelectorAll('[data-ymo]'), function (b) { b.onclick = function () { var p = b.dataset.ymo.split('|'); MSV.view = 'MONTH'; MSV.anchor = MSV.year + '-' + ('0' + (Number(p[0]) + 1)).slice(-2) + '-01'; if (p[1] && MS_ORDER.indexOf(p[1]) >= 0) MSV.team = p[1]; msRender(); window.scrollTo(0, 0); }; });
+  if (!msRender.mq) { msRender.mq = 1; try { window.matchMedia('(max-width:640px)').addEventListener('change', function () { var pg = $('pg'); if (pg && pg.classList.contains('mspage') && (MSV.view === 'MONTH' || MSV.view === 'YEAR')) msRender(); }); } catch (e) {} }
   Array.prototype.forEach.call(document.querySelectorAll('[data-av]'), function (b) { b.onclick = function () { MSV.view = 'ALERTS'; msRender(); window.scrollTo(0, 0); }; });
   Array.prototype.forEach.call(document.querySelectorAll('[data-flt]'), function (b) { b.onclick = function () { var p = b.dataset.flt.split(':'); MSV[p[0]] = p[1]; msRender(); }; });
   if ($('msRf')) $('msRf').onclick = function () { msLoad(true, msRender); };
@@ -2745,6 +2765,7 @@ function msWeekHtml() {
 
 /* ---------- MÊS ---------- */
 function msMonthHtml() {
+  if (msPhone()) return msMonthPhoneHtml();
   var d0 = ymd(MSV.anchor), y = d0.getFullYear(), mo = d0.getMonth(), nd = new Date(y, mo + 1, 0).getDate(), K = [], i;
   for (i = 1; i <= nd; i++) K.push(y + '-' + ('0' + (mo + 1)).slice(-2) + '-' + ('0' + i).slice(-2));
   var first = K[0], last = K[nd - 1];
@@ -2792,6 +2813,7 @@ function msLegend() {
 
 /* ---------- ANO · Gantt semanal ---------- */
 function msYearHtml() {
+  if (msPhone()) return msYearPhoneHtml();
   var y = MSV.year, weeks = (MSD.plan.weeks || []).filter(function (w) { return w.y === y; });
   if (!weeks.length) { /* ano sem PLAN_WEEKS: semanas ISO a partir da 1.ª segunda-feira */
     var m0 = msMon(y + '-01-04'), w;
@@ -2863,6 +2885,101 @@ function msYearHtml() {
   }
   h += '</table></div>';
   h += '<div class="mslegend"><span><i style="background:#f6dcdc;box-shadow:inset 0 0 0 1.5px #e5484d"></i>Planeada, sem nomes (n.º = pessoas previstas)</span><span><i style="background:#f19a9c"></i>Nomeados em parte (ex. 1/2)</span><span><i style="background:#e5484d"></i>Completa</span><span><i style="background:#fff;box-shadow:inset 0 0 0 2px #e5484d"></i>Nomeado fora do plano *</span><span><i style="background:#fbe1df"></i>Feriado / encerramento</span><span>Toque numa célula → nomes, funções, datas</span></div>';
+  return h;
+}
+/* ===== v0.9.20 · Missões no telemóvel: mês em lista com barra no mês, ano em 12 meses (sem grelhas a ampliar) ===== */
+function msPhone() { try { return window.matchMedia('(max-width:640px)').matches; } catch (e) { return false; } }
+function msMonthPhoneHtml() {
+  var d0 = ymd(MSV.anchor), y = d0.getFullYear(), mo = d0.getMonth(), nd = new Date(y, mo + 1, 0).getDate(), K = [], i;
+  for (i = 1; i <= nd; i++) K.push(y + '-' + ('0' + (mo + 1)).slice(-2) + '-' + ('0' + i).slice(-2));
+  var first = K[0], last = K[nd - 1], today = msTodayY(), lim = MSD.cfg.MAX_CLINICAL_PER_DAY;
+  var M = MSD.missions.filter(function (m) { return m.a <= last && m.b >= first && msPass(m); });
+  var cnt = K.map(function (d) { return MSD.missions.filter(function (m) { return m.dir === 'LUA' && m.clin && msOn(m, d); }).length; });
+  var mx = Math.max.apply(null, cnt.concat([0])), over = cnt.filter(function (c) { return lim && c >= lim; }).length;
+  var h = msNavBar(MS_MES[mo] + ' ' + y) + msFilters();
+  /* clinici CCM a Luanda, giorno per giorno: striscia a colori */
+  h += '<div class="msps"><div class="t"><b>Clínicos CCM em Luanda</b><span>pico ' + mx + (lim ? ' · limite ' + lim : '') + (over ? ' · <em>' + over + ' dia' + (over > 1 ? 's' : '') + ' no limite</em>' : '') + '</span></div><div class="st">' +
+    cnt.map(function (c, j) { var k = K[j], w = ymd(k).getDay(); return '<i class="' + (lim && c >= lim ? 'hi' : c ? 'c' + Math.min(3, c) : '') + (w === 0 || w === 6 ? ' we' : '') + (k === today ? ' td' : '') + '" title="' + msF(k) + ': ' + c + '"></i>'; }).join('') +
+    '</div><div class="dd">' + [1, 8, 15, 22, 29].filter(function (x) { return x <= nd; }).map(function (x) { return '<span style="left:' + ((x - 0.5) / nd * 100) + '%">' + x + '</span>'; }).join('') + '</div></div>';
+  var pos = function (s) { return Math.max(0, msDiff(first, s)) / nd * 100; };
+  var lane = function (dir, title, teams) {
+    var L = msMerged(M.filter(function (m) { return m.dir === dir; }));
+    if (!L.length) return '';
+    var s = '<div class="msplane">' + esc(title) + ' · ' + L.length + '</div>';
+    teams.forEach(function (t) {
+      var T = L.filter(function (m) { return dir === 'MIL' || m.team === t; });
+      if (!T.length) return;
+      s += '<div class="msptm"><i style="background:' + MS_TC[t] + '"></i>' + esc(MS_TN[t] || t) + '</div>';
+      T.sort(function (x, z) { return x.a.localeCompare(z.a); }).forEach(function (m) {
+        var c = msStCls(m.st), cls = c === 'EN' || c === 'NO' ? 'env' : c === 'OU' ? 'out' : '';
+        var al = msAlertsFor(m.ids), red = al.some(function (a) { return a.lv === 'R'; }), yel = al.some(function (a) { return a.lv === 'Y'; });
+        var a = m.a < first ? first : m.b, l = pos(m.a < first ? first : m.a), r = pos(m.b > last ? last : m.b) + 100 / nd;
+        s += '<button class="msprow" data-mid="' + m.id + '" data-ids="' + m.ids.join(',') + '" style="--c:' + MS_TC[dir === 'MIL' ? 'OBS' : m.team] + '">' +
+          '<span class="h"><b>' + esc(msShort(m.name)) + '</b>' + (red ? '<i class="ic r">!</i>' : yel ? '<i class="ic">!</i>' : '') + '<span class="d">' + msF(m.a) + ' → ' + msF(m.b) + ' · ' + m.days + ' d</span></span>' +
+          '<span class="ro">' + esc(m.role) + ' · ' + esc(m.area) + '</span>' +
+          '<span class="tr"><span class="bar ' + cls + '" style="left:' + l + '%;width:' + Math.max(2, r - l) + '%"></span>' + (today >= first && today <= last ? '<span class="now" style="left:' + (pos(today) + 50 / nd) + '%"></span>' : '') + '</span></button>';
+      });
+    });
+    return s;
+  };
+  h += lane('LUA', 'CCM em Luanda', MS_ORDER) + lane('MIL', 'CHDCP em Milão (observership @ CCM)', ['OBS']);
+  if (!M.length) h += '<div class="noact">Sem missões neste mês.</div>';
+  var al = msAlertsIn(first, last);
+  h += '<div class="sec mssec"><span>Alertas · ' + esc(MS_MES[mo]) + '</span><button class="link" data-av="1">todos</button></div>' + (al.length ? msAlertsHtml(msGroupAlerts(al), false) : '<div class="noact">Sem alertas neste mês.</div>');
+  return h + msLegend();
+}
+function msYearPhoneHtml() {
+  var y = MSV.year, weeks = (MSD.plan.weeks || []).filter(function (w) { return w.y === y; });
+  if (!weeks.length) { var m0 = msMon(y + '-01-04'), w; for (w = 0; w < 53; w++) { var mon = addDays(m0, 7 * w); if (Number(addDays(mon, 3).slice(0, 4)) !== y) break; weeks.push({ y: y, w: w + 1, mon: mon }); } }
+  var moOf = function (mon) { return ymd(addDays(mon, 3)).getMonth(); };
+  var rowsP = (MSD.plan.rows || []).filter(function (r) { return r.y === y; });
+  var inWk = function (m, mon) { return m.a <= addDays(mon, 6) && m.b >= mon; };
+  var match = function (m, r) { if (m.dir !== r.dir || !r.areas.length || r.areas.indexOf(m.area) < 0) return false; if (r.rp) { try { return new RegExp(r.rp, 'i').test(m.role); } catch (e) { return false; } } return true; };
+  var M = MSD.missions.filter(function (m) { return m.a.slice(0, 4) <= String(y) && m.b.slice(0, 4) >= String(y) && msPass(m); });
+  var h = msNavBar(String(y)) + msFilters();
+  if (rowsP.length) {
+    var tot = 0, cov = 0;
+    rowsP.forEach(function (r) { if (!r.areas.length) return; Object.keys(r.cells).forEach(function (mon) { tot++; if (M.filter(function (m) { return match(m, r) && inWk(m, mon); }).length >= r.cells[mon]) cov++; }); });
+    h += '<div class="mscov"><b>Cobertura do plano ' + y + '</b>' + cov + ' de ' + tot + ' semanas planeadas já com nomes' + (tot ? ' (' + Math.round(100 * cov / tot) + '%)' : '') + '</div>';
+  }
+  var nowMo = String(y) === msTodayY().slice(0, 4) ? ymd(msTodayY()).getMonth() : -1;
+  var head = '<div class="mspyh"><span></span>' + MESES.map(function (x, i) { return '<b class="' + (i === nowMo ? 'td' : '') + '">' + x.charAt(0) + '</b>'; }).join('') + '</div>';
+  /* per mese: settimane previste (p), coperte (c), con nomi fuori piano (x) */
+  var row = function (label, color, planOf, namedOf, team) {
+    var Mo = []; for (var i = 0; i < 12; i++) Mo.push({ p: 0, c: 0, x: 0 });
+    weeks.forEach(function (w) { var o = Mo[moOf(w.mon)], p = planOf(w.mon), n = namedOf(w.mon); if (p) { o.p++; if (n >= p) o.c++; } else if (n) o.x++; });
+    if (!Mo.some(function (o) { return o.p || o.x; })) return '';
+    return '<div class="mspyr"><div class="l"><i class="dot" style="background:' + color + '"></i>' + esc(label) + '</div><div class="g">' + Mo.map(function (o, i) {
+      var st = '', tx = '';
+      if (o.p) { tx = o.c + '/' + o.p; st = o.c >= o.p ? 'background:' + color + ';color:#fff' : o.c ? 'background:color-mix(in srgb,' + color + ' 55%,#fff);color:#fff' : 'background:color-mix(in srgb,' + color + ' 16%,#fff);box-shadow:inset 0 0 0 1.5px ' + color; }
+      else if (o.x) { tx = o.x + '*'; st = 'background:#fff;color:' + color + ';box-shadow:inset 0 0 0 2px ' + color; }
+      return '<button class="c' + (i === nowMo ? ' td' : '') + '" data-ymo="' + i + '|' + (team || '') + '" style="' + st + '">' + tx + '</button>';
+    }).join('') + '</div></div>';
+  };
+  var body = '';
+  if (rowsP.length) {
+    [['MGT', 'Coordenação & management'], ['LUA', 'Equipas CCM em Luanda'], ['MIL', 'CHDCP no CCM – Milão']].forEach(function (sc) {
+      var R = rowsP.filter(function (r) { return r.sec === sc[0] && (!MSV.team || r.team === MSV.team || (sc[0] === 'MIL' && MSV.team)) && (MSV.dir === 'ALL' || r.dir === MSV.dir); });
+      var s = R.map(function (r) { return row(r.line, MS_TC[r.team] || '#888', function (mon) { return r.cells[mon] || 0; }, function (mon) { return r.areas.length ? M.filter(function (m) { return match(m, r) && inWk(m, mon); }).length : 0; }, r.team); }).join('');
+      if (s) body += '<div class="msplane">' + esc(sc[1]) + '</div>' + head + s;
+    });
+    var extra = M.filter(function (m) { return !rowsP.some(function (r) { return match(m, r); }); });
+    var keys = extra.map(function (m) { return m.dir + '|' + m.team + '|' + m.area; }).filter(function (x, i, l) { return l.indexOf(x) === i; }).sort();
+    if (keys.length) body += '<div class="msplane">Missões nomeadas sem linha no plano</div>' + head + keys.map(function (k) { var p = k.split('|'); return row((p[0] === 'MIL' ? 'Milão · ' : '') + p[2], MS_TC[p[1]] || '#888', function () { return 0; }, function (mon) { return extra.filter(function (m) { return m.dir + '|' + m.team + '|' + m.area === k && inWk(m, mon); }).length; }, p[1]); }).join('');
+  } else {
+    [['LUA', 'CCM em Luanda'], ['MIL', 'CHDCP em Milão (observership @ CCM)']].forEach(function (sc) {
+      var L = M.filter(function (m) { return m.dir === sc[0]; }), s = '';
+      (sc[0] === 'MIL' ? ['OBS'] : MS_ORDER).forEach(function (t) {
+        L.filter(function (m) { return sc[0] === 'MIL' || m.team === t; }).map(function (m) { return m.area; }).filter(function (x, i, l) { return l.indexOf(x) === i; }).sort().forEach(function (a) {
+          s += row(a, MS_TC[t], function () { return 0; }, function (mon) { return L.filter(function (m) { return m.area === a && (sc[0] === 'MIL' || m.team === t) && inWk(m, mon); }).length; }, t);
+        });
+      });
+      if (s) body += '<div class="msplane">' + esc(sc[1]) + '</div>' + head + s;
+    });
+  }
+  h += body || '<div class="noact">Sem missões neste ano.</div>';
+  h += '<div class="mslegend"><span><i style="background:#f6dcdc;box-shadow:inset 0 0 0 1.5px #e5484d"></i>Planeado, sem nomes</span><span><i style="background:#f19a9c"></i>Em parte</span><span><i style="background:#e5484d"></i>Completo</span><span><i style="background:#fff;box-shadow:inset 0 0 0 2px #e5484d"></i>Fora do plano *</span></div>';
+  h += '<div class="small muted" style="margin-top:6px">Em cada mês: semanas com nomes / semanas planeadas. Toque num mês para abrir o mês.</div>';
   return h;
 }
 /* célula do Gantt anual → lista de pessoas */
