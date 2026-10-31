@@ -244,6 +244,10 @@ input{font-family:inherit;font-size:16px}
 .addlist{max-height:46vh;overflow:auto;margin-top:8px;-webkit-overflow-scrolling:touch}
 .addlist .user{margin-bottom:6px}.addnote{margin:2px 2px 8px}
 .addplus{flex:none;font-size:20px;font-weight:800;color:var(--brand);padding:0 4px}
+.addroles{display:flex;gap:6px;overflow-x:auto;padding:2px 0 8px;margin:0 0 4px;-webkit-overflow-scrolling:touch}.addroles::-webkit-scrollbar{display:none}
+.addrc{flex:none;border:1px solid var(--line);background:#fff;border-radius:16px;padding:6px 10px;font:inherit;font-size:12.5px;color:var(--muted);cursor:pointer;white-space:nowrap}.addrc b{font-weight:700;color:var(--faint);margin-left:2px}
+.addrc.on{background:var(--brand-soft);border-color:var(--brand-line);color:var(--brand);font-weight:700}.addrc.on b{color:var(--brand)}
+.addrb{display:inline-block;font-size:10.5px;font-weight:700;padding:1px 6px;border-radius:5px;background:var(--info-soft);color:var(--info);margin-right:2px}.addrb.no{background:#eef1f3;color:var(--faint)}
 .pending{font-size:12.5px;padding:7px 11px;border-radius:9px;margin:0 0 10px;background:var(--warn-soft);color:var(--warn);font-weight:700}
 .pending button{color:inherit;text-decoration:underline;font-weight:800;margin-left:6px}
 .mg{background:#fff;border:1px solid var(--line);border-radius:14px;margin-bottom:9px;overflow:hidden}
@@ -587,6 +591,21 @@ var I18N = (function () {
 /* Dicionário da CHDCP Agenda: [português, English, italiano].
    Linhas com expressão regular servem para textos com números ou nomes ($1, $2…). */
 I18N.add([
+  /* v0.9.21 adicionar participante por papel */
+  ["Todos", "All", "Tutti"],
+  ["Formandos", "Trainees", "Formandi"],
+  ["Formadores", "Trainers", "Formatori"],
+  ["Pontos focais", "Focal points", "Punti focali"],
+  ["Direcção", "Management", "Direzione"],
+  ["Consulta", "View only", "Consultazione"],
+  ["Administração", "Admin", "Amministrazione"],
+  ["Sem app", "No app", "Senza app"],
+  ["Formando", "Trainee", "Formando"],
+  ["Formador", "Trainer", "Formatore"],
+  ["Ponto focal", "Focal point", "Punto focale"],
+  ["sem app", "no app", "senza app"],
+  [/^(\d+) pessoa\(s\)$/, '$1 person(s)', '$1 persona/e'],
+  [/^(\d+) encontrado\(s\)$/, '$1 found', '$1 trovato/i'],
   /* v0.9.10 link sessões */
   ["Entrar na sessão online", "Join the online session", "Entra nella sessione online"],
   /* v0.9.9 calendário */
@@ -2080,7 +2099,7 @@ function renderHome() {
     return '<button class="tile" data-k="' + t.k + '"><span class="ic">' + t.ic + '</span><b>' + esc(t.t) + '</b><small>' + esc(t.d) + '</small></button>';
   }).join('') + '</div></div><div class="htoday"><div class="sec hsec">As minhas actividades de hoje · ' + esc(fmtDate(today, true)) + '</div>' +
     (mine.length ? mine.map(function (a) { return hrow(a, today); }).join('') : '<div class="noact">Sem actividades suas hoje.</div>') + '</div></div>';
-  h += '<div class="foot">CHDCP Conecta · v0.9.20' + (pushOn() ? ' · <button class="link" id="pushOff" style="margin:0">🔔 Desactivar notificações</button>' : '') + '</div></div>';
+  h += '<div class="foot">CHDCP Conecta · v0.9.21' + (pushOn() ? ' · <button class="link" id="pushOff" style="margin:0">🔔 Desactivar notificações</button>' : '') + '</div></div>';
   $('app').innerHTML = h;
   $('app').classList.remove('weekwide');
   $('app').classList.add('homewide');
@@ -2274,10 +2293,10 @@ function withCtx(key, fn, a, title, draw) {
    para adicionar várias pessoas seguidas. */
 /* lista de pessoas do Training Hub: guardada no telefone 12 h (abre logo, mesmo sem rede) */
 var PL_BUSY = null;
-function peopleCached() { var c = LS.get('people'); return c && c.p && (Date.now() - c.t < 12 * 3600000) ? c.p : null; }
+function peopleCached() { var c = LS.get('people2'); return c && c.p && (Date.now() - c.t < 12 * 3600000) ? c.p : null; }
 function loadPeople(a) {
   if (PL_BUSY) return PL_BUSY;
-  PL_BUSY = callT(45000, 'apiPeopleList', S.token, a.id).then(function (r) { PL_BUSY = null; var p = (r && r.people) || []; LS.set('people', { t: Date.now(), p: p }); return p; },
+  PL_BUSY = callT(45000, 'apiPeopleList', S.token, a.id).then(function (r) { PL_BUSY = null; var p = (r && r.people) || []; LS.set('people2', { t: Date.now(), p: p }); return p; },
     function (e) { PL_BUSY = null; throw e; });
   return PL_BUSY;
 }
@@ -2285,23 +2304,38 @@ function setPlist(d, people, a) {
   var area = String(a.area || '').toUpperCase();
   var trn = (d.ctx.act && d.ctx.act.trainers || []).map(norm);
   d.parea = area;
-  d.plist = people.filter(function (p) { return trn.indexOf(norm(p.name)) < 0; }).map(function (p) { return { id: p.id, name: p.name, areas: p.areas || [], same: (p.areas || []).indexOf(area) >= 0 ? 1 : 0 }; })
-    .sort(function (x, y) { return (y.same - x.same) || x.name.localeCompare(y.name); });
+  d.plist = people.filter(function (p) { return trn.indexOf(norm(p.name)) < 0; }).map(function (p) { return { id: p.id, name: p.name, areas: p.areas || [], r: p.r || '', same: (p.areas || []).indexOf(area) >= 0 ? 1 : 0 }; })
+    .sort(function (x, y) { return ((y.r ? 1 : 0) - (x.r ? 1 : 0)) || (y.same - x.same) || x.name.localeCompare(y.name); });
 }
 
+var ADD_RO = ['FORMANDO', 'FORMATORE', 'PUNTO FOCALE', 'DIREZIONE', 'CONSULTA', 'ADMIN', '-'];
+var ADD_RP = { 'FORMANDO': 'Formandos', 'FORMATORE': 'Formadores', 'PUNTO FOCALE': 'Pontos focais', 'DIREZIONE': 'Direcção', 'CONSULTA': 'Consulta', 'ADMIN': 'Administração', '-': 'Sem app' };
+var ADD_RL = { 'FORMANDO': 'Formando', 'FORMATORE': 'Formador', 'PUNTO FOCALE': 'Ponto focal', 'DIREZIONE': 'Direcção', 'CONSULTA': 'Consulta', 'ADMIN': 'Administração', '-': 'sem app' };
 function bindAddPerson(a, d, onAdd) {
   var btn = $('addp');
   if (!btn) return;
   var open = function () {
     d.addOpen = true;
     $('addbox').innerHTML = '<div class="addpanel"><div class="addhead"><input class="inp" id="addq" placeholder="Procurar nome ou Person ID…" autocomplete="off" value="' + esc(d.addQ || '') + '">' +
-      '<button class="minor" id="addx" aria-label="Fechar">✕</button></div><div id="addr" class="addlist"><div class="small muted">A carregar a lista…</div></div></div>';
+      '<button class="minor" id="addx" aria-label="Fechar">✕</button></div><div id="addrl" class="addroles"></div><div id="addr" class="addlist"><div class="small muted">A carregar a lista…</div></div></div>';
     btn.style.display = 'none';
     $('addx').onclick = function () { d.addOpen = false; d.addQ = ''; $('addbox').innerHTML = ''; btn.style.display = ''; };
     var inRoster = function (id) { return d.ctx.people.some(function (x) { return x.id === id; }); };
     var row = function (p) {
       return '<button class="user" data-id="' + esc(p.id) + '" data-n="' + esc(p.name) + '"><span class="av" style="background:' + avc(p.id) + '">' + esc(ini(p.name)) + '</span>' +
-        '<span style="flex:1;min-width:0">' + esc(p.name) + '<br><span class="small muted">' + esc((p.areas || []).join(', ') || p.id) + '</span></span><span class="addplus">＋</span></button>';
+        '<span style="flex:1;min-width:0">' + esc(p.name) + '<br><span class="small muted">' + (p.r !== undefined ? '<span class="addrb' + (p.r ? '' : ' no') + '">' + esc(ADD_RL[p.r || '-']) + '</span> ' : '') + esc((p.areas || []).join(', ') || p.id) + '</span></span><span class="addplus">＋</span></button>';
+    };
+    /* v0.9.21: menu per ruolo nell'app (utenti Conecta); «Sem app» = só no Training Hub */
+    var roles = function () {
+      var box = $('addrl'); if (!box || !d.plist) return;
+      var all = d.plist.filter(function (p) { return !inRoster(p.id); }), n = {};
+      all.forEach(function (p) { var k = p.r || '-'; n[k] = (n[k] || 0) + 1; });
+      var keys = ADD_RO.filter(function (k) { return n[k]; });
+      if (!keys.length || (keys.length === 1 && keys[0] === '-')) { box.innerHTML = ''; return; }
+      box.innerHTML = ['<button class="addrc' + (!d.addR ? ' on' : '') + '" data-r="">Todos</button>'].concat(keys.map(function (k) {
+        return '<button class="addrc' + (d.addR === k ? ' on' : '') + '" data-r="' + k + '">' + esc(ADD_RP[k]) + ' <b>' + n[k] + '</b></button>';
+      })).join('');
+      Array.prototype.forEach.call(box.querySelectorAll('.addrc'), function (b) { b.onclick = function () { d.addR = b.dataset.r; roles(); draw(); }; });
     };
     var bindRows = function () {
       Array.prototype.forEach.call($('addr').querySelectorAll('.user'), function (b) {
@@ -2317,8 +2351,10 @@ function bindAddPerson(a, d, onAdd) {
     var draw = function () {
       if (!$('addr')) return;
       var q = norm(d.addQ || ''), all = (d.plist || []).filter(function (p) { return !inRoster(p.id); });
+      if (d.addR) all = all.filter(function (p) { return (p.r || '-') === d.addR; });
       var shown, note = '';
-      if (q) {
+      if (d.addR && !q) { shown = all; note = all.length + ' pessoa(s)'; }
+      else if (q) {
         shown = all.filter(function (p) { if (!p._h) p._h = norm(p.name + ' ' + p.id + ' ' + (p.areas || []).join(' ')); return p._h.indexOf(q) >= 0; });
         note = shown.length + ' encontrado(s)';
       } else {
@@ -2350,10 +2386,10 @@ function bindAddPerson(a, d, onAdd) {
     };
     $('addq').oninput = function () { d.addQ = this.value; draw(); };
     setTimeout(function () { try { $('addq').focus(); } catch (e) {} }, 30);
-    if (d.plist) { draw(); return; }
+    if (d.plist) { roles(); draw(); return; }
     var c0 = peopleCached();
-    if (c0) { setPlist(d, c0, a); draw(); }
-    loadPeople(a).then(function (pl) { setPlist(d, pl, a); draw(); }).catch(function (e) {
+    if (c0) { setPlist(d, c0, a); roles(); draw(); }
+    loadPeople(a).then(function (pl) { setPlist(d, pl, a); roles(); draw(); }).catch(function (e) {
       if (!$('addr') || d.plist) return;
       if (/não permitida|inexistente|is not a function|not defined|Script function not found/i.test(e.message)) { legacy(); return; }
       $('addr').innerHTML = '<div class="err">' + esc(isNet(e.message) ? 'Sem ligação: tente quando houver rede.' : e.message) + '</div><button class="minor" id="addre">Tentar de novo</button>';
