@@ -533,11 +533,6 @@ table.msy .vh{font-size:8.5px;color:var(--bad);font-weight:700}
 .mspyh{position:sticky;top:46px;z-index:2;background:var(--bg);padding:4px 0;margin-left:0}.mspyh span{display:none}.mspyh b{text-align:center;font-size:11px;color:var(--muted)}.mspyh b.td{color:var(--brand)}
 .mspyr{background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 9px 9px;margin-bottom:6px}.mspyr .l{font-size:13px;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:6px}
 .mspyr .c{height:30px;border-radius:5px;background:#f6f7f8;font-size:10.5px;font-weight:800;padding:0;min-width:0;color:var(--ink)}.mspyr .c.td{outline:2px solid var(--ink);outline-offset:1px}
-.minf{display:flex;align-items:center;gap:8px;padding:7px 0;border-top:1px solid var(--line);font-size:13.5px}.minf span{flex:1;min-width:0;overflow-wrap:anywhere}.minf small{display:block;color:var(--muted);font-size:11.5px}.minx{border:1px solid var(--line);background:var(--bg);border-radius:9px;width:34px;height:34px;color:var(--bad);font-weight:800}
-.minrec{margin:8px 0 0;padding:9px 11px;border-radius:11px;background:var(--info-soft);font-size:13.5px;font-weight:700}.minrec.on{background:var(--bad-soft);color:var(--bad)}.minrec.bad{background:var(--bad-soft);color:var(--bad)}
-.minta,.minin{width:100%;box-sizing:border-box;border:1px solid var(--line);border-radius:10px;padding:9px 10px;font:inherit;font-size:14px;background:#fff;color:var(--ink)}.minta{resize:vertical;line-height:1.45}
-.minl{display:block;font-size:12px;font-weight:800;color:var(--brand);margin:12px 0 4px}.minchk{display:flex;gap:8px;align-items:center;font-size:13px;margin:12px 0 0}
-.minread h4{font-size:13px;color:var(--brand);margin:12px 0 4px}.minread p{margin:0 0 6px;font-size:13.5px;line-height:1.5}
 </style>
 </head>
 <body>
@@ -596,76 +591,6 @@ var I18N = (function () {
 /* Dicionário da CHDCP Agenda: [português, English, italiano].
    Linhas com expressão regular servem para textos com números ou nomes ($1, $2…). */
 I18N.add([
-  /* v0.9.23 acta da reunião */
-  ["Acta da reunião", "Meeting minutes", "Verbale della riunione"],
-  ["Ver a acta", "View the minutes", "Vedi il verbale"],
-  ["✓ Acta aprovada", "✓ Minutes approved", "✓ Verbale approvato"],
-  ["Rascunho por rever", "Draft to review", "Bozza da rivedere"],
-  ["Notas de voz, apresentação, rascunho com IA", "Voice notes, presentation, AI draft", "Note vocali, presentazione, bozza con IA"],
-  ["apresentação", "presentation", "presentazione"],
-  ["Da Conecta", "From Conecta", "Da Conecta"],
-  ["Presenças ainda não registadas: registe-as antes de gerar a acta (os participantes vêm daí).", "Attendance not yet recorded: record it before generating the minutes (participants come from there).", "Presenze non ancora registrate: registrale prima di generare il verbale (i partecipanti vengono da lì)."],
-  ["(hora real)", "(actual time)", "(ora reale)"],
-  ["(hora prevista)", "(planned time)", "(ora prevista)"],
-  ["Notas de voz", "Voice notes", "Note vocali"],
-  ["Depois da reunião, dite os seus apontamentos: o que foi discutido, decidido, quem faz o quê e até quando. Pode gravar várias notas.", "After the meeting, dictate your notes: what was discussed and decided, who does what and by when. You can record several notes.", "Dopo la riunione, detta i tuoi appunti: cosa si è discusso e deciso, chi fa cosa ed entro quando. Puoi registrare più note."],
-  ["🎙 Gravar nota de voz", "🎙 Record voice note", "🎙 Registra nota vocale"],
-  ["Carregar áudio", "Upload audio", "Carica audio"],
-  ["Apagar", "Delete", "Elimina"],
-  ["Apresentação da reunião", "Meeting presentation", "Presentazione della riunione"],
-  ["Substituir ficheiro", "Replace file", "Sostituisci file"],
-  ["Carregar ficheiro", "Upload file", "Carica file"],
-  ["Colar link do Drive", "Paste Drive link", "Incolla link Drive"],
-  ["Guardar link", "Save link", "Salva link"],
-  ["Notas escritas (opcional)", "Written notes (optional)", "Note scritte (facoltative)"],
-  ["Pontos que quer garantir na acta…", "Points you want in the minutes…", "Punti che vuoi nel verbale…"],
-  ["IA ainda não configurada: o rascunho terá só os dados da Conecta.", "AI not configured yet: the draft will only have the Conecta data.", "IA non ancora configurata: la bozza avrà solo i dati di Conecta."],
-  ["✨ Gerar rascunho da acta", "✨ Generate draft minutes", "✨ Genera la bozza del verbale"],
-  ["✨ Gerar de novo o rascunho", "✨ Generate the draft again", "✨ Rigenera la bozza"],
-  ["✨ A gerar… (1–2 min)", "✨ Generating… (1–2 min)", "✨ Generazione… (1–2 min)"],
-  ["Pode demorar 1–2 minutos.", "It may take 1–2 minutes.", "Può richiedere 1–2 minuti."],
-  ["Gerar de novo substitui o texto actual. Pode demorar 1–2 minutos.", "Generating again replaces the current text. It may take 1–2 minutes.", "Rigenerare sostituisce il testo attuale. Può richiedere 1–2 minuti."],
-  ["Acta ainda não disponível.", "Minutes not available yet.", "Verbale non ancora disponibile."],
-  ["Rascunho da acta", "Draft minutes", "Bozza del verbale"],
-  ["A verificar antes de aprovar", "To check before approving", "Da verificare prima di approvare"],
-  ["1. Objectivo da Reunião", "1. Meeting Objective", "1. Obiettivo della riunione"],
-  ["2. Principais Pontos Discutidos", "2. Main Points Discussed", "2. Principali punti discussi"],
-  ["3. Observação Final", "3. Closing Remarks", "3. Osservazione finale"],
-  ["4. Próximos Passos Acordados", "4. Agreed Next Steps", "4. Prossimi passi concordati"],
-  ["Assunto", "Subject", "Oggetto"],
-  ["Um ponto por bloco: título na primeira linha, texto a seguir. Blocos separados por uma linha vazia.", "One point per block: title on the first line, text below. Blocks separated by an empty line.", "Un punto per blocco: titolo sulla prima riga, testo sotto. Blocchi separati da una riga vuota."],
-  ["Uma acção por linha: acção | responsável | prazo", "One action per line: action | owner | deadline", "Un'azione per riga: azione | responsabile | scadenza"],
-  ["Guardar alterações", "Save changes", "Salva modifiche"],
-  ["Abrir no Google Docs", "Open in Google Docs", "Apri in Google Docs"],
-  ["Apagar as notas de voz depois de aprovar", "Delete the voice notes after approval", "Elimina le note vocali dopo l'approvazione"],
-  ["✓ Aprovar a acta", "✓ Approve the minutes", "✓ Approva il verbale"],
-  ["Aprovar de novo", "Approve again", "Approva di nuovo"],
-  ["A enviar…", "Sending…", "Invio…"],
-  ["A verificar…", "Checking…", "Verifica…"],
-  ["A guardar…", "Saving…", "Salvataggio…"],
-  ["A aprovar…", "Approving…", "Approvazione…"],
-  ["Nota de voz guardada.", "Voice note saved.", "Nota vocale salvata."],
-  ["Apresentação guardada.", "Presentation saved.", "Presentazione salvata."],
-  ["Link guardado.", "Link saved.", "Link salvato."],
-  ["Rascunho pronto.", "Draft ready.", "Bozza pronta."],
-  ["Guardado.", "Saved.", "Salvato."],
-  ["Apagado.", "Deleted.", "Eliminato."],
-  ["Acta aprovada.", "Minutes approved.", "Verbale approvato."],
-  ["Apagar este ficheiro?", "Delete this file?", "Eliminare questo file?"],
-  ["Gerar de novo? O texto actual do rascunho é substituído.", "Generate again? The current draft text will be replaced.", "Rigenerare? Il testo attuale della bozza viene sostituito."],
-  ["Aprovar a acta? Fica visível aos participantes da actividade.", "Approve the minutes? They become visible to the activity participants.", "Approvare il verbale? Diventa visibile ai partecipanti dell'attività."],
-  ["■ Parar e guardar", "■ Stop and save", "■ Ferma e salva"],
-  ["Cancelar", "Cancel", "Annulla"],
-  ["(máx. 15 min)", "(max 15 min)", "(max 15 min)"],
-  ["Tentar de novo", "Try again", "Riprova"],
-  ["Este navegador não grava: use «Carregar áudio» (gravador do telefone).", "This browser cannot record: use «Upload audio» (phone recorder).", "Questo browser non registra: usa «Carica audio» (registratore del telefono)."],
-  ["Microfone não disponível aqui: use o gravador do telefone.", "Microphone not available here: use the phone recorder.", "Microfono non disponibile qui: usa il registratore del telefono."],
-  [/^(\d+) nota\(s\) de voz$/, '$1 voice note(s)', '$1 nota/e vocale/i'],
-  [/^(\d+) nota\(s\) de voz · apresentação$/, '$1 voice note(s) · presentation', '$1 nota/e vocale/i · presentazione'],
-  [/^✓ Presenças registadas: (\d+) presentes$/, '✓ Attendance recorded: $1 present', '✓ Presenze registrate: $1 presenti'],
-  [/^✓ Presenças registadas: (\d+) presentes · (\d+) ausentes$/, '✓ Attendance recorded: $1 present · $2 absent', '✓ Presenze registrate: $1 presenti · $2 assenti'],
-  [/^Aprovada por (.*)$/, 'Approved by $1', 'Approvato da $1'],
-  [/^PowerPoint, PDF ou Word\. Fica guardada na pasta da actividade \((.*)\)\.$/, 'PowerPoint, PDF or Word. Saved in the activity folder ($1).', 'PowerPoint, PDF o Word. Salvata nella cartella dell\'attività ($1).'],
   /* v0.9.21 adicionar participante por papel */
   ["Todos", "All", "Tutti"],
   ["Formandos", "Trainees", "Formandi"],
@@ -2174,7 +2099,7 @@ function renderHome() {
     return '<button class="tile" data-k="' + t.k + '"><span class="ic">' + t.ic + '</span><b>' + esc(t.t) + '</b><small>' + esc(t.d) + '</small></button>';
   }).join('') + '</div></div><div class="htoday"><div class="sec hsec">As minhas actividades de hoje · ' + esc(fmtDate(today, true)) + '</div>' +
     (mine.length ? mine.map(function (a) { return hrow(a, today); }).join('') : '<div class="noact">Sem actividades suas hoje.</div>') + '</div></div>';
-  h += '<div class="foot">CHDCP Conecta · v0.9.24' + (pushOn() ? ' · <button class="link" id="pushOff" style="margin:0">🔔 Desactivar notificações</button>' : '') + '</div></div>';
+  h += '<div class="foot">CHDCP Conecta · v0.9.25' + (pushOn() ? ' · <button class="link" id="pushOff" style="margin:0">🔔 Desactivar notificações</button>' : '') + '</div></div>';
   $('app').innerHTML = h;
   $('app').classList.remove('weekwide');
   $('app').classList.add('homewide');
@@ -2323,11 +2248,6 @@ function actionsHtml(a, d) {
     }).join('') + '</div>';
   }
   if (d && d.meet && !a.hidden && a.date >= addDays(ALL ? ALL.today : todayYmd(), -1)) h = '<div class="acts" style="margin-bottom:9px"><button class="abtn" data-k="MEET" style="border-color:var(--info);background:var(--info-soft)"><span class="ic">🎥</span><span><b>Entrar na sessão online</b><small>' + esc(d.meet.replace(/^https?:\/\//, '').split('/')[0]) + '</small></span><span class="go">›</span></button></div>' + h;
-  /* v0.9.23: acta da reunião (responsável / direcção; aprovada: participantes) */
-  if (d && d.min && !a.hidden && (d.min.can || d.min.st === 'APPROVED')) {
-    var mFut = d.min.can && future;
-    h += '<div class="acts" style="margin-top:9px"><button class="abtn' + (d.min.st === 'APPROVED' ? ' sec2' : '') + '" data-k="MIN"' + (mFut ? ' disabled' : '') + '><span class="ic">📝</span><span><b>' + (d.min.can ? 'Acta da reunião' : 'Ver a acta') + '</b><small>' + (mFut ? 'Disponível a partir de ' + fmtDate(a.date, false) : esc(minStatusTxt(d.min))) + '</small></span><span class="go">›</span></button></div>';
-  }
   /* resultados: formador / ponto focal (Learning & Assessment controla as permissões) */
   if (!a.hidden) h += '<div class="acts" style="margin-top:9px"><button class="abtn sec2" data-k="CALADD"><span class="ic">📅</span><span><b>Adicionar ao calendário</b><small>Google, Outlook, iPhone (cópia: não se actualiza)</small></span><span class="go">›</span></button></div>';
   if (staff() && a.area && a.area !== 'ALL') {
@@ -2338,7 +2258,7 @@ function actionsHtml(a, d) {
 
 function bindDetail(a) {
   Array.prototype.forEach.call(document.querySelectorAll('#pg .abtn'), function (b) {
-    b.onclick = function () { if (b.dataset.k === 'AREA') laOpen('area', { area: a.area }); else if (b.dataset.k === 'CALADD') go(function () { screenCalAdd(a); }); else if (b.dataset.k === 'MIN') go(function () { screenMinutes(a); }); else if (b.dataset.k === 'MEET') { var dd = ST[a.id] || cxGet('det|' + a.id); if (dd && dd.meet) openExt(dd.meet); } else runAction(b.dataset.k, a); };
+    b.onclick = function () { if (b.dataset.k === 'AREA') laOpen('area', { area: a.area }); else if (b.dataset.k === 'CALADD') go(function () { screenCalAdd(a); }); else if (b.dataset.k === 'MEET') { var dd = ST[a.id] || cxGet('det|' + a.id); if (dd && dd.meet) openExt(dd.meet); } else runAction(b.dataset.k, a); };
   });
   Array.prototype.forEach.call(document.querySelectorAll('#pg .prof'), function (b) { b.onclick = function () { laOpen('person', { personId: b.dataset.pid }); }; });
 }
@@ -3205,193 +3125,6 @@ function copyTxt(t) {
   try { prompt('Copie o link:', t); } catch (e) {}
 }
 function isAndroid() { return /android/i.test(navigator.userAgent); }
-/* ---------------- v0.9.23 · ACTA DA REUNIÃO ----------------
-   Notas de voz do responsável (gravadas no telefone) + apresentação + presenças da Conecta → rascunho (Gemini) → aprovação */
-var MREC = null;
-function minStatusTxt(m) {
-  if (!m) return '';
-  if (m.st === 'APPROVED') return '✓ Acta aprovada';
-  if (m.st === 'DRAFT') return 'Rascunho por rever';
-  var x = [];
-  if (m.na) x.push(m.na + ' nota(s) de voz');
-  if (m.ppt) x.push('apresentação');
-  return x.length ? x.join(' · ') : 'Notas de voz, apresentação, rascunho com IA';
-}
-function minB64(blob) {
-  return new Promise(function (ok, ko) { var r = new FileReader(); r.onload = function () { ok(String(r.result || '')); }; r.onerror = function () { ko(new Error('Leitura do ficheiro falhou.')); }; r.readAsDataURL(blob); });
-}
-function minUpload(a, kind, blob, name, sec) {
-  var mb = blob.size / 1048576;
-  if (mb > 20) return Promise.reject(new Error('Ficheiro demasiado grande (máx. 20 MB): cole o link do Drive.'));
-  return minB64(blob).then(function (b64) {
-    return callT(180000, 'apiMinutesUpload', S.token, a.id, { kind: kind, name: name || '', mime: (blob.type || '').split(';')[0], b64: b64, sec: sec || 0, cid: uid() });
-  });
-}
-function minFmtSec(s) { s = Math.round(s || 0); return Math.floor(s / 60) + ':' + ('0' + (s % 60)).slice(-2); }
-function minRecStop(cancel) {
-  if (!MREC) return;
-  MREC.cancel = !!cancel;
-  try { if (MREC.mr.state !== 'inactive') MREC.mr.stop(); } catch (e) {}
-  try { MREC.st.getTracks().forEach(function (t) { t.stop(); }); } catch (e) {}
-  clearInterval(MREC.tm);
-}
-function screenMinutes(a) {
-  var head = bhead('Acta da reunião', a.title);
-  var me = here();
-  page(head + '<div class="body"><div class="empty">A carregar…</div></div>');
-  callT(45000, 'apiMinutesContext', S.token, a.id).then(function (r) {
-    if (here() !== me) return;
-    minDraw(a, r, head);
-  }).catch(function (e) { errorPage('Acta da reunião', a.title, e.message, function () { screenMinutes(a); }); });
-}
-function minDraw(a, r, head) {
-  var att = r.att || {}, d = r.draft, h = head + '<div class="body">' + ctxBox(a);
-  /* 1 · dados da Conecta */
-  h += '<div class="card"><div class="sec" style="margin-top:0">Da Conecta</div>' +
-    (att.registered ? '<div class="small">✓ Presenças registadas: ' + att.people.filter(function (p) { return !p.resp; }).length + ' presentes' + (att.absent ? ' · ' + att.absent + ' ausentes' : '') + '</div>'
-      : '<div class="calnote" style="margin:6px 0">Presenças ainda não registadas: registe-as antes de gerar a acta (os participantes vêm daí).</div>') +
-    (att.start ? '<div class="small">🕒 ' + esc(att.start + (att.end ? '–' + att.end : '')) + ' <span>' + (att.real ? '(hora real)' : '(hora prevista)') + '</span></div>' : '') + '</div>';
-  if (r.can) {
-    var files = r.files || [], au = files.filter(function (f) { return f.k === 'AUDIO'; }), pp = files.filter(function (f) { return f.k === 'PPT'; })[0];
-    /* 2 · notas de voz */
-    h += '<div class="card"><div class="sec" style="margin-top:0">Notas de voz</div><p class="small muted" style="margin:2px 0 8px">Depois da reunião, dite os seus apontamentos: o que foi discutido, decidido, quem faz o quê e até quando. Pode gravar várias notas.</p>' +
-      au.map(function (f) { return '<div class="minf"><span>🎙 ' + esc(f.name) + '<small>' + (f.sec ? minFmtSec(f.sec) + ' · ' : '') + f.kb + ' KB · ' + esc(tsTxt(f.at)) + '</small></span><button class="minx" data-id="' + esc(f.id) + '" title="Apagar">✕</button></div>'; }).join('') +
-      '<div id="mrec"></div><div class="calbtns"><button class="pri" id="mRec">🎙 Gravar nota de voz</button><button id="mAud">Carregar áudio</button></div>' +
-      '<input type="file" id="mAf" accept="audio/*" capture style="display:none"></div>';
-    /* 3 · apresentação */
-    h += '<div class="card"><div class="sec" style="margin-top:0">Apresentação da reunião</div>' +
-      (pp ? '<div class="minf"><span>📎 ' + esc(pp.name) + '<small>' + (pp.kb ? pp.kb + ' KB · ' : '') + esc(tsTxt(pp.at)) + '</small></span><button class="minx" data-id="' + esc(pp.id) + '" title="Apagar">✕</button></div>' : '<p class="small muted" style="margin:2px 0 6px">PowerPoint, PDF ou Word. Fica guardada na pasta da actividade (' + esc(a.id) + ').</p>') +
-      '<div class="calbtns"><button id="mPpt">' + (pp ? 'Substituir ficheiro' : 'Carregar ficheiro') + '</button><button id="mLnk">Colar link do Drive</button></div>' +
-      '<input type="file" id="mPf" accept=".ppt,.pptx,.pdf,.doc,.docx,.odp,application/pdf,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.ms-powerpoint" style="display:none">' +
-      '<div id="mLw" style="display:none;margin-top:8px"><input id="mLi" class="minin" placeholder="https://drive.google.com/…"><div class="calbtns"><button class="pri" id="mLok">Guardar link</button></div></div></div>';
-    /* 4 · notas escritas + gerar */
-    h += '<div class="card"><div class="sec" style="margin-top:0">Notas escritas (opcional)</div><textarea id="mNt" class="minta" rows="3" placeholder="Pontos que quer garantir na acta…">' + esc(r.notes || '') + '</textarea>' +
-      (r.ai ? '' : '<div class="calnote" style="margin:8px 0 0">IA ainda não configurada: o rascunho terá só os dados da Conecta.</div>') +
-      '<div class="calbtns"><button class="pri" id="mGen">✨ ' + (d ? 'Gerar de novo o rascunho' : 'Gerar rascunho da acta') + '</button></div>' +
-      '<p class="small muted" style="margin:6px 0 0">' + (d ? 'Gerar de novo substitui o texto actual. ' : '') + 'Pode demorar 1–2 minutos.</p></div>';
-  }
-  /* 5 · rascunho / acta */
-  if (d && d.data) h += minDraftHtml(d, r.can, r.url);
-  else if (!r.can) h += '<div class="empty">Acta ainda não disponível.</div>';
-  h += '</div>';
-  page(h, true);
-  minBind(a, r, head);
-}
-function minDraftHtml(d, can, url) {
-  var x = d.data, ap = d.st === 'APPROVED';
-  var h = '<div class="card" id="mDr"><div class="sec" style="margin-top:0">' + (ap ? '✓ Acta aprovada' : 'Rascunho da acta') + '</div>' +
-    '<p class="small muted" style="margin:0 0 8px">' + (ap ? 'Aprovada por ' + esc(d.apBy + ' · ' + tsTxt(d.apAt)) : (d.by ? esc(d.by) + ' · ' + esc(tsTxt(d.at)) : '') + (d.model && d.model !== 'none' ? ' · IA: ' + esc(d.model) : '')) + '</p>';
-  if (!ap && (x.verificar || []).length) h += '<div class="calnote"><b>A verificar antes de aprovar</b><br>' + x.verificar.map(esc).join('<br>') + '</div>';
-  if (!can) {
-    h += '<div class="minread"><b>' + esc(x.assunto) + '</b><h4>1. Objectivo da Reunião</h4><p>' + esc(x.objectivo) + '</p><h4>2. Principais Pontos Discutidos</h4>' +
-      (x.pontos || []).map(function (p) { return '<p><b>' + esc(p.titulo) + '</b> ' + esc(p.texto) + '</p>'; }).join('') +
-      '<h4>3. Observação Final</h4><p>' + esc(x.observacao) + '</p><h4>4. Próximos Passos Acordados</h4>' +
-      (x.proximos || []).map(function (p) { return '<p>• ' + esc(p.accao) + (p.responsavel || p.prazo ? ' <small>(' + esc([p.responsavel, p.prazo].filter(Boolean).join(' · ')) + ')</small>' : '') + '</p>'; }).join('') + '</div></div>';
-    return h;
-  }
-  var ta = function (id, v, rows) { return '<textarea class="minta" id="' + id + '" rows="' + (rows || 3) + '">' + esc(v || '') + '</textarea>'; };
-  h += '<label class="minl">Assunto</label><input class="minin" id="mAs" value="' + esc(x.assunto) + '">' +
-    '<label class="minl">1. Objectivo da Reunião</label>' + ta('mOb', x.objectivo, 3) +
-    '<label class="minl">2. Principais Pontos Discutidos</label><p class="small muted" style="margin:0 0 4px">Um ponto por bloco: título na primeira linha, texto a seguir. Blocos separados por uma linha vazia.</p>' +
-    ta('mPo', (x.pontos || []).map(function (p) { return p.titulo + '\n' + p.texto; }).join('\n\n'), 10) +
-    '<label class="minl">3. Observação Final</label>' + ta('mOf', x.observacao, 3) +
-    '<label class="minl">4. Próximos Passos Acordados</label><p class="small muted" style="margin:0 0 4px">Uma acção por linha: acção | responsável | prazo</p>' +
-    ta('mPr', (x.proximos || []).map(function (p) { return [p.accao, p.responsavel, p.prazo].join(' | ').replace(/( \| )+$/, ''); }).join('\n'), 5) +
-    '<div class="calbtns"><button id="mSv">Guardar alterações</button>' + (url ? '<button id="mDoc">Abrir no Google Docs</button>' : '') + '</div>' +
-    '<label class="minchk"><input type="checkbox" id="mDrop" checked> Apagar as notas de voz depois de aprovar</label>' +
-    '<div class="calbtns"><button class="pri" id="mAp">' + (ap ? 'Aprovar de novo' : '✓ Aprovar a acta') + '</button></div></div>';
-  return h;
-}
-function minRead() {
-  var v = function (id) { return ($(id) && $(id).value) || ''; };
-  return {
-    assunto: v('mAs'), objectivo: v('mOb'), observacao: v('mOf'), verificar: [],
-    pontos: v('mPo').split(/\n\s*\n/).map(function (b) { var l = b.trim().split('\n'); return { titulo: (l.shift() || '').trim(), texto: l.join(' ').trim() }; }).filter(function (p) { return p.titulo || p.texto; }),
-    proximos: v('mPr').split('\n').map(function (l) { var c = l.split('|'); return { accao: (c[0] || '').trim(), responsavel: (c[1] || '').trim(), prazo: (c[2] || '').trim() }; }).filter(function (p) { return p.accao; })
-  };
-}
-function minBind(a, r, head) {
-  var reload = function (msg) { if (msg) toast(msg); swapTop(function () { screenMinutes(a); }); };
-  var fail = function (b, label) { return function (e) { if (b) { b.disabled = false; if (label) b.textContent = label; } toast((e && e.message) || 'Erro.'); }; };
-  var busyBtn = function (b, t) { var l = b.textContent; b.disabled = true; b.textContent = t; return l; };
-  Array.prototype.forEach.call(document.querySelectorAll('#pg .minx'), function (b) {
-    b.onclick = function () { if (!confirm('Apagar este ficheiro?')) return; b.disabled = true; call('apiMinutesRemove', S.token, a.id, b.dataset.id).then(function () { reload('Apagado.'); }, fail(b)); };
-  });
-  if (r.can) {
-    $('mAud').onclick = function () { $('mAf').click(); };
-    $('mAf').onchange = function () {
-      var f = this.files && this.files[0]; if (!f) return;
-      var b = $('mAud'), l = busyBtn(b, 'A enviar…');
-      minUpload(a, 'AUDIO', f, f.name, 0).then(function () { reload('Nota de voz guardada.'); }, fail(b, l));
-    };
-    $('mRec').onclick = function () { minRecord(a); };
-    $('mPpt').onclick = function () { $('mPf').click(); };
-    $('mPf').onchange = function () {
-      var f = this.files && this.files[0]; if (!f) return;
-      var b = $('mPpt'), l = busyBtn(b, 'A enviar…');
-      minUpload(a, 'PPT', f, f.name, 0).then(function () { reload('Apresentação guardada.'); }, fail(b, l));
-    };
-    $('mLnk').onclick = function () { $('mLw').style.display = 'block'; $('mLi').focus(); };
-    $('mLok').onclick = function () {
-      var b = $('mLok'), l = busyBtn(b, 'A verificar…');
-      call('apiMinutesLink', S.token, a.id, $('mLi').value).then(function () { reload('Link guardado.'); }, fail(b, l));
-    };
-    $('mGen').onclick = function () {
-      if (r.draft && !confirm('Gerar de novo? O texto actual do rascunho é substituído.')) return;
-      var b = $('mGen'), l = busyBtn(b, '✨ A gerar… (1–2 min)');
-      callT(330000, 'apiMinutesGenerate', S.token, a.id, { notes: $('mNt').value }).then(function () { reload('Rascunho pronto.'); }, fail(b, l));
-    };
-    if ($('mSv')) $('mSv').onclick = function () {
-      var b = $('mSv'), l = busyBtn(b, 'A guardar…');
-      callT(120000, 'apiMinutesSave', S.token, a.id, { data: minRead() }).then(function () { reload('Guardado.'); }, fail(b, l));
-    };
-    if ($('mDoc')) $('mDoc').onclick = function () { openExt(r.url); };
-    if ($('mAp')) $('mAp').onclick = function () {
-      if (!confirm('Aprovar a acta? Fica visível aos participantes da actividade.')) return;
-      var b = $('mAp'), l = busyBtn(b, 'A aprovar…');
-      callT(120000, 'apiMinutesApprove', S.token, a.id, { data: minRead(), dropAudio: $('mDrop').checked }).then(function () { delete ST[a.id]; reload('Acta aprovada.'); }, fail(b, l));
-    };
-  }
-}
-/* gravação no telefone (MediaRecorder); sem microfone disponível → gravador do telefone (Carregar áudio) */
-function minRecord(a) {
-  var box = $('mrec');
-  if (MREC) return;
-  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || !window.MediaRecorder) { toast('Este navegador não grava: use «Carregar áudio» (gravador do telefone).'); $('mAf').click(); return; }
-  navigator.mediaDevices.getUserMedia({ audio: { channelCount: 1, echoCancellation: true, noiseSuppression: true } }).then(function (st) {
-    var types = ['audio/webm;codecs=opus', 'audio/mp4', 'audio/ogg;codecs=opus', 'audio/webm'], mt = '';
-    for (var i = 0; i < types.length; i++) { try { if (MediaRecorder.isTypeSupported(types[i])) { mt = types[i]; break; } } catch (e) {} }
-    var opt = { audioBitsPerSecond: 32000 }; if (mt) opt.mimeType = mt;
-    var mr = new MediaRecorder(st, opt), chunks = [], t0 = Date.now();
-    MREC = { mr: mr, st: st, cancel: false };
-    mr.ondataavailable = function (e) { if (e.data && e.data.size) chunks.push(e.data); };
-    mr.onstop = function () {
-      var rec = MREC; MREC = null;
-      var sec = (Date.now() - t0) / 1000;
-      if (rec && rec.cancel) { if (box) box.innerHTML = ''; return; }
-      var blob = new Blob(chunks, { type: (mr.mimeType || mt || 'audio/webm') });
-      if (box) box.innerHTML = '<div class="minrec">⬆️ A enviar a nota (' + minFmtSec(sec) + ')… não feche a app.</div>';
-      var send = function () {
-        minUpload(a, 'AUDIO', blob, '', sec).then(function () { toast('Nota de voz guardada.'); swapTop(function () { screenMinutes(a); }); }, function (e) {
-          if (!box) return;
-          box.innerHTML = '<div class="minrec bad">Envio falhou: ' + esc((e && e.message) || '') + '</div><div class="calbtns"><button class="pri" id="mRetry">Tentar de novo</button></div>';
-          $('mRetry').onclick = send;
-        });
-      };
-      send();
-    };
-    mr.start(1000);
-    box.innerHTML = '<div class="minrec on">● A gravar <b id="mT">0:00</b> <small>(máx. 15 min)</small></div><div class="calbtns"><button class="pri" id="mStop">■ Parar e guardar</button><button id="mCan">Cancelar</button></div>';
-    MREC.tm = setInterval(function () { var s = (Date.now() - t0) / 1000; if ($('mT')) $('mT').textContent = minFmtSec(s); if (s >= 900) minRecStop(false); }, 500);
-    $('mStop').onclick = function () { minRecStop(false); };
-    $('mCan').onclick = function () { minRecStop(true); };
-    $('mRec').disabled = true;
-  }).catch(function () {
-    toast('Microfone não disponível aqui: use o gravador do telefone.');
-    $('mAf').click();
-  });
-}
-
 function screenCalAdd(a) {
   var head = bhead('Adicionar ao calendário', a.title);
   page(head + '<div class="body"><div class="empty">A preparar…</div></div>');
