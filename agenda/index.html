@@ -591,6 +591,9 @@ var I18N = (function () {
 /* Dicionário da CHDCP Agenda: [português, English, italiano].
    Linhas com expressão regular servem para textos com números ou nomes ($1, $2…). */
 I18N.add([
+  /* v0.9.26 ricerca nella lista presenze */
+  ["Procurar na lista…", "Search the list…", "Cerca nella lista…"],
+  ["Nenhum nome encontrado.", "No name found.", "Nessun nome trovato."],
   /* v0.9.21 adicionar participante por papel */
   ["Todos", "All", "Tutti"],
   ["Formandos", "Trainees", "Formandi"],
@@ -1808,6 +1811,7 @@ busy = function (on) {
   el.innerHTML = on ? '<div class="loading">A carregar…</div>' : '';
 };
 
+function normQ(x) { return String(x || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, ' ').trim(); }
 function uid() { return 'AG-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 8); }
 function isNet(msg) { return /TIMEOUT|NetworkError|HTTP 0|Failed to fetch|network|Sem ligação|Load failed/i.test(String(msg || '')); }
 function dmy(s) { var d = ymd(s); return d ? ('0' + d.getDate()).slice(-2) + '/' + ('0' + (d.getMonth() + 1)).slice(-2) + '/' + d.getFullYear() : ''; }
@@ -2099,7 +2103,7 @@ function renderHome() {
     return '<button class="tile" data-k="' + t.k + '"><span class="ic">' + t.ic + '</span><b>' + esc(t.t) + '</b><small>' + esc(t.d) + '</small></button>';
   }).join('') + '</div></div><div class="htoday"><div class="sec hsec">As minhas actividades de hoje · ' + esc(fmtDate(today, true)) + '</div>' +
     (mine.length ? mine.map(function (a) { return hrow(a, today); }).join('') : '<div class="noact">Sem actividades suas hoje.</div>') + '</div></div>';
-  h += '<div class="foot">CHDCP Conecta · v0.9.25' + (pushOn() ? ' · <button class="link" id="pushOff" style="margin:0">🔔 Desactivar notificações</button>' : '') + '</div></div>';
+  h += '<div class="foot">CHDCP Conecta · v0.9.26' + (pushOn() ? ' · <button class="link" id="pushOff" style="margin:0">🔔 Desactivar notificações</button>' : '') + '</div></div>';
   $('app').innerHTML = h;
   $('app').classList.remove('weekwide');
   $('app').classList.add('homewide');
@@ -2423,9 +2427,11 @@ function drawAttendance(a, d) {
   h += '<div class="counters"><div class="p"><b id="cP">0</b><span>Presentes</span></div><div class="a"><b id="cA">0</b><span>Ausentes</span></div><div><b id="cN">0</b><span>Por marcar</span></div></div>';
   if (!ro) h += '<button class="minor" id="allp">Todos presentes</button><button class="minor" id="addp">+ Adicionar participante</button><div id="addbox"></div>';
   if (!c.people.length) h += '<div class="empty">Sem lista prevista para esta actividade. Use «Adicionar participante».</div>';
+  /* v0.9.26: ricerca nella lista (solo filtro sul telefono: nessun cambio a chi compare nella lista) */
+  if (c.people.length > 5) h += '<input class="inp" id="pq" type="search" placeholder="Procurar na lista…" autocomplete="off" style="margin:8px 0" value="' + esc(d.pq || '') + '"><div class="empty" id="pq0" style="display:none">Nenhum nome encontrado.</div>';
   h += '<div class="plist">' + c.people.map(function (p) {
     var st = d.mark[p.id] || '';
-    return '<div class="prow"><div class="nm"><b>' + esc(p.name) + '</b><span>' + esc([p.r && p.r !== 'TRAINEE' && p.r !== 'INVITED' ? p.r : '', srcTxt[p.src] || ''].filter(Boolean).join(' · ')) + '</span></div>' +
+    return '<div class="prow" data-n="' + esc(normQ(p.name + ' ' + p.id)) + '"><div class="nm"><b>' + esc(p.name) + '</b><span>' + esc([p.r && p.r !== 'TRAINEE' && p.r !== 'INVITED' ? p.r : '', srcTxt[p.src] || ''].filter(Boolean).join(' · ')) + '</span></div>' +
       '<div class="seg2"><button data-p="' + esc(p.id) + '" data-s="PRESENT" class="' + (st === 'PRESENT' ? 'onP' : '') + '"' + (ro ? ' disabled' : '') + '>Presente</button>' +
       '<button data-p="' + esc(p.id) + '" data-s="ABSENT" class="' + (st === 'ABSENT' ? 'onA' : '') + '"' + (ro ? ' disabled' : '') + '>Ausente</button></div></div>';
   }).join('') + '</div></div>';
@@ -2461,6 +2467,12 @@ function drawAttendance(a, d) {
       paint();
     };
   });
+  var filt = function () {
+    var q = normQ(d.pq || ''), n = 0;
+    Array.prototype.forEach.call(document.querySelectorAll('.plist .prow'), function (r) { var ok = !q || r.dataset.n.indexOf(q) >= 0; r.style.display = ok ? '' : 'none'; if (ok) n++; });
+    if ($('pq0')) $('pq0').style.display = q && !n ? 'block' : 'none';
+  };
+  if ($('pq')) { $('pq').oninput = function () { d.pq = this.value; filt(); }; filt(); }
   if ($('allp')) $('allp').onclick = function () { d.touched = true; c.people.forEach(function (p) { if (!d.mark[p.id]) d.mark[p.id] = 'PRESENT'; }); drawAttendance(a, d); };
   bindAddPerson(a, d, function (pid) { d.touched = true; d.mark[pid] = 'PRESENT'; drawAttendance(a, d); });
   if (!ro && !peopleCached()) loadPeople(a).catch(function () {});
