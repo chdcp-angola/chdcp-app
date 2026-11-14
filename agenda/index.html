@@ -1746,7 +1746,7 @@ function actHtml(a, i) {
   if (a.done) tags += '<span class="tag ok">✓ REALIZADA</span>';
   if (a.pend) tags += '<span class="tag pend">⏳ POR COMPLETAR</span>';
   if (a.provisional) tags += '<span class="tag general">PLANO GERAL</span>';
-  if (a.hidden) tags += '<span class="tag bad">' + esc((a.exec || a.status || 'CANCELADA').toUpperCase()) + '</span>';
+  if (a.hidden) tags += '<span class="tag bad">' + esc(hidTag(a)) + '</span>';
   if (a.holiday && a.holiday.kind !== 'ON') tags += '<span class="tag">' + esc(HOLK[a.holiday.kind]) + '</span>';
   var meta = [a.typeLabel || a.method, a.platform].filter(Boolean).join(' · ');
   return '<button class="' + cls + '" data-i="' + i + '"><div class="tm">' + tm + '</div><div class="bx" style="--tc:' + esc(a.typeColor || '#93a0a7') + '">' +
@@ -1811,6 +1811,8 @@ busy = function (on) {
   el.innerHTML = on ? '<div class="loading">A carregar…</div>' : '';
 };
 
+/* v0.9.27: etichetta delle attività nascoste («REPORTED · NOT EXECUTED» = annullata all'ultimo momento) */
+function hidTag(a) { var st = String(a.status || ''), ex = String(a.exec || ''); return (/report/i.test(st) && /^(not|n[aã]o|non)\b/i.test(ex) ? st + ' · ' + ex : (ex || st || 'CANCELADA')).toUpperCase(); }
 function normQ(x) { return String(x || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, ' ').trim(); }
 function uid() { return 'AG-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 8); }
 function isNet(msg) { return /TIMEOUT|NetworkError|HTTP 0|Failed to fetch|network|Sem ligação|Load failed/i.test(String(msg || '')); }
@@ -2103,7 +2105,7 @@ function renderHome() {
     return '<button class="tile" data-k="' + t.k + '"><span class="ic">' + t.ic + '</span><b>' + esc(t.t) + '</b><small>' + esc(t.d) + '</small></button>';
   }).join('') + '</div></div><div class="htoday"><div class="sec hsec">As minhas actividades de hoje · ' + esc(fmtDate(today, true)) + '</div>' +
     (mine.length ? mine.map(function (a) { return hrow(a, today); }).join('') : '<div class="noact">Sem actividades suas hoje.</div>') + '</div></div>';
-  h += '<div class="foot">CHDCP Conecta · v0.9.26' + (pushOn() ? ' · <button class="link" id="pushOff" style="margin:0">🔔 Desactivar notificações</button>' : '') + '</div></div>';
+  h += '<div class="foot">CHDCP Conecta · v0.9.28' + (pushOn() ? ' · <button class="link" id="pushOff" style="margin:0">🔔 Desactivar notificações</button>' : '') + '</div></div>';
   $('app').innerHTML = h;
   $('app').classList.remove('weekwide');
   $('app').classList.add('homewide');
@@ -2170,7 +2172,7 @@ function renderDetail(a) {
   if (a.governance) tags += '<span class="tag">' + esc((a.governanceType === 'PROTOCOL' ? 'PROTOCOLO · ' : 'PROCEDIMENTO · ') + a.governance) + '</span>';
   if (a.tentative) tags += '<span class="tag tent">PREVISTA</span>';
   if (a.done) tags += '<span class="tag ok">✓ REALIZADA</span>';
-  if (a.hidden) tags += '<span class="tag bad">' + esc((a.exec || a.status || 'CANCELADA').toUpperCase()) + '</span>';
+  if (a.hidden) tags += '<span class="tag bad">' + esc(hidTag(a)) + '</span>';
   if (a.provisional) tags += '<span class="tag general">PLANO GERAL</span>';
   var det = ST[a.id] || cxGet('det|' + a.id);
   /* v0.9: titolo sopra; sul telefono le azioni vengono subito dopo il titolo (prima dei dettagli) */
@@ -2306,9 +2308,9 @@ function loadPeople(a) {
 }
 function setPlist(d, people, a) {
   var area = String(a.area || '').toUpperCase();
-  var trn = (d.ctx.act && d.ctx.act.trainers || []).map(norm);
   d.parea = area;
-  d.plist = people.filter(function (p) { return trn.indexOf(norm(p.name)) < 0; }).map(function (p) { return { id: p.id, name: p.name, areas: p.areas || [], r: p.r || '', same: (p.areas || []).indexOf(area) >= 0 ? 1 : 0 }; })
+  /* v0.9.28: anche il formatore / responsabile dell'attività si può segnare presente (riunioni) */
+  d.plist = people.map(function (p) { return { id: p.id, name: p.name, areas: p.areas || [], r: p.r || '', same: (p.areas || []).indexOf(area) >= 0 ? 1 : 0 }; })
     .sort(function (x, y) { return ((y.r ? 1 : 0) - (x.r ? 1 : 0)) || (y.same - x.same) || x.name.localeCompare(y.name); });
 }
 
