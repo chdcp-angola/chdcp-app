@@ -49,7 +49,7 @@ main{max-width:760px;margin:0 auto;padding:14px 14px 110px}
 @media (min-width:1024px){main{max-width:1100px}.plist{grid-template-columns:repeat(3,1fr)}}
 @media (hover:hover) and (pointer:fine){.tile:hover,.hrow:hover,.prow:hover{border-color:var(--brand-line);box-shadow:0 2px 8px rgba(27,33,36,.08)}}
 </style>
-<script>var LA_BOOT=(function(){var q=new URLSearchParams(location.search),p={};["mode","activityId","personId","area","date","title","tab","lang"].forEach(function(k){p[k]=q.get(k)||"";});if(!p.mode)p.mode="";return{v:"38",t:q.get("t")||"",p:p,urls:{home:"index.html"}};})();</script><script>var LA = window.LA_BOOT || { p:{}, urls:{} };
+<script>var LA_BOOT=(function(){var q=new URLSearchParams(location.search),p={};["mode","activityId","personId","area","date","title","tab","lang","sug"].forEach(function(k){p[k]=q.get(k)||"";});if(!p.mode)p.mode="";return{v:"38",t:q.get("t")||"",p:p,urls:{home:"index.html"}};})();</script><script>var LA = window.LA_BOOT || { p:{}, urls:{} };
 function laSess(){ try { return JSON.parse(localStorage.getItem('la_sess') || 'null'); } catch(e){ return null; } }
 function laSetSess(s){ try { if (s) localStorage.setItem('la_sess', JSON.stringify(s)); else localStorage.removeItem('la_sess'); } catch(e){} }
 function laQs(o){ var k = Object.keys(o||{}).filter(function(x){ return o[x]; }); return k.map(function(x){ return x+'='+encodeURIComponent(o[x]); }).join('&'); }

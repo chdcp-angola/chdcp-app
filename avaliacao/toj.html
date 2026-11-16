@@ -275,7 +275,7 @@ button.nrow{border-left:0;border-right:0;border-bottom:0}
 </style>
 <title>Avaliação TOJ</title></head>
 <body>
-<script>var LA_BOOT=(function(){var q=new URLSearchParams(location.search),p={};["mode","activityId","personId","area","date","title","tab","lang"].forEach(function(k){p[k]=q.get(k)||"";});if(!p.mode)p.mode="toj";return{v:"38",t:q.get("t")||"",p:p,urls:{home:"index.html"}};})();</script><script>var LA = window.LA_BOOT || { p:{}, urls:{} };
+<script>var LA_BOOT=(function(){var q=new URLSearchParams(location.search),p={};["mode","activityId","personId","area","date","title","tab","lang","sug"].forEach(function(k){p[k]=q.get(k)||"";});if(!p.mode)p.mode="toj";return{v:"38",t:q.get("t")||"",p:p,urls:{home:"index.html"}};})();</script><script>var LA = window.LA_BOOT || { p:{}, urls:{} };
 function laSess(){ try { return JSON.parse(localStorage.getItem('la_sess') || 'null'); } catch(e){ return null; } }
 function laSetSess(s){ try { if (s) localStorage.setItem('la_sess', JSON.stringify(s)); else localStorage.removeItem('la_sess'); } catch(e){} }
 function laQs(o){ var k = Object.keys(o||{}).filter(function(x){ return o[x]; }); return k.map(function(x){ return x+'='+encodeURIComponent(o[x]); }).join('&'); }
@@ -466,7 +466,7 @@ var T = {
     today:'Hoje', yesterday:'Ontem', other_day:'Outra data', future:'A data não pode ser no futuro.',
     mode_week:'TOJ semanal', mode_spot:'TOJ pontual', mode_week_d:'Plano {s}–{e} · {n} competências planeadas',
     mode_spot_d:'Uma atividade, um dia', mode_change:'Mudar',
-    search:'Nome ou ID do formando', due:'Por avaliar neste plano', due_np:'Há mais tempo sem TOJ', all:'Todos os formandos de {a}', results:'Resultados', other_areas:'De outras áreas',
+    search:'Nome ou ID do formando', due:'Por avaliar neste plano', due_np:'Há mais tempo sem TOJ', sug_t:'Presentes na sessão TOJ', all:'Todos os formandos de {a}', results:'Resultados', other_areas:'De outras áreas',
     no_results:'Nenhum formando encontrado.', show_more:'Mostrar mais {n}', multi_hint:'Toque no círculo para avaliar vários formandos seguidos.',
     t_never:'nunca avaliado', t_due:'por avaliar', t_done:'✓ {d}', t_last:'última TOJ {d}', done_plan:'Já avaliados neste plano', sel_title:'Selecionados', recent_t:'Recentes',
     start_n:'Avaliar {n} →', selected:'Selecionados: <b>{n}</b>', clear:'Limpar', s_search:'Procurar competência',
@@ -494,7 +494,7 @@ var T = {
     today:'Today', yesterday:'Yesterday', other_day:'Other date', future:'The date cannot be in the future.',
     mode_week:'Weekly TOJ', mode_spot:'Spot TOJ', mode_week_d:'Plan {s}–{e} · {n} planned skills',
     mode_spot_d:'One activity, one day', mode_change:'Change',
-    search:'Trainee name or ID', due:'To assess in this plan', due_np:'Longest time without a TOJ', all:'All {a} trainees', results:'Results', other_areas:'From other areas',
+    search:'Trainee name or ID', due:'To assess in this plan', due_np:'Longest time without a TOJ', sug_t:'Present at the TOJ session', all:'All {a} trainees', results:'Results', other_areas:'From other areas',
     no_results:'No trainee found.', show_more:'Show {n} more', multi_hint:'Tap the circle to assess several trainees in a row.',
     t_never:'never assessed', t_due:'to assess', t_done:'✓ {d}', t_last:'last TOJ {d}', done_plan:'Already assessed in this plan', sel_title:'Selected', recent_t:'Recent',
     start_n:'Assess {n} →', selected:'Selected: <b>{n}</b>', clear:'Clear', s_search:'Search skill',
@@ -522,7 +522,7 @@ var T = {
     today:'Oggi', yesterday:'Ieri', other_day:'Altra data', future:'La data non può essere nel futuro.',
     mode_week:'TOJ settimanale', mode_spot:'TOJ puntuale', mode_week_d:'Piano {s}–{e} · {n} skill pianificate',
     mode_spot_d:'Un\'attività, un giorno', mode_change:'Cambia',
-    search:'Nome o ID del trainee', due:'Da valutare in questo piano', due_np:'Da più tempo senza TOJ', all:'Tutti i trainee di {a}', results:'Risultati', other_areas:'Di altre aree',
+    search:'Nome o ID del trainee', due:'Da valutare in questo piano', due_np:'Da più tempo senza TOJ', sug_t:'Presenti alla sessione TOJ', all:'Tutti i trainee di {a}', results:'Risultati', other_areas:'Di altre aree',
     no_results:'Nessun trainee trovato.', show_more:'Mostra altri {n}', multi_hint:'Tocca il cerchio per valutare più trainee di fila.',
     t_never:'mai valutato', t_due:'da valutare', t_done:'✓ {d}', t_last:'ultima TOJ {d}', done_plan:'Già valutati in questo piano', sel_title:'Selezionati', recent_t:'Recenti',
     start_n:'Valuta {n} →', selected:'Selezionati: <b>{n}</b>', clear:'Deseleziona', s_search:'Cerca skill',
@@ -749,6 +749,8 @@ function init(d, cached){
     if (PR.date && PR.date <= d.today) S.date = PR.date;
     S.modeManual = '';
     S.act = PR.activityId ? { id: PR.activityId, t: PR.title || '', area: S.area, date: S.date } : null;
+    /* v41: presenti nelle sessioni TOJ registrate in Conecta = primi suggerimenti */
+    S.sug = String(PR.sug || '').split(',').filter(Boolean);
     LA.p = {};
   }
   go(DRAFT_FOUND ? 'assess' : 'home');
@@ -921,7 +923,9 @@ function renderPeople(){
     var byName = function(a,b){ return a.name.localeCompare(b.name); };
     var selP = S.sel.map(personById).filter(Boolean);
     if (selP.length) h += sec(t('sel_title'), selP.length) + '<div class="list">'+selP.map(function(x){ return prow(x); }).join('')+'</div>';
-    var rest = area.filter(function(x){ return S.sel.indexOf(x.id) < 0; });
+    var sugP = (S.sug || []).filter(function(id){ return S.sel.indexOf(id) < 0; }).map(personById).filter(Boolean);
+    if (sugP.length) h += sec(t('sug_t'), sugP.length) + '<div class="list">'+sugP.map(function(x){ return prow(x); }).join('')+'</div>';
+    var rest = area.filter(function(x){ return S.sel.indexOf(x.id) < 0 && (S.sug || []).indexOf(x.id) < 0; });
     if (p) {
       var due = rest.filter(function(x){ return statusOf(x.id).k === 'due'; }).sort(byName);
       var done = rest.filter(function(x){ return statusOf(x.id).k === 'done'; }).sort(byName);

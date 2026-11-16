@@ -295,6 +295,7 @@ input{font-family:inherit;font-size:16px}
 .realbox .rr{display:flex;align-items:flex-end;gap:10px;margin-top:8px;flex-wrap:wrap}
 .realbox label{display:flex;flex-direction:column;font-size:11.5px;color:var(--muted);font-weight:700;gap:3px}
 .realbox input{font:700 17px/1.2 inherit;padding:8px 10px;border:1.5px solid var(--brand-line);border-radius:10px;background:#fff;color:var(--ink,#1b2124);min-width:108px}
+.tsd{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}.tsd .on{border-color:var(--brand);color:var(--brand);font-weight:800}
 .realbox em{font-style:normal;font-weight:800;color:var(--brand);padding-bottom:10px}.realbox em.bad{color:#b3261e}
 .qrpage{text-align:center}
 .qrpage .sbtn{display:block;width:100%;max-width:420px;margin:14px auto 0;border:1.5px solid var(--brand-line);border-radius:14px;padding:13px;font-weight:800;color:var(--brand);background:#fff}
@@ -1793,11 +1794,12 @@ window.addEventListener('online', function () { if (S.token && SYNC.state === 'o
 
 var ACT_LABEL = {
   ATTENDANCE: ['✅', 'Registar presenças', 'Presente / ausente de cada participante', 'PRESENÇAS'],
+  TOJSESSION: ['🕒', 'Registo da sessão TOJ', 'Dia, horas, descrição e formandos presentes', 'SESSÃO TOJ'],
   TOJ: ['🩺', 'Avaliação TOJ', 'Abre Learning & Assessment já nesta actividade', 'TOJ'],
   THEORY: ['📝', 'Avaliação teórica', 'Notas da prova, em Learning & Assessment', 'TEÓRICA'],
   EVALUATION: ['⭐', 'Questionário de satisfação', 'Questionário anónimo da formação', 'QUESTIONÁRIO']
 };
-var ACT_ORDER = ['ATTENDANCE', 'TOJ', 'THEORY', 'EVALUATION'];
+var ACT_ORDER = ['ATTENDANCE', 'TOJSESSION', 'TOJ', 'THEORY', 'EVALUATION'];
 var NAV = [];
 var DR = {};
 var ST = {};
@@ -2105,7 +2107,7 @@ function renderHome() {
     return '<button class="tile" data-k="' + t.k + '"><span class="ic">' + t.ic + '</span><b>' + esc(t.t) + '</b><small>' + esc(t.d) + '</small></button>';
   }).join('') + '</div></div><div class="htoday"><div class="sec hsec">As minhas actividades de hoje · ' + esc(fmtDate(today, true)) + '</div>' +
     (mine.length ? mine.map(function (a) { return hrow(a, today); }).join('') : '<div class="noact">Sem actividades suas hoje.</div>') + '</div></div>';
-  h += '<div class="foot">CHDCP Conecta · v0.9.28' + (pushOn() ? ' · <button class="link" id="pushOff" style="margin:0">🔔 Desactivar notificações</button>' : '') + '</div></div>';
+  h += '<div class="foot">CHDCP Conecta · v0.9.29' + (pushOn() ? ' · <button class="link" id="pushOff" style="margin:0">🔔 Desactivar notificações</button>' : '') + '</div></div>';
   $('app').innerHTML = h;
   $('app').classList.remove('weekwide');
   $('app').classList.add('homewide');
@@ -2152,6 +2154,7 @@ function screenPick(k) {
 function runAction(k, a) {
   if (k === 'ATTENDANCE') go(function () { screenAttendance(a); });
   else if (k === 'EVALUATION') go(function () { screenEval(a); });
+  else if (k === 'TOJSESSION') go(function () { screenTojSession(a); });
   else if (k === 'TOJ') laOpen('toj', { activityId: a.id });
   else if (k === 'THEORY') laOpen('theory', { activityId: a.id });
 }
@@ -2248,6 +2251,7 @@ function actionsHtml(a, d) {
   } else {
     h = '<div class="acts">' + ax.map(function (k) {
       var L = ACT_LABEL[k], info = L[2];
+      if (k === 'TOJSESSION' && d && d.tojs) info = '<span class="done">✓ ' + d.tojs.days + (d.tojs.days === 1 ? ' dia' : ' dias') + ' · ' + fmtMin(d.tojs.min) + '</span> · último ' + esc(fmtDate(d.tojs.last.date, false));
       if (k === 'ATTENDANCE' && d && d.att) info = '<span class="done">✓ ' + d.att.n + ' registados (' + d.att.present + ' presentes)</span> · ' + esc(tsTxt(d.att.at));
       if (future) info = 'Disponível a partir de ' + fmtDate(a.date, false);
       return '<button class="abtn" data-k="' + k + '"' + (future ? ' disabled' : '') + '><span class="ic">' + L[0] + '</span><span><b>' + L[1] + '</b><small>' + info + '</small></span><span class="go">›</span></button>';
@@ -2494,6 +2498,96 @@ function drawAttendance(a, d) {
     }, function (e) { busy(false); $('save').disabled = false; toast(e.message); });
   };
   paint();
+}
+
+
+/* ---------------- v0.9.29 · REGISTO DA SESSÃO TOJ (um registo por dia) ---------------- */
+
+function fmtMin(m) { m = Math.round(Number(m) || 0); var h = Math.floor(m / 60), r = m % 60; return h ? h + ' h' + (r ? ' ' + ('0' + r).slice(-2) : '') : r + ' min'; }
+
+function screenTojSession(a) {
+  withCtx('tojs|' + a.id, 'apiTojSessionContext', a, 'Sessão TOJ', function (d) { drawTojSession(a, d); });
+}
+
+function drawTojSession(a, d) {
+  var c = d.ctx, ro = !c.canWrite.ok, today = c.today || todayYmd();
+  var byDate = {}; (c.sessions || []).forEach(function (o) { byDate[o.date] = o; });
+  var load = function (date) {
+    var o = byDate[date];
+    d.f = { date: date, s: o ? o.s : (c.act.noTime ? '' : c.act.start || ''), e: o ? o.e : (c.act.noTime ? '' : c.act.end || ''), dur: o ? String(o.dur) : '', note: o ? o.note : '', durTouched: !!o };
+    d.mark = {}; (o ? o.pids : []).forEach(function (pid) { d.mark[pid] = 1; });
+  };
+  if (!d.f) load(today < c.act.date ? c.act.date : (today > addDays(c.act.date, 60) ? c.act.date : today));
+  var f = d.f, dis = ro ? ' disabled' : '';
+  var h = bhead('Sessão TOJ', c.act.title) + '<div class="body">' + ctxBox(c.act);
+  if (ro) h += '<div class="readonly">' + esc(c.canWrite.why) + '</div>';
+  if (c.sessions && c.sessions.length) {
+    var tot = c.sessions.reduce(function (x, o) { return x + (o.dur || 0); }, 0);
+    h += '<div class="sync">Registados: ' + c.sessions.length + (c.sessions.length === 1 ? ' dia' : ' dias') + ' · ' + fmtMin(tot) + '. Toque num dia para o ver ou corrigir.</div><div class="tsd">' +
+      c.sessions.map(function (o) { return '<button class="minor' + (o.date === f.date ? ' on' : '') + '" data-day="' + esc(o.date) + '">' + esc(fmtDate(o.date, false)) + ' · ' + fmtMin(o.dur) + '</button>'; }).join('') + '</div>';
+  }
+  h += '<div class="realbox"><div class="rt">📅 <b>Dia da sessão</b><small>' + (byDate[f.date] ? 'já registado · pode corrigir' : 'novo registo') + '</small></div>' +
+    '<div class="rr"><label><span>Dia</span><input type="date" id="tD" min="' + esc(c.act.date) + '" max="' + esc(today) + '" value="' + esc(f.date) + '"' + dis + '></label></div></div>';
+  h += '<div class="realbox"><div class="rt">🕒 <b>Horas</b><small>início, fim e duração efectiva</small></div>' +
+    '<div class="rr"><label><span>Começou</span><input type="time" id="tS" value="' + esc(f.s) + '"' + dis + '></label>' +
+    '<label><span>Acabou</span><input type="time" id="tE" value="' + esc(f.e) + '"' + dis + '></label>' +
+    '<label><span>Duração (min)</span><input type="number" id="tM" min="1" max="960" inputmode="numeric" value="' + esc(f.dur) + '"' + dis + '></label><em id="tX"></em></div></div>';
+  h += '<div class="realbox"><div class="rt">📝 <b>Descrição do TOJ</b><small>o que se fez, serviço, procedimentos</small></div>' +
+    '<textarea class="inp" id="tN" rows="4" maxlength="2000" style="width:100%;margin-top:8px"' + dis + '>' + esc(f.note) + '</textarea></div>';
+  h += '<div class="counters"><div class="p"><b id="cP">0</b><span>Presentes</span></div><div><b>' + c.people.length + '</b><span>Na lista</span></div></div>';
+  if (!ro) h += '<button class="minor" id="allp">Todos presentes</button><button class="minor" id="addp">+ Adicionar participante</button><div id="addbox"></div>';
+  if (!c.people.length) h += '<div class="empty">Sem lista prevista para este TOJ. Use «Adicionar participante».</div>';
+  if (c.people.length > 5) h += '<input class="inp" id="pq" type="search" placeholder="Procurar na lista…" autocomplete="off" style="margin:8px 0" value="' + esc(d.pq || '') + '"><div class="empty" id="pq0" style="display:none">Nenhum nome encontrado.</div>';
+  h += '<div class="plist">' + c.people.map(function (p) {
+    var on = !!d.mark[p.id];
+    return '<div class="prow" data-n="' + esc(normQ(p.name + ' ' + p.id)) + '"><div class="nm"><b>' + esc(p.name) + '</b><span>' + esc(p.src === 'SAVED' ? 'registado antes' : p.src === 'ADD' ? 'adicionado' : '') + '</span></div>' +
+      '<div class="seg2"><button data-p="' + esc(p.id) + '" class="' + (on ? 'onP' : '') + '"' + dis + '>' + (on ? '✓ Presente' : 'Presente') + '</button></div></div>';
+  }).join('') + '</div><div class="small muted" style="margin-top:8px">Os presentes aparecem primeiro na Avaliação TOJ. Este registo não conta como presença de aula.</div></div>';
+  if (!ro) h += '<div class="savebar"><div class="in"><button class="btn" id="save">Guardar sessão</button></div></div>';
+  page(h);
+
+  var mins = function (x) { var p = String(x || '').split(':'); return p.length === 2 ? +p[0] * 60 + +p[1] : null; };
+  var span = function () { var s = mins(f.s), e = mins(f.e); return s != null && e != null ? e - s : null; };
+  var paintT = function () {
+    var x = span(), el = $('tX'); if (!el) return;
+    if (!f.durTouched && x > 0) { f.dur = String(x); if ($('tM')) $('tM').value = f.dur; }
+    var bad = x != null && x <= 0, dv = Number(f.dur);
+    el.textContent = bad ? I18N.tr('Fim antes do início') : (dv > 0 ? fmtMin(dv) : '');
+    el.className = bad || (x > 0 && dv > x) ? 'bad' : '';
+  };
+  var paint = function () { var n = 0; c.people.forEach(function (p) { if (d.mark[p.id]) n++; }); $('cP').textContent = n; };
+  if ($('tD')) $('tD').onchange = function () { load(this.value || f.date); d.touched = true; drawTojSession(a, d); };
+  if ($('tS')) $('tS').oninput = function () { f.s = this.value; d.touched = true; paintT(); };
+  if ($('tE')) $('tE').oninput = function () { f.e = this.value; d.touched = true; paintT(); };
+  if ($('tM')) $('tM').oninput = function () { f.dur = this.value; f.durTouched = true; d.touched = true; paintT(); };
+  if ($('tN')) $('tN').oninput = function () { f.note = this.value; d.touched = true; };
+  Array.prototype.forEach.call(document.querySelectorAll('[data-day]'), function (b) { b.onclick = function () { load(b.dataset.day); drawTojSession(a, d); }; });
+  Array.prototype.forEach.call(document.querySelectorAll('.seg2 button'), function (b) {
+    b.onclick = function () { var pid = b.dataset.p; d.touched = true; if (d.mark[pid]) delete d.mark[pid]; else d.mark[pid] = 1; b.className = d.mark[pid] ? 'onP' : ''; b.textContent = d.mark[pid] ? '✓ Presente' : 'Presente'; paint(); };
+  });
+  var filt = function () {
+    var q = normQ(d.pq || ''), n = 0;
+    Array.prototype.forEach.call(document.querySelectorAll('.plist .prow'), function (r) { var ok = !q || r.dataset.n.indexOf(q) >= 0; r.style.display = ok ? '' : 'none'; if (ok) n++; });
+    if ($('pq0')) $('pq0').style.display = q && !n ? 'block' : 'none';
+  };
+  if ($('pq')) { $('pq').oninput = function () { d.pq = this.value; filt(); }; filt(); }
+  if ($('allp')) $('allp').onclick = function () { d.touched = true; c.people.forEach(function (p) { d.mark[p.id] = 1; }); drawTojSession(a, d); };
+  bindAddPerson(a, d, function (pid, name) { d.touched = true; d.mark[pid] = 1; if (!c.people.some(function (p) { return p.id === pid; })) c.people.push({ id: pid, name: name || pid, src: 'ADD', r: '' }); drawTojSession(a, d); });
+  UNSAVED = function () { return !!d.touched; };
+  if ($('save')) $('save').onclick = function () {
+    var x = span(), dv = Number(f.dur);
+    if (!f.date) { toast(I18N.tr('Indique o dia da sessão.')); return; }
+    if (!(x > 0)) { toast(I18N.tr('Verifique a hora de início e de fim.')); return; }
+    if (!(dv > 0 && dv <= x)) { toast(I18N.tr('Duração inválida: entre 1 minuto e o tempo entre início e fim.')); return; }
+    var payload = { clientId: uid(), activityId: a.id, date: f.date, start: f.s, end: f.e, dur: dv, note: f.note, present: Object.keys(d.mark) };
+    $('save').disabled = true; busy(true);
+    saveOrQueue('apiSaveTojSession', payload, 'Sessão TOJ · ' + c.act.title, function (r, queued) {
+      busy(false); delete DR['tojs|' + a.id]; cxDel('tojs|' + a.id); cxDel('det|' + a.id); delete ST[a.id];
+      var msg = queued ? 'Sem ligação: guardado no telefone, será enviado.' : (r.duplicate ? 'Já estava guardado.' : 'Sessão de ' + fmtDate(r.date, false) + ' guardada: ' + fmtMin(r.dur) + ', ' + r.present + (r.present === 1 ? ' presente.' : ' presentes.'));
+      swapTop(function () { screenDone(a, 'TOJSESSION', 'Sessão TOJ', msg, !!queued); });
+    }, function (e) { busy(false); $('save').disabled = false; toast(e.message); });
+  };
+  paintT(); paint();
 }
 
 /* ---------------- QUESTIONÁRIO (formulário existente, pré-preenchido) ---------------- */
