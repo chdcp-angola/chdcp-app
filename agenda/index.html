@@ -851,6 +851,7 @@ I18N.add([
   ['Vista compacta semanal, ideal para leitura multiárea.', 'Compact weekly view, ideal for reading across areas.', 'Vista settimanale compatta, ideale per più aree.'],
   ['Deslize horizontalmente no telemóvel para ver os cinco dias.', 'Swipe sideways on the phone to see all five days.', 'Scorri in orizzontale sul telefono per vedere i cinque giorni.'],
   ['Nenhuma actividade.', 'No activities.', 'Nessuna attività.'],
+  ['As actividades passadas estão na Lista.', 'Past activities are in the List.', 'Le attività passate sono nella Lista.'],
   ['Nenhuma actividade encontrada.', 'No activities found.', 'Nessuna attività trovata.'],
   ['1 actividade', '1 activity', '1 attività'],
   [/^(\d+) actividades$/, '$1 activities', '$1 attività'],
@@ -868,6 +869,7 @@ I18N.add([
   ['FORMADOR', 'TRAINER', 'FORMATORE'],
   ['PARTICIPANTE', 'PARTICIPANT', 'PARTECIPANTE'],
   ['REGISTO', 'RECORDER', 'REGISTRAZIONE'],
+  ['REGISTO E AVALIAÇÃO', 'RECORD & ASSESS', 'REGISTRAZIONE E VALUTAZIONE'],
   ['PREVISTA', 'PLANNED', 'PREVISTA'],
   ['✓ REALIZADA', '✓ DONE', '✓ SVOLTA'],
   ['PLANO GERAL', 'GENERAL PLAN', 'PIANO GENERALE'],
@@ -1347,9 +1349,11 @@ function setData(r) {
     delete r.pre;
   }
   ALL = { user: r.user, areas: r.areas || [], acts: acts, holidays: r.holidays || [], from: r.from, to: r.to, readAt: r.readAt, today: r.today, warnings: r.warnings || [], syncedAt: r.syncedAt || 0,
-    past: r.past || r.from, older: !!r.older, changes: r.changes || [] };
+    past: r.past || r.from, older: !!r.older, weekPast: r.weekPast !== false, changes: r.changes || [] };
   var real = todayYmd(); if (real > ALL.today) ALL.today = real;
 }
+/* v0.9.31: «As minhas» = formador ou participante (REGISTO e REGISTO E AVALIAÇÃO valem em todas, não contam) */
+function isMine(a) { return !!a.role && a.role !== 'RECORDER' && a.role !== 'SUPERVISOR'; }
 function todayYmd() { var d = new Date(); return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); }
 
 /* chamada com tempo máximo: na rede fraca não fica à espera para sempre */
@@ -1408,9 +1412,9 @@ function buildView() {
     if (a.hidden && !S.hidden) return;
     if (a.area) fa[a.area] = true;
     if (a.method) fm[a.method] = true;
-    if (S.mine && !a.role) return;
-    /* v0.9.3: Hoje e Semana só de hoje em diante; o passado está na Lista */
-    if (S.view !== 'LIST' && a.date < today) return;
+    if (S.mine && !isMine(a)) return;
+    /* v0.9.3: Hoje só de hoje em diante; v0.9.30: Semana também no passado (CONFIG WEEK_SHOW_PAST), senão o passado está na Lista */
+    if (a.date < today && (S.view === 'TODAY' || (S.view === 'WEEK' && !A.weekPast))) return;
     if (from && a.date < from) return;
     if (to && a.date > to) return;
     if (af && norm(a.area) !== af && norm(a.area) !== 'all') return;
@@ -1457,7 +1461,9 @@ function moveDate(dir) {
   else if (S.view === 'WEEK') S.anchor = addDays(S.anchor, dir * 7);
   var t0 = S.data ? S.data.today : '';
   if (t0 && S.view === 'TODAY' && S.anchor < t0) S.anchor = t0;
-  if (t0 && S.view === 'WEEK' && addDays(S.anchor, 6 - ((ymd(S.anchor).getDay() + 6) % 7)) < t0) S.anchor = t0;
+  /* v0.9.30: com WEEK_SHOW_PAST a semana pode recuar até ao início dos dados carregados */
+  var wmin = (ALL && ALL.weekPast) ? ((ALL.olderFrom && ALL.olderFrom < ALL.from) ? ALL.olderFrom : ALL.from) : t0;
+  if (wmin && S.view === 'WEEK' && addDays(S.anchor, 6 - ((ymd(S.anchor).getDay() + 6) % 7)) < wmin) S.anchor = wmin;
   saveF(); loadAgenda();
 }
 
@@ -1510,6 +1516,9 @@ function layoutWeekDay(items) {
   return items;
 }
 
+/* v0.9.30: marca nas vistas da semana (passado incluído) */
+function wkMark(a) { return a.pend ? '⏳ ' : (a.done ? '✓ ' : ''); }
+
 function renderWeekCompact(d, list) {
   var days = [];
   for (var i = 0; i < 5; i++) days.push(addDays(d.viewFrom, i));
@@ -1532,7 +1541,7 @@ function renderWeekCompact(d, list) {
       h += '<div class="wclist">';
       items.forEach(function (x) {
         var a = x.a, cls = 'wcrow' + (a.tentative ? ' tent' : '') + (a.done ? ' done' : '') + (a.hidden ? ' hid' : '');
-        h += '<button class="' + cls + '" data-i="' + x.i + '" style="--tc:' + esc(a.typeColor || '#93a0a7') + '"><div class="topline"><div class="time">' + esc(a.noTime ? 'Sem hora' : a.start) + (a.end ? '<span class="dur">' + esc(a.end) + '</span>' : '') + '</div></div><div class="title">' + esc(a.title) + '</div><div class="meta">' + compactMeta(a) + '</div></button>';
+        h += '<button class="' + cls + '" data-i="' + x.i + '" style="--tc:' + esc(a.typeColor || '#93a0a7') + '"><div class="topline"><div class="time">' + esc(a.noTime ? 'Sem hora' : a.start) + (a.end ? '<span class="dur">' + esc(a.end) + '</span>' : '') + '</div></div><div class="title">' + wkMark(a) + esc(a.title) + '</div><div class="meta">' + compactMeta(a) + '</div></button>';
       });
       h += '</div>';
     }
@@ -1615,7 +1624,7 @@ function renderWeekCalendar(d, list) {
       var a = x.a, cls = 'wcevent' + (a.tentative ? ' tent' : '') + (a.done ? ' done' : '') + (a.hidden ? ' hid' : '');
       h += '<button class="' + cls + '" data-i="' + x.i + '" style="--tc:' + esc(a.typeColor || '#93a0a7') + ';top:' + top + 'px;height:' + eh + 'px;left:calc(' + left + '% + 2px);width:calc(' + width + '% - 4px)">' +
         '<div class="wct">' + esc(a.start) + (a.end ? '–' + esc(a.end) : '') + (a.provisional ? ' · PLANO GERAL' : '') + '</div>' +
-        '<div class="wcn">' + esc(a.title) + '</div><div class="wca">' + esc(a.area) + '</div></button>';
+        '<div class="wcn">' + wkMark(a) + esc(a.title) + '</div><div class="wca">' + esc(a.area) + '</div></button>';
     });
     h += '</div>';
   });
@@ -1652,6 +1661,8 @@ function renderAgenda() {
   h += '<div class="viewtabs" id="views">' + VIEWS.map(function (v) { return '<button data-v="' + v[0] + '" class="' + (S.view === v[0] ? 'on' : '') + '">' + v[1] + '</button>'; }).join('') + '</div>';
   if (S.view !== 'LIST') {
     var atStart = S.view === 'TODAY' ? d.viewFrom <= d.today : addDays(d.viewFrom, 6) <= addDays(d.today, 6 - ((ymd(d.today).getDay() + 6) % 7));
+    /* v0.9.30: semana no passado até ao início dos dados carregados */
+    if (S.view === 'WEEK' && ALL && ALL.weekPast) atStart = d.viewFrom <= ((ALL.olderFrom && ALL.olderFrom < ALL.from) ? ALL.olderFrom : ALL.from);
     h += '<div class="navdate"><button id="prev" aria-label="Anterior"' + (atStart ? ' disabled style="opacity:.3"' : '') + '>‹</button><div class="period">' + esc(periodLabel(d)) + '<small><button class="link" id="today" style="margin:0;text-decoration:none">Ir para hoje</button></small></div><button id="next" aria-label="Seguinte">›</button></div>';
   } else {
     h += '<div class="listhead">' + esc(fmtDate((ALL.olderFrom && ALL.olderFrom < (ALL.past || d.from)) ? ALL.olderFrom : (ALL.past || d.from), false)) + ' – ' + esc(fmtDate(d.to, false)) + '</div>';
@@ -1667,6 +1678,7 @@ function renderAgenda() {
   if (S.view === 'WEEK') {
     var wm = activeWeekMode();
     h += '<div class="weekswitch"><div class="wseg"><button id="wmcal" class="' + (wm === 'CALENDAR' ? 'on' : '') + '">Calendário</button><button id="wmcmp" class="' + (wm === 'COMPACT' ? 'on' : '') + '">Compacta</button></div><div class="wmodehint">' + (wm === 'COMPACT' ? 'Melhor para ver todas as áreas na mesma semana.' : 'Melhor para uma área única ou poucas actividades.') + '</div></div>';
+    if (ALL && !ALL.weekPast && d.viewFrom < d.today) h += '<div class="wmodehint" style="margin:0 0 8px">As actividades passadas estão na Lista.</div>';
   }
 
   (d.holidays || []).forEach(function (x) {
@@ -1741,7 +1753,7 @@ function actHtml(a, i) {
   var cls = 'act' + (a.tentative ? ' tent' : '') + (a.done ? ' done' : '') + (a.hidden ? ' hid' : '');
   var tm = a.noTime ? '<i>SEM<br>HORA</i>' : '<b>' + esc(a.start) + '</b><span>' + esc(a.end) + '</span>';
   var tags = '<span class="tag area">' + esc(a.area) + '</span>';
-  if (a.role) tags += '<span class="tag role">' + (a.role === 'TRAINER' ? 'FORMADOR' : a.role === 'RECORDER' ? 'REGISTO' : 'PARTICIPANTE') + '</span>';
+  if (a.role) tags += '<span class="tag role">' + (a.role === 'TRAINER' ? 'FORMADOR' : a.role === 'RECORDER' ? 'REGISTO' : a.role === 'SUPERVISOR' ? 'REGISTO E AVALIAÇÃO' : 'PARTICIPANTE') + '</span>';
   if (a.governance) tags += '<span class="tag">' + esc((a.governanceType === 'PROTOCOL' ? 'PROTOCOLO · ' : 'PROCEDIMENTO · ') + a.governance) + '</span>';
   if (a.tentative) tags += '<span class="tag tent">PREVISTA</span>';
   if (a.done) tags += '<span class="tag ok">✓ REALIZADA</span>';
@@ -2097,7 +2109,7 @@ function renderHome() {
   if (!ALL) { sync(true); return; }
   var u = S.user || ALL.user, today = ALL.today;
   var vis = { FULL: 'vê tudo', AREA: 'vê a sua área', OWN: 'vê as suas' }[u.visibility] || '';
-  var mine = ALL.acts.filter(function (a) { return a.role && !a.hidden && a.date === today; })
+  var mine = ALL.acts.filter(function (a) { return isMine(a) && !a.hidden && a.date === today; })
     .sort(function (x, y) { return (x.start || '99').localeCompare(y.start || '99'); });
   var h = head(u.name + (vis ? ' · ' + vis : ''), '<div class="hright">' + I18N.picker() + '<button class="chipbtn" id="out">Sair</button></div>') + '<div class="body"><div id="syncw">' + syncHtml() + '</div>';
   if (ALL.warnings && ALL.warnings.length && /^(ADMIN|MANAGER)$/.test(u.role || '')) h += '<div class="warnbox">' + ALL.warnings.map(esc).join('<br>') + '</div>';
@@ -2107,7 +2119,7 @@ function renderHome() {
     return '<button class="tile" data-k="' + t.k + '"><span class="ic">' + t.ic + '</span><b>' + esc(t.t) + '</b><small>' + esc(t.d) + '</small></button>';
   }).join('') + '</div></div><div class="htoday"><div class="sec hsec">As minhas actividades de hoje · ' + esc(fmtDate(today, true)) + '</div>' +
     (mine.length ? mine.map(function (a) { return hrow(a, today); }).join('') : '<div class="noact">Sem actividades suas hoje.</div>') + '</div></div>';
-  h += '<div class="foot">CHDCP Conecta · v0.9.29' + (pushOn() ? ' · <button class="link" id="pushOff" style="margin:0">🔔 Desactivar notificações</button>' : '') + '</div></div>';
+  h += '<div class="foot">CHDCP Conecta · v0.9.31' + (pushOn() ? ' · <button class="link" id="pushOff" style="margin:0">🔔 Desactivar notificações</button>' : '') + '</div></div>';
   $('app').innerHTML = h;
   $('app').classList.remove('weekwide');
   $('app').classList.add('homewide');
@@ -2171,7 +2183,7 @@ function renderDetail(a) {
   var dt = ymd(a.date);
   var row = function (k, v) { return v ? '<div class="ro"><span>' + k + '</span><b>' + esc(v) + '</b></div>' : ''; };
   var tags = '<span class="tag area">' + esc(a.area) + '</span>';
-  if (a.role) tags += '<span class="tag role">' + (a.role === 'TRAINER' ? 'FORMADOR' : a.role === 'RECORDER' ? 'REGISTO' : 'PARTICIPANTE') + '</span>';
+  if (a.role) tags += '<span class="tag role">' + (a.role === 'TRAINER' ? 'FORMADOR' : a.role === 'RECORDER' ? 'REGISTO' : a.role === 'SUPERVISOR' ? 'REGISTO E AVALIAÇÃO' : 'PARTICIPANTE') + '</span>';
   if (a.governance) tags += '<span class="tag">' + esc((a.governanceType === 'PROTOCOL' ? 'PROTOCOLO · ' : 'PROCEDIMENTO · ') + a.governance) + '</span>';
   if (a.tentative) tags += '<span class="tag tent">PREVISTA</span>';
   if (a.done) tags += '<span class="tag ok">✓ REALIZADA</span>';
@@ -2651,14 +2663,14 @@ function screenQr(a, r) {
 /* sequência para anterior / seguinte: as minhas actividades se a ficha é minha, senão a agenda visível */
 function pnList(a) {
   if (!ALL) return [];
-  var mine = !!a.role;
-  return ALL.acts.filter(function (x) { return (x.id === a.id) || (!x.hidden && (!mine || x.role)); })
+  var mine = isMine(a);
+  return ALL.acts.filter(function (x) { return (x.id === a.id) || (!x.hidden && (!mine || isMine(x))); })
     .sort(function (x, y) { return (x.date + (x.start || '99') + x.id).localeCompare(y.date + (y.start || '99') + y.id); });
 }
 function pnOf(a) {
   var l = pnList(a), i = -1;
   for (var k = 0; k < l.length; k++) if (l[k].id === a.id) { i = k; break; }
-  return { prev: i > 0 ? l[i - 1] : null, next: i >= 0 && i < l.length - 1 ? l[i + 1] : null, mine: !!a.role };
+  return { prev: i > 0 ? l[i - 1] : null, next: i >= 0 && i < l.length - 1 ? l[i + 1] : null, mine: isMine(a) };
 }
 function pnHtml(a) {
   var p = pnOf(a);
