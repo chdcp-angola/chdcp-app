@@ -339,6 +339,7 @@ input{font-family:inherit;font-size:16px}
 .plan .pl:last-child{border-bottom:0}
 .plan .pl span{display:block;font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:2px}
 .plan .sk1{font-size:12.5px;padding:2px 0}
+.dpv-todo{background:#fff4d9;color:#a46a00}.dpv-re{background:var(--bad-soft);color:var(--bad)}.dpv-ok{background:var(--ok-soft);color:var(--ok)}.dpv-warn{color:#a46a00}.dpvf .link{margin:4px 0 0}.dpvf textarea{margin:4px 0 8px}.dpvv{white-space:normal}
 .plan summary,.card>summary{cursor:pointer;list-style:none}
 .card>summary::-webkit-details-marker{display:none}
 .prof{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:8px 2px;border-bottom:1px solid var(--line);font-size:14px;font-weight:600}
@@ -1024,6 +1025,41 @@ I18N.add([
   [/^Já preenchido: (.*)\.$/, 'Already filled in: $1.', 'Già compilato: $1.'],
   ['Questionário não configurado.', 'Questionnaire not configured.', 'Questionario non configurato.'],
   ['Learning & Assessment ainda não está ligado à Agenda (menu do Hub "Collega Agenda").', 'Learning & Assessment is not yet linked to the Agenda (Hub menu "Collega Agenda").', 'Learning & Assessment non è ancora collegato all\'Agenda (menu del Hub "Collega Agenda").']
+]);
+I18N.add([
+  /* v0.9.32 planos para validar (Detailed Plan) */
+  ["Planos para validar", "Plans to validate", "Piani da validare"],
+  ["Detailed Plan · rever e aprovar", "Detailed Plan · review and approve", "Detailed Plan · rivedi e approva"],
+  ["Todas as áreas · ADMIN", "All areas · ADMIN", "Tutte le aree · ADMIN"],
+  [/^Ponto focal CCM · (.+)$/, 'CCM focal point · $1', 'Punto focale CCM · $1'],
+  ["O Hub ainda não tem a lista dos planos (DP_PLANS): peça para correr «Aggiorna tutto».", "The Hub does not have the plan list yet (DP_PLANS): ask for «Aggiorna tutto» to be run.", "Il Hub non ha ancora l'elenco dei piani (DP_PLANS): fai lanciare «Aggiorna tutto»."],
+  ["Nenhum plano para mostrar.", "No plans to show.", "Nessun piano da mostrare."],
+  ["Por validar", "To validate", "Da validare"],
+  ["Alterado · validar de novo", "Changed · validate again", "Cambiato · da rivalidare"],
+  ["Aprovado", "Approved", "Approvato"],
+  ["Aprovados", "Approved", "Approvati"],
+  ["Para validar", "To validate", "Da validare"],
+  ["linhas", "rows", "righe"],
+  ["Objectivo", "Objective", "Obiettivo"],
+  ["Conteúdos / competências", "Content / skills", "Contenuti / competenze"],
+  ["Avaliação", "Assessment", "Valutazione"],
+  ["Critério de sucesso", "Success criterion", "Criterio di successo"],
+  ["o formador alterou o original", "the trainer changed the original", "il formatore ha cambiato l'originale"],
+  ["Original do formador", "Trainer's original", "Originale del formatore"],
+  ["Editar", "Edit", "Modifica"],
+  ["Plano de formação", "Training plan", "Piano formativo"],
+  ["Aprovado por", "Approved by", "Approvato da"],
+  ["O ficheiro mudou depois da aprovação: reveja e aprove de novo.", "The file changed after approval: review and approve again.", "Il file è cambiato dopo l'approvazione: rivedi e approva di nuovo."],
+  ["Campos revistos que o formador alterou depois", "Revised fields the trainer changed later", "Campi rivisti che il formatore ha cambiato dopo"],
+  ["ADMIN: pode aprovar; as alterações ao texto são do ponto focal CCM.", "ADMIN: you can approve; text changes are made by the CCM focal point.", "ADMIN: puoi approvare; le modifiche al testo le fa il punto focale CCM."],
+  ["Prioridades TOJ", "TOJ priorities", "Priorità TOJ"],
+  ["Aprovar e publicar o plano", "Approve and publish the plan", "Approva e pubblica il piano"],
+  ["Guardar", "Save", "Salva"],
+  ["Cancelar", "Cancel", "Annulla"],
+  ["Guardado ✓", "Saved ✓", "Salvato ✓"],
+  ["Aprovar o plano? Fica publicado na agenda do período e o formador recebe uma notificação.", "Approve the plan? It is published in the agenda for its period and the trainer is notified.", "Approvare il piano? Viene pubblicato in agenda nel suo periodo e il formatore riceve una notifica."],
+  ["Plano aprovado ✓", "Plan approved ✓", "Piano approvato ✓"],
+  ["⏳ Plano em validação pelo ponto focal CCM.", "⏳ Plan being validated by the CCM focal point.", "⏳ Piano in validazione dal punto focale CCM."]
 ]);
 
 /*I18N:END*/
@@ -2027,6 +2063,8 @@ function homeTiles() {
   if (staff()) t.push({ k: 'AREA', ic: '📊', t: 'Resultados da área', d: 'Formandos e competências' });
   t.push({ k: 'CAL', ic: '🗓️', t: 'O meu calendário', d: 'Agenda no Google, Outlook ou iPhone' });
   if (msCanSee()) t.push({ k: 'MISS', ic: '✈️', t: 'Missões', d: 'CCM ⇄ CHDCP · semana, mês, ano' });
+  /* v0.9.32: Detailed Plan para validar (FP CCM da área, ADMIN) */
+  if (dpvCanSee()) t.push({ k: 'DPV', ic: '🗂️', t: 'Planos para validar', d: 'Detailed Plan · rever e aprovar' });
   return t;
 }
 
@@ -2119,7 +2157,7 @@ function renderHome() {
     return '<button class="tile" data-k="' + t.k + '"><span class="ic">' + t.ic + '</span><b>' + esc(t.t) + '</b><small>' + esc(t.d) + '</small></button>';
   }).join('') + '</div></div><div class="htoday"><div class="sec hsec">As minhas actividades de hoje · ' + esc(fmtDate(today, true)) + '</div>' +
     (mine.length ? mine.map(function (a) { return hrow(a, today); }).join('') : '<div class="noact">Sem actividades suas hoje.</div>') + '</div></div>';
-  h += '<div class="foot">CHDCP Conecta · v0.9.31' + (pushOn() ? ' · <button class="link" id="pushOff" style="margin:0">🔔 Desactivar notificações</button>' : '') + '</div></div>';
+  h += '<div class="foot">CHDCP Conecta · v0.9.32' + (pushOn() ? ' · <button class="link" id="pushOff" style="margin:0">🔔 Desactivar notificações</button>' : '') + '</div></div>';
   $('app').innerHTML = h;
   $('app').classList.remove('weekwide');
   $('app').classList.add('homewide');
@@ -2136,6 +2174,7 @@ function renderHome() {
       else if (k === 'MY') laOpen('person', {});
       else if (k === 'AREA') laOpen('area', {});
       else if (k === 'MISS') { NAV = []; go(screenMissions); }
+      else if (k === 'DPV') { NAV = []; go(screenDpvList); }
       else if (k === 'CAL') { NAV = []; go(screenCalFeed); }
       else { NAV = []; go(function () { screenPick(k); }); }
     };
@@ -2223,6 +2262,8 @@ function renderDetail(a) {
 
 /* Secção do Detailed Training Plan só desta actividade */
 function planHtml(p) {
+  /* v0.9.32: piano ancora da approvare dai FP CCM */
+  if (p && p.pending && !(p.activity || []).length && !p.toj) return '<div class="card plan"><div class="sec" style="margin:0">Plano de formação (Detailed Plan)</div><p class="muted small" style="margin:6px 0 0">⏳ Plano em validação pelo ponto focal CCM.</p></div>';
   if (!p || (!(p.activity || []).length && !p.toj)) return '';
   var h = '<details class="card plan" open><summary class="sec" style="margin:0">Plano de formação (Detailed Plan)</summary>';
   (p.activity || []).forEach(function (x) {
@@ -2773,6 +2814,83 @@ var MS_TN = { OR: 'OR team', NUR: 'Nursing', CARD: 'Cardiologia', IMG: 'Imaging'
 var MS_ORDER = ['OR', 'NUR', 'CARD', 'IMG', 'X', 'MGT'];
 var MS_DN = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'];
 var MS_MES = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+
+/* ============================================================
+   v0.9.32 · PLANOS PARA VALIDAR (Detailed Plan · FP CCM da área, ADMIN)
+   ============================================================ */
+function dpvCanSee() { return !!(ALL && ALL.user && ALL.user.dpv); }
+var DPV_ST = { 'DA VALIDARE': ['Por validar', 'dpv-todo'], 'DA RIVALIDARE': ['Alterado · validar de novo', 'dpv-re'], 'APPROVATO': ['Aprovado', 'dpv-ok'] };
+var DPV_LBL = { obj: 'Objectivo', know: 'Conteúdos / competências', assess: 'Avaliação', success: 'Critério de sucesso' };
+function dpvChip(st) { var x = DPV_ST[st] || [st, '']; return '<span class="tag ' + x[1] + '">' + esc(I18N.tr(x[0])) + '</span>'; }
+function screenDpvList() {
+  loadingPage('Planos para validar', 'Detailed Plan');
+  call('apiDpvList', S.token).then(function (r) {
+    var h = bhead('Planos para validar', r.admin ? 'Todas as áreas · ADMIN' : 'Ponto focal CCM · ' + (r.areas || []).join(', ')) + '<div class="body">';
+    if (!r.ok) h += '<div class="card small muted">O Hub ainda não tem a lista dos planos (DP_PLANS): peça para correr «Aggiorna tutto».</div>';
+    if (!r.plans.length) h += '<div class="empty">Nenhum plano para mostrar.</div>';
+    var last = '';
+    r.plans.forEach(function (p) {
+      var g = p.status === 'APPROVATO' ? 'Aprovados' : 'Para validar';
+      if (g !== last) { h += '<div class="sec">' + esc(I18N.tr(g)) + (g === 'Para validar' ? ' · ' + r.todo : '') + '</div>'; last = g; }
+      h += '<button class="hrow dpvrow" data-id="' + esc(p.id) + '"><div class="t">' + esc(p.area) + ' · ' + esc(p.period) + ' ' + dpvChip(p.status) + '</div>' +
+        '<div class="m">' + esc(p.trainer || p.file) + ' · ' + p.n + ' ' + esc(I18N.tr('linhas')) + (p.edits ? ' · ✏️ ' + p.edits : '') +
+        (p.by ? ' · ✓ ' + esc(p.by) + ' (' + esc(p.role) + ')' : '') + '</div></button>';
+    });
+    page(h + '</div>');
+    Array.prototype.forEach.call(document.querySelectorAll('.dpvrow'), function (b) { b.onclick = function () { go(function () { screenDpvPlan(b.dataset.id); }); }; });
+  }).catch(function (e) { errorPage('Planos para validar', '', e.message, screenDpvList); });
+}
+function dpvFieldHtml(a, k, f, canEdit) {
+  var v = f[k] || { val: '' };
+  return '<div class="pl dpvf" data-k="' + esc(a.key) + '" data-f="' + k + '"><span>' + esc(I18N.tr(DPV_LBL[k])) +
+    (v.by ? ' · ✏️ ' + esc(v.by) : '') + (v.conflict ? ' · <b class="dpv-warn">⚠ ' + esc(I18N.tr('o formador alterou o original')) + '</b>' : '') + '</span>' +
+    '<div class="dpvv">' + (v.val ? esc(v.val).replace(/\n/g, '<br>') : '<i class="muted">—</i>') + '</div>' +
+    (v.by && v.orig !== v.val ? '<div class="small muted">' + esc(I18N.tr('Original do formador')) + ': ' + esc(v.orig || '—') + '</div>' : '') +
+    (canEdit ? '<button class="link dpved">✏️ ' + esc(I18N.tr('Editar')) + '</button>' : '') + '</div>';
+}
+function screenDpvPlan(id) {
+  loadingPage('Plano de formação', '');
+  call('apiDpvPlan', S.token, id).then(function (r) {
+    var p = r.plan, h = bhead('Plano de formação', p.area + ' · ' + p.period) + '<div class="body">';
+    h += '<div class="card"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b>' + esc(p.trainer || p.file) + '</b>' + dpvChip(p.status) + '</div>' +
+      '<div class="small muted" style="margin-top:4px">' + esc(p.file) + '</div>' +
+      (p.by ? '<div class="small" style="margin-top:6px">✓ ' + esc(I18N.tr('Aprovado por')) + ' ' + esc(p.by) + ' (' + esc(p.role) + ')' + (p.at ? ' · ' + esc(dmy(p.at)) : '') + '</div>' : '') +
+      (p.status === 'DA RIVALIDARE' ? '<div class="small dpv-warn" style="margin-top:6px">' + esc(I18N.tr('O ficheiro mudou depois da aprovação: reveja e aprove de novo.')) + '</div>' : '') +
+      (r.conflicts ? '<div class="small dpv-warn" style="margin-top:6px">⚠ ' + esc(I18N.tr('Campos revistos que o formador alterou depois')) + ': ' + r.conflicts + '</div>' : '') +
+      (!p.canEdit && p.canApprove ? '<div class="small muted" style="margin-top:6px">' + esc(I18N.tr('ADMIN: pode aprovar; as alterações ao texto são do ponto focal CCM.')) + '</div>' : '') + '</div>';
+    (r.act || []).forEach(function (a) {
+      h += '<div class="card plan"><div class="sec" style="margin:0 0 4px">' + esc(a.key) + '</div><b>' + esc(a.title || a.type) + '</b>' +
+        (a.la || a.phase ? '<div class="small muted">' + esc([a.la, a.phase].filter(Boolean).join(' · ')) + '</div>' : '') +
+        ['obj', 'know', 'assess', 'success'].map(function (k) { return dpvFieldHtml(a, k, a.f, p.canEdit); }).join('') + '</div>';
+    });
+    if ((r.toj || []).length) h += '<div class="card plan"><div class="sec" style="margin:0">' + esc(I18N.tr('Prioridades TOJ')) + '</div>' +
+      r.toj.map(function (s) { return '<div class="sk1"><b>' + esc(s.c) + '</b> ' + esc(s.d) + '</div>'; }).join('') + '</div>';
+    if (p.canApprove) h += '<div class="savebar"><button class="btn" id="dpvOk">✓ ' + esc(I18N.tr('Aprovar e publicar o plano')) + '</button></div>';
+    page(h + '</div>');
+    Array.prototype.forEach.call(document.querySelectorAll('.dpved'), function (b) {
+      b.onclick = function () {
+        var box = b.closest('.dpvf'), k = box.dataset.f, key = box.dataset.k;
+        var a = r.act.filter(function (x) { return x.key === key; })[0], cur = a.f[k] || { val: '' };
+        box.innerHTML = '<span>' + esc(I18N.tr(DPV_LBL[k])) + '</span><textarea class="inp" rows="5" maxlength="4000">' + esc(cur.val || '') + '</textarea>' +
+          '<button class="minor dpvsv">' + esc(I18N.tr('Guardar')) + '</button><button class="minor dpvcx">' + esc(I18N.tr('Cancelar')) + '</button>';
+        var ta = box.querySelector('textarea'); ta.focus();
+        UNSAVED = function () { return ta.value !== (cur.val || ''); };
+        box.querySelector('.dpvcx').onclick = function () { UNSAVED = null; swapTop(function () { screenDpvPlan(id); }); };
+        box.querySelector('.dpvsv').onclick = function () {
+          var sv = this; sv.disabled = true;
+          call('apiDpvSave', S.token, id, key, k, ta.value).then(function () { UNSAVED = null; toast(I18N.tr('Guardado ✓')); swapTop(function () { screenDpvPlan(id); }); })
+            .catch(function (e) { sv.disabled = false; toast(e.message); });
+        };
+      };
+    });
+    if ($('dpvOk')) $('dpvOk').onclick = function () {
+      if (!confirm(I18N.tr('Aprovar o plano? Fica publicado na agenda do período e o formador recebe uma notificação.'))) return;
+      var b = this; b.disabled = true;
+      call('apiDpvApprove', S.token, id).then(function () { toast(I18N.tr('Plano aprovado ✓')); swapTop(function () { screenDpvPlan(id); }); })
+        .catch(function (e) { b.disabled = false; toast(e.message); });
+    };
+  }).catch(function (e) { errorPage('Plano de formação', '', e.message, function () { screenDpvPlan(id); }); });
+}
 
 function msCanSee() { return !!(ALL && ALL.user && ALL.user.ms); }
 function msTodayY() { return (MSD && MSD.today) || (ALL && ALL.today) || todayYmd(); }
