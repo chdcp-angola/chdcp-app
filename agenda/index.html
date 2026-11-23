@@ -339,6 +339,7 @@ input{font-family:inherit;font-size:16px}
 .plan .pl:last-child{border-bottom:0}
 .plan .pl span{display:block;font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:2px}
 .plan .sk1{font-size:12.5px;padding:2px 0}
+.plorig{margin-top:4px}.plorig summary{cursor:pointer;padding:4px 0}
 .dpv-todo{background:#fff4d9;color:#a46a00}.dpv-re{background:var(--bad-soft);color:var(--bad)}.dpv-ok{background:var(--ok-soft);color:var(--ok)}.dpv-warn{color:#a46a00}.dpvf .link{margin:4px 0 0}.dpvf textarea{margin:4px 0 8px}.dpvv{white-space:normal}
 .plan summary,.card>summary{cursor:pointer;list-style:none}
 .card>summary::-webkit-details-marker{display:none}
@@ -1060,6 +1061,26 @@ I18N.add([
   ["Aprovar o plano? Fica publicado na agenda do período e o formador recebe uma notificação.", "Approve the plan? It is published in the agenda for its period and the trainer is notified.", "Approvare il piano? Viene pubblicato in agenda nel suo periodo e il formatore riceve una notifica."],
   ["Plano aprovado ✓", "Plan approved ✓", "Piano approvato ✓"],
   ["⏳ Plano em validação pelo ponto focal CCM.", "⏳ Plan being validated by the CCM focal point.", "⏳ Piano in validazione dal punto focale CCM."]
+]);
+I18N.add([
+  /* v0.9.33 impressões + tradução PT do plano */
+  ["Impressões", "Prints", "Stampe"],
+  ["Resumo e plano da semana", "Weekly summary and plan", "Sintesi e piano della settimana"],
+  ["Semana anterior", "Previous week", "Settimana precedente"],
+  ["Esta semana", "This week", "Questa settimana"],
+  ["Semana seguinte", "Next week", "Settimana successiva"],
+  ["Resumo da semana", "Weekly summary", "Sintesi della settimana"],
+  ["Síntese e detalhe · A4 horizontal", "Summary and detail · A4 landscape", "Sintesi e dettaglio · A4 orizzontale"],
+  ["actividades", "activities", "attività"],
+  ["aulas", "lessons", "lezioni"],
+  ["Plano da semana por área (português)", "Weekly plan by area (Portuguese)", "Piano della settimana per area (portoghese)"],
+  ["Sem actividades nesta semana.", "No activities this week.", "Nessuna attività questa settimana."],
+  ["Em validação", "Being validated", "In validazione"],
+  ["Sem plano", "No plan", "Senza piano"],
+  ["Abre no navegador: «Imprimir / Guardar PDF». No telemóvel: Partilhar › Imprimir › Guardar como PDF.", "Opens in the browser: «Print / Save PDF». On the phone: Share › Print › Save as PDF.", "Si apre nel browser: «Stampa / Salva PDF». Sul telefono: Condividi › Stampa › Salva come PDF."],
+  ["Ver texto original", "Show original text", "Vedi testo originale"],
+  ["🌐 Tradução automática do plano do formador, não revista.", "🌐 Automatic translation of the trainer's plan, not reviewed.", "🌐 Traduzione automatica del piano del formatore, non rivista."],
+  [/^Semana de (.+)$/, 'Week of $1', 'Settimana del $1']
 ]);
 
 /*I18N:END*/
@@ -2065,6 +2086,8 @@ function homeTiles() {
   if (msCanSee()) t.push({ k: 'MISS', ic: '✈️', t: 'Missões', d: 'CCM ⇄ CHDCP · semana, mês, ano' });
   /* v0.9.32: Detailed Plan para validar (FP CCM da área, ADMIN) */
   if (dpvCanSee()) t.push({ k: 'DPV', ic: '🗂️', t: 'Planos para validar', d: 'Detailed Plan · rever e aprovar' });
+  /* v0.9.33: impressões da semana (ADMIN) */
+  if (S.user && S.user.role === 'ADMIN') t.push({ k: 'PRINT', ic: '🖨️', t: 'Impressões', d: 'Resumo e plano da semana' });
   return t;
 }
 
@@ -2157,7 +2180,7 @@ function renderHome() {
     return '<button class="tile" data-k="' + t.k + '"><span class="ic">' + t.ic + '</span><b>' + esc(t.t) + '</b><small>' + esc(t.d) + '</small></button>';
   }).join('') + '</div></div><div class="htoday"><div class="sec hsec">As minhas actividades de hoje · ' + esc(fmtDate(today, true)) + '</div>' +
     (mine.length ? mine.map(function (a) { return hrow(a, today); }).join('') : '<div class="noact">Sem actividades suas hoje.</div>') + '</div></div>';
-  h += '<div class="foot">CHDCP Conecta · v0.9.32a' + (pushOn() ? ' · <button class="link" id="pushOff" style="margin:0">🔔 Desactivar notificações</button>' : '') + '</div></div>';
+  h += '<div class="foot">CHDCP Conecta · v0.9.33' + (pushOn() ? ' · <button class="link" id="pushOff" style="margin:0">🔔 Desactivar notificações</button>' : '') + '</div></div>';
   $('app').innerHTML = h;
   $('app').classList.remove('weekwide');
   $('app').classList.add('homewide');
@@ -2175,6 +2198,7 @@ function renderHome() {
       else if (k === 'AREA') laOpen('area', {});
       else if (k === 'MISS') { NAV = []; go(screenMissions); }
       else if (k === 'DPV') { NAV = []; go(screenDpvList); }
+      else if (k === 'PRINT') { NAV = []; go(function () { screenPrint(); }); }
       else if (k === 'CAL') { NAV = []; go(screenCalFeed); }
       else { NAV = []; go(function () { screenPick(k); }); }
     };
@@ -2265,17 +2289,25 @@ function planHtml(p) {
   /* v0.9.32: piano ancora da approvare dai FP CCM */
   if (p && p.pending && !(p.activity || []).length && !p.toj) return '<div class="card plan"><div class="sec" style="margin:0">Plano de formação (Detailed Plan)</div><p class="muted small" style="margin:6px 0 0">⏳ Plano em validação pelo ponto focal CCM.</p></div>';
   if (!p || (!(p.activity || []).length && !p.toj)) return '';
+  /* v0.9.33: em português a tradução do Hub (texto original num «ver original»); em IT/EN o original */
+  var pt = I18N.lang() === 'PT', note = '';
   var h = '<details class="card plan" open><summary class="sec" style="margin:0">Plano de formação (Detailed Plan)</summary>';
   (p.activity || []).forEach(function (x) {
-    var r = function (k, v) { return v ? '<div class="pl"><span>' + k + '</span>' + esc(v) + '</div>' : ''; };
-    h += r('Objectivo', x.obj) + r('Conteúdos / competências', x.know) + r('Domínio', [x.domain, x.la].filter(Boolean).join(' · ')) +
-      r('Fase', x.phase) + r('Avaliação', x.assess) + r('Critério de sucesso', x.success);
+    var tx = pt && x.pt ? x.pt : {};
+    var r = function (k, f) { var v = tx[f] || x[f]; return v ? '<div class="pl"><span>' + k + '</span>' + esc(v) + '</div>' : ''; };
+    h += r('Objectivo', 'obj') + r('Conteúdos / competências', 'know') + (x.domain || x.la ? '<div class="pl"><span>Domínio</span>' + esc([x.domain, x.la].filter(Boolean).join(' · ')) + '</div>' : '') +
+      (x.phase ? '<div class="pl"><span>Fase</span>' + esc(x.phase) + '</div>' : '') + r('Avaliação', 'assess') + r('Critério de sucesso', 'success');
+    if (pt && x.pt) {
+      if (x.tst === 'AUTO' || x.tst === 'A REVER') note = '<p class="muted small" style="margin:6px 0 0">🌐 Tradução automática do plano do formador, não revista.</p>';
+      h += '<details class="plorig"><summary class="muted small">Ver texto original</summary>' +
+        ['obj', 'know', 'assess', 'success'].map(function (f) { return x[f] ? '<div class="pl small">' + esc(x[f]) + '</div>' : ''; }).join('') + '</details>';
+    }
   });
   if (p.toj) {
     h += '<div class="pl"><span>Prioridades TOJ ' + esc(dmy(p.toj.start)) + '–' + esc(dmy(p.toj.end)) + '</span>' +
-      p.toj.skills.map(function (s) { return '<div class="sk1"><b>' + esc(s.c) + '</b> ' + esc(s.d) + '</div>'; }).join('') + '</div>';
+      p.toj.skills.map(function (s) { return '<div class="sk1"><b>' + esc(s.c) + '</b> ' + esc(pt && s.pt ? s.pt : s.d) + '</div>'; }).join('') + '</div>';
   }
-  return h + '</details>';
+  return h + note + '</details>';
 }
 
 /* Participantes previstos (só formador): nome → perfil em Learning & Assessment */
@@ -2890,6 +2922,39 @@ function screenDpvPlan(id) {
         .catch(function (e) { b.disabled = false; toast(e.message); });
     };
   }).catch(function (e) { errorPage('Plano de formação', '', e.message, function () { screenDpvPlan(id); }); });
+}
+
+/* ============================================================
+   v0.9.33 · IMPRESSÕES DA SEMANA (ADMIN)
+   ============================================================ */
+var PRW = null;
+function prMon(s) { var d = ymd(s), k = (d.getDay() + 6) % 7; return addDays(s, -k); }
+function screenPrint(mon) {
+  PRW = mon || PRW || prMon((ALL && ALL.today) || todayYmd());
+  loadingPage('Impressões', 'Semana de ' + dmy(PRW));
+  call('apiPrintWeek', S.token, PRW).then(function (r) {
+    var h = bhead('Impressões', dmy(r.mon) + ' – ' + dmy(r.sun)) + '<div class="body">' +
+      '<div class="weekswitch"><button class="minor" id="prPrev">‹ ' + esc(I18N.tr('Semana anterior')) + '</button><button class="minor" id="prNow">' + esc(I18N.tr('Esta semana')) + '</button><button class="minor" id="prNext">' + esc(I18N.tr('Semana seguinte')) + ' ›</button></div>' +
+      '<button class="abtn" id="prSum"><span class="ic">📊</span><span><b>' + esc(I18N.tr('Resumo da semana')) + '</b><br><small class="muted">' + esc(I18N.tr('Síntese e detalhe · A4 horizontal')) + ' · ' + r.n + ' ' + esc(I18N.tr('actividades')) + '</small></span></button>' +
+      '<div class="sec" style="margin-top:14px">' + esc(I18N.tr('Plano da semana por área (português)')) + '</div>';
+    if (!r.areas.length) h += '<div class="empty">' + esc(I18N.tr('Sem actividades nesta semana.')) + '</div>';
+    r.areas.forEach(function (a) {
+      var st = a.plan === 'APROVADO' ? '<span class="tag dpv-ok">' + esc(I18N.tr('Aprovado')) + '</span>' : a.plan === 'EM VALIDAÇÃO' ? '<span class="tag dpv-todo">' + esc(I18N.tr('Em validação')) + '</span>' : '<span class="tag">' + esc(I18N.tr('Sem plano')) + '</span>';
+      h += '<button class="hrow prarea" data-a="' + esc(a.area) + '"><div class="t">📄 ' + esc(a.area) + ' ' + st + '</div><div class="m">' + a.acts + ' ' + esc(I18N.tr('actividades')) + ' · ' + a.lessons + ' ' + esc(I18N.tr('aulas')) + ' · ' + a.toj + ' TOJ' +
+        (a.trainers.length ? ' · ' + esc(a.trainers.join(', ')) : '') + '</div></button>';
+    });
+    h += '<p class="muted small" style="margin-top:12px">' + esc(I18N.tr('Abre no navegador: «Imprimir / Guardar PDF». No telemóvel: Partilhar › Imprimir › Guardar como PDF.')) + '</p>';
+    page(h + '</div>');
+    var nav = function (d) { swapTop(function () { screenPrint(addDays(PRW, d)); }); };
+    $('prPrev').onclick = function () { nav(-7); }; $('prNext').onclick = function () { nav(7); };
+    $('prNow').onclick = function () { swapTop(function () { screenPrint(prMon((ALL && ALL.today) || todayYmd())); }); };
+    var open = function (kind, area, b) {
+      b.disabled = true;
+      call('apiPrintLink', S.token, kind, PRW, area || '').then(function (x) { b.disabled = false; openExt(x.url); }, function (e) { b.disabled = false; toast(e.message); });
+    };
+    $('prSum').onclick = function () { open('SUMMARY', '', this); };
+    Array.prototype.forEach.call(document.querySelectorAll('.prarea'), function (b) { b.onclick = function () { open('AREA', b.dataset.a, b); }; });
+  }).catch(function (e) { errorPage('Impressões', '', e.message, function () { screenPrint(PRW); }); });
 }
 
 function msCanSee() { return !!(ALL && ALL.user && ALL.user.ms); }
