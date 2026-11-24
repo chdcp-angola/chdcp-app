@@ -1082,6 +1082,26 @@ I18N.add([
   ["🌐 Tradução automática do plano do formador, não revista.", "🌐 Automatic translation of the trainer's plan, not reviewed.", "🌐 Traduzione automatica del piano del formatore, non rivista."],
   [/^Semana de (.+)$/, 'Week of $1', 'Settimana del $1']
 ]);
+I18N.add([
+  /* v0.9.34 PDF directo */
+  ["O PDF é criado no telefone e descarregado logo (A4, com a grafia do projecto).", "The PDF is created on the phone and downloaded right away (A4, with the project graphics).", "Il PDF viene creato sul telefono e scaricato subito (A4, con la grafica di progetto)."],
+  ["A preparar o PDF…", "Preparing the PDF…", "Preparazione del PDF…"],
+  ["Sem ligação: tente de novo.", "No connection: try again.", "Nessuna connessione: riprova."]
+]);
+I18N.add([
+  /* v0.9.36 cursos online */
+  ["Cursos online", "Online courses", "Corsi online"],
+  [/^(\d+) curso\(s\) · Skilla$/, '$1 course(s) · Skilla', '$1 corso/i · Skilla'],
+  ["Cursos da sua área na plataforma Skilla", "Courses of your area on the Skilla platform", "Corsi della tua area sulla piattaforma Skilla"],
+  ["Nenhum curso online disponível.", "No online course available.", "Nessun corso online disponibile."],
+  ["Todas as áreas", "All areas", "Tutte le aree"],
+  ["Obrigatório", "Mandatory", "Obbligatorio"],
+  ["Prazo", "Due", "Scadenza"],
+  ["Prazo terminado", "Overdue", "Scaduto"],
+  ["Disponível a partir de", "Available from", "Disponibile dal"],
+  ["Abrir no Skilla", "Open in Skilla", "Apri in Skilla"],
+  ["Se o Skilla pedir, entre com o seu utilizador e palavra-passe Skilla.", "If Skilla asks, sign in with your Skilla username and password.", "Se Skilla lo chiede, entra con il tuo utente e password Skilla."]
+]);
 
 /*I18N:END*/
 </script>
@@ -2086,6 +2106,8 @@ function homeTiles() {
   if (msCanSee()) t.push({ k: 'MISS', ic: '✈️', t: 'Missões', d: 'CCM ⇄ CHDCP · semana, mês, ano' });
   /* v0.9.32: Detailed Plan para validar (FP CCM da área, ADMIN) */
   if (dpvCanSee()) t.push({ k: 'DPV', ic: '🗂️', t: 'Planos para validar', d: 'Detailed Plan · rever e aprovar' });
+  /* v0.9.36: cursos online (Skilla) da área */
+  if (S.user && S.user.cur) t.push({ k: 'CUR', ic: '💻', t: 'Cursos online', d: S.user.cur + ' curso(s) · Skilla' });
   /* v0.9.33: impressões da semana (ADMIN) */
   if (S.user && S.user.role === 'ADMIN') t.push({ k: 'PRINT', ic: '🖨️', t: 'Impressões', d: 'Resumo e plano da semana' });
   return t;
@@ -2180,7 +2202,7 @@ function renderHome() {
     return '<button class="tile" data-k="' + t.k + '"><span class="ic">' + t.ic + '</span><b>' + esc(t.t) + '</b><small>' + esc(t.d) + '</small></button>';
   }).join('') + '</div></div><div class="htoday"><div class="sec hsec">As minhas actividades de hoje · ' + esc(fmtDate(today, true)) + '</div>' +
     (mine.length ? mine.map(function (a) { return hrow(a, today); }).join('') : '<div class="noact">Sem actividades suas hoje.</div>') + '</div></div>';
-  h += '<div class="foot">CHDCP Conecta · v0.9.33' + (pushOn() ? ' · <button class="link" id="pushOff" style="margin:0">🔔 Desactivar notificações</button>' : '') + '</div></div>';
+  h += '<div class="foot">CHDCP Conecta · v0.9.36' + (pushOn() ? ' · <button class="link" id="pushOff" style="margin:0">🔔 Desactivar notificações</button>' : '') + '</div></div>';
   $('app').innerHTML = h;
   $('app').classList.remove('weekwide');
   $('app').classList.add('homewide');
@@ -2198,6 +2220,7 @@ function renderHome() {
       else if (k === 'AREA') laOpen('area', {});
       else if (k === 'MISS') { NAV = []; go(screenMissions); }
       else if (k === 'DPV') { NAV = []; go(screenDpvList); }
+      else if (k === 'CUR') { NAV = []; go(screenCourses); }
       else if (k === 'PRINT') { NAV = []; go(function () { screenPrint(); }); }
       else if (k === 'CAL') { NAV = []; go(screenCalFeed); }
       else { NAV = []; go(function () { screenPick(k); }); }
@@ -2943,20 +2966,463 @@ function screenPrint(mon) {
       h += '<button class="hrow prarea" data-a="' + esc(a.area) + '"><div class="t">📄 ' + esc(a.area) + ' ' + st + '</div><div class="m">' + a.acts + ' ' + esc(I18N.tr('actividades')) + ' · ' + a.lessons + ' ' + esc(I18N.tr('aulas')) + ' · ' + a.toj + ' TOJ' +
         (a.trainers.length ? ' · ' + esc(a.trainers.join(', ')) : '') + '</div></button>';
     });
-    h += '<p class="muted small" style="margin-top:12px">' + esc(I18N.tr('Abre no navegador: «Imprimir / Guardar PDF». No telemóvel: Partilhar › Imprimir › Guardar como PDF.')) + '</p>';
+    h += '<p class="muted small" style="margin-top:12px">' + esc(I18N.tr('O PDF é criado no telefone e descarregado logo (A4, com a grafia do projecto).')) + '</p>';
     page(h + '</div>');
     var nav = function (d) { swapTop(function () { screenPrint(addDays(PRW, d)); }); };
     $('prPrev').onclick = function () { nav(-7); }; $('prNext').onclick = function () { nav(7); };
     $('prNow').onclick = function () { swapTop(function () { screenPrint(prMon((ALL && ALL.today) || todayYmd())); }); };
-    var open = function (kind, area, b) {
-      b.disabled = true;
-      call('apiPrintLink', S.token, kind, PRW, area || '').then(function (x) { b.disabled = false; openExt(x.url); }, function (e) { b.disabled = false; toast(e.message); });
-    };
+    /* v0.9.34: PDF generato nel telefono e scaricato subito */
+    var open = function (kind, area, b) { prPdf(kind, area || '', b); };
     $('prSum').onclick = function () { open('SUMMARY', '', this); };
     Array.prototype.forEach.call(document.querySelectorAll('.prarea'), function (b) { b.onclick = function () { open('AREA', b.dataset.a, b); }; });
   }).catch(function (e) { errorPage('Impressões', '', e.message, function () { screenPrint(PRW); }); });
 }
 
+/* v0.9.34 · stampe PDF disegnate nel telefono (jsPDF): grafica del modello di progetto */
+/* v0.9.35 · «Plano da semana · área»: blocchi grafici (cartiglio, numeri, programma per giorno, schede delle aule, test, TOJ) */
+function prBuildAreaPdf2(jsPDF, D) {
+  var doc = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'a4', compress: true });
+  var W = doc.internal.pageSize.getWidth(), H = doc.internal.pageSize.getHeight();
+  var M = 34, CW = W - 2 * M, A = D.assets || {};
+  var C = {
+    red: [139, 0, 0], red2: [176, 46, 46], ink: [26, 26, 26], grey: [85, 85, 85], muted: [125, 133, 139], line: [214, 219, 223],
+    pink: [251, 236, 236], pinkB: [236, 196, 196], bg: [245, 247, 248], bgB: [226, 231, 234], ok: [17, 128, 74], okBg: [231, 245, 237],
+    wait: [164, 106, 0], waitBg: [253, 244, 225], teo: [41, 98, 168], teoBg: [230, 239, 250], pra: [17, 128, 74], praBg: [231, 245, 237],
+    ass: [126, 70, 160], assBg: [242, 234, 248], white: [255, 255, 255]
+  };
+  var col = function (c) { doc.setTextColor(c[0], c[1], c[2]); };
+  var fill = function (c) { doc.setFillColor(c[0], c[1], c[2]); };
+  var draw = function (c) { doc.setDrawColor(c[0], c[1], c[2]); };
+  var font = function (st, sz) { doc.setFont('helvetica', st || 'normal'); doc.setFontSize(sz); };
+  var img = function (k, x, y, h) { var a = A[k]; if (!a) return; try { doc.addImage(a.d, a.t, x, y, h * a.r, h, k, 'FAST'); } catch (e) {} };
+  var fit = function (k, h, maxW) { var a = A[k]; if (!a) return { h: 0, w: 0 }; var w = Math.min(h * a.r, maxW); return { h: w / a.r, w: w }; };
+  var FOOT = 62, y = 0, page = 0;
+  var pages = [];
+
+  function header(first) {
+    page++;
+    var t = A.top; if (t) doc.addImage(t.d, t.t, 0, 0, W, W / t.r, 'top', 'FAST');
+    if (first) {
+      var pg = fit('progetto', 38, CW * 0.55), sp = fit('sponsor', 38, CW * 0.36);
+      img('progetto', M, 18 + (38 - pg.h) / 2, pg.h); img('sponsor', W - M - sp.w, 18 + (38 - sp.h) / 2, sp.h);
+      y = 70;
+    } else {
+      var p2 = fit('progetto', 16, CW * 0.35); img('progetto', M, 14, p2.h);
+      font('bold', 8.5); col(C.grey); doc.text(D.area + ' · ' + D.weekShort, W - M, 26, { align: 'right' });
+      draw(C.line); doc.setLineWidth(0.6); doc.line(M, 40, W - M, 40);
+      y = 52;
+    }
+  }
+  function footer() {
+    var pw = A.partner ? 24 * A.partner.r : 0;
+    img('partner', W - M - pw, H - FOOT + 6, 24);
+    var b = A.bottom; if (b) doc.addImage(b.d, b.t, 0, H - 20, W, 20, 'bottom', 'FAST');
+    draw(C.line); doc.setLineWidth(0.6); doc.line(M, H - FOOT, W - M, H - FOOT);
+    font('normal', 7.5); col(C.muted);
+    doc.text('Plano de formação · ' + D.area + ' · ' + D.weekShort, M, H - FOOT + 14);
+    pages.push(page);
+  }
+  function newPage() { footer(); doc.addPage(); header(false); }
+  function room(h) { if (y + h > H - FOOT - 10) { newPage(); return true; } return false; }
+  /* intestazione di sezione: numero in cerchio rosso + titolo + linea */
+  function section(n, t, sub, need) {
+    room(need || 60);
+    fill(C.red); doc.circle(M + 9, y + 9, 9, 'F');
+    font('bold', 10); col(C.white); doc.text(String(n), M + 9, y + 12.5, { align: 'center' });
+    font('bold', 12.5); col(C.ink); doc.text(t.toUpperCase(), M + 25, y + 13);
+    var tw = doc.getTextWidth(t.toUpperCase());
+    if (sub) { font('normal', 8.5); col(C.muted); doc.text(sub, M + 25 + tw + 8, y + 13); }
+    draw(C.pinkB); doc.setLineWidth(1); doc.line(M, y + 24, W - M, y + 24);
+    y += 34;
+  }
+  function chip(txt, x, yy, fg, bg, size) {
+    font('bold', size || 7); var w = doc.getTextWidth(txt) + 10, h = (size || 7) + 6;
+    fill(bg); doc.roundedRect(x, yy, w, h, h / 2, h / 2, 'F');
+    col(fg); doc.text(txt, x + 5, yy + h - 4.2);
+    return w;
+  }
+  var typeC = function (t) { return t === 'Prática' ? [C.pra, C.praBg] : t === 'Avaliação' ? [C.ass, C.assBg] : t === 'TOJ' ? [C.wait, C.waitBg] : [C.teo, C.teoBg]; };
+  function check(x, yy, c) { draw(c); doc.setLineWidth(1.6); doc.line(x, yy, x + 3.5, yy + 3.5); doc.line(x + 3.5, yy + 3.5, x + 10, yy - 3.5); }
+  function bullets(list, x, yy, w, fs, it) {
+    font(it ? 'italic' : 'normal', fs);
+    list.forEach(function (b) {
+      var lines = doc.splitTextToSize(b, w - 10);
+      fill(C.red2); doc.circle(x + 2.5, yy - fs * 0.32, 1.6, 'F');
+      col(it ? C.grey : C.ink); doc.text(lines, x + 9, yy, { lineHeightFactor: 1.28 });
+      yy += lines.length * fs * 1.28 + 3;
+    });
+    return yy;
+  }
+  function bulletsH(list, w, fs, it) { font(it ? 'italic' : 'normal', fs); return list.reduce(function (s, b) { return s + doc.splitTextToSize(b, w - 10).length * fs * 1.28 + 3; }, 0); }
+
+  header(true);
+  if (D.mock) {
+    font('bold', 7.5); col(C.wait); doc.text('MOCKUP · conteúdo ilustrativo', W / 2, 64, { align: 'center' });
+  }
+
+  /* ---- 1. cartiglio: area, settimana, formatore, stato ---- */
+  var bh = 92;
+  fill(C.pink); doc.roundedRect(M, y, CW, bh, 8, 8, 'F');
+  fill(C.red); doc.rect(M, y, 5, bh, 'F');
+  font('bold', 8); col(C.red); doc.text('PLANO DE FORMAÇÃO DA SEMANA', M + 18, y + 20);
+  font('bold', 21); col(C.ink); doc.text(D.areaName, M + 18, y + 44);
+  font('bold', 10.5); col(C.grey); doc.text(D.area, M + 18 + doc.getTextWidth(D.areaName) * 21 / 10.5 + 8, y + 44);
+  font('normal', 10.5); col(C.ink); doc.text(D.week, M + 18, y + 64);
+  font('normal', 9.5); col(C.grey); doc.text('Formador: ', M + 18, y + 80);
+  var fx = M + 18 + doc.getTextWidth('Formador: ');
+  font('bold', 9.5); col(C.ink); doc.text(D.trainer, fx, y + 80);
+  /* stato */
+  var sx = W - M - 168, sy = y + 16, okS = D.status.state === 'APROVADO', noS = D.status.state === 'SEM PLANO';
+  var sc = okS ? C.ok : noS ? C.muted : C.wait;
+  fill(C.white); draw(sc); doc.setLineWidth(1.2); doc.roundedRect(sx, sy, 152, 60, 6, 6, 'FD');
+  if (okS) check(sx + 14, sy + 20, C.ok);
+  font('bold', 12); col(sc); doc.text(okS ? 'APROVADO' : noS ? 'SEM PLANO' : 'EM VALIDAÇÃO', sx + (okS ? 32 : 12), sy + 24);
+  font('normal', 8); col(C.grey);
+  var stTxt = okS ? (D.status.by ? 'por ' + D.status.by + '\n' + D.status.role + (D.status.date ? ' · ' + D.status.date : '') : 'plano em uso') : noS ? 'sem Detailed Plan\npara esta semana' : 'aguarda a aprovação\ndo ponto focal CCM';
+  doc.text(doc.splitTextToSize(stTxt, 130), sx + 12, sy + 38);
+  y += bh + 12;
+
+  /* ---- riquadri numeri ---- */
+  var n = D.kpis.length, gap = 8, kw = (CW - gap * (n - 1)) / n, kh = 44;
+  D.kpis.forEach(function (k, i) {
+    var x = M + i * (kw + gap);
+    fill(C.bg); doc.roundedRect(x, y, kw, kh, 6, 6, 'F');
+    font('bold', 18); col(C.red); doc.text(String(k[0]), x + 10, y + 26);
+    var nw = doc.getTextWidth(String(k[0]));
+    font('bold', 8); col(C.ink); doc.text(doc.splitTextToSize(k[1], kw - nw - 26), x + 16 + nw, y + 19);
+    font('normal', 7.5); col(C.muted); if (k[2]) doc.text(k[2], x + 16 + nw, y + 33);
+  });
+  y += kh + 20;
+
+  /* ---- 2. programma giorno per giorno ---- */
+  section(1, 'Programa da semana', 'dia, hora, local', 90);
+  var TW = CW - 58 - 80 - 120; /* larghezza del titolo nella riga */
+  D.days.forEach(function (d) {
+    var rowsH = d.rows.map(function (r) { font('bold', 9.5); return Math.max(40, doc.splitTextToSize(r.title, TW).length * 12 + (r.group ? 12 : 0) + 16); });
+    var dh = rowsH.reduce(function (s, v) { return s + v; }, 0);
+    room(dh + 6);
+    fill(C.pink); doc.roundedRect(M, y, 54, dh, 6, 6, 'F');
+    fill(C.red); doc.rect(M, y + 6, 3, dh - 12, 'F');
+    font('bold', 13); col(C.red); doc.text(d.dow, M + 28, y + dh / 2 - 1, { align: 'center' });
+    font('bold', 9); col(C.ink); doc.text(d.date, M + 28, y + dh / 2 + 12, { align: 'center' });
+    fill(C.bg); doc.roundedRect(M + 58, y, CW - 58, dh, 6, 6, 'F');
+    var yy = y;
+    d.rows.forEach(function (r, i) {
+      var h = rowsH[i];
+      if (i) { draw(C.bgB); doc.setLineWidth(0.8); doc.line(M + 66, yy, W - M - 8, yy); }
+      font('bold', 10); col(C.ink); doc.text(r.time, M + 68, yy + 17);
+      font('bold', 9.5); col(C.ink); var tl = doc.splitTextToSize(r.title, TW); doc.text(tl, M + 140, yy + 17, { lineHeightFactor: 1.25 });
+      if (r.group) { font('normal', 8.5); col(C.grey); doc.text(r.group, M + 140, yy + 17 + tl.length * 12); }
+      var tc = typeC(r.type);
+      font('bold', 7); var cw2 = doc.getTextWidth(r.type.toUpperCase()) + 10;
+      chip(r.type.toUpperCase(), W - M - 12 - cw2, yy + 8, tc[0], tc[1]);
+      font('normal', 8); col(C.muted); doc.text(doc.splitTextToSize(r.place, 112), W - M - 12, yy + 31, { align: 'right' });
+      yy += h;
+    });
+    y += dh + 8;
+  });
+  y += 8;
+
+  /* ---- 3. piano delle lezioni ---- */
+  section(2, 'Plano das aulas', 'o que se aprende e como se avalia', D.lessons.length ? 220 : 80);
+  if (!D.lessons.length) {
+    fill(C.bg); doc.roundedRect(M, y, CW, 34, 6, 6, 'F');
+    font('normal', 10); col(C.grey);
+    doc.text(D.pending ? 'O plano desta semana ainda está em validação pelo ponto focal CCM.' : 'Sem Detailed Plan para as actividades desta semana.', M + 14, y + 21);
+    y += 46;
+  }
+  D.lessons.forEach(function (l, li) {
+    var gw = (CW - 30) / 2;
+    if (!l.obj.length) l.obj = ['—']; if (!l.know.length) l.know = ['—'];
+    if (!l.assess) l.assess = '—'; if (!l.success) l.success = '—';
+    var hObj = bulletsH(l.obj, gw, 9, l.objOrig), hKnow = bulletsH(l.know, gw, 9, l.knowOrig);
+    font('bold', 11.5); var tl = doc.splitTextToSize(l.title, CW - 24);
+    font('bold', 9); var aL = doc.splitTextToSize(l.assess, gw - 10), sL = doc.splitTextToSize(l.success, gw - 10);
+    var boxH = 18 + Math.max(aL.length, sL.length) * 11.5;
+    var h = 22 + 16 + tl.length * 14 + (l.group ? 12 : 0) + 14 + Math.max(hObj, hKnow) + 8 + boxH + 10;
+    room(h + 10);
+    var y0 = y;
+    /* cornice */
+    draw(C.line); doc.setLineWidth(0.8); fill(C.white); doc.roundedRect(M, y0, CW, h, 8, 8, 'FD');
+    /* striscia superiore con quando / dove / fase */
+    fill(C.bg); doc.roundedRect(M, y0, CW, 22, 8, 8, 'F'); doc.rect(M, y0 + 12, CW, 10, 'F');
+    font('bold', 8.5); col(C.red); doc.text(String(li + 1).padStart ? ('AULA ' + (li + 1)) : 'AULA', M + 12, y0 + 15);
+    font('bold', 8.5); col(C.ink); doc.text(l.when, M + 58, y0 + 15);
+    var ww = doc.getTextWidth(l.when);
+    font('normal', 8.5); col(C.grey); doc.text('·  ' + l.place, M + 64 + ww, y0 + 15);
+    var tc = typeC(l.type);
+    font('bold', 7); var w1 = doc.getTextWidth(l.phase.toUpperCase()) + 10, w2 = doc.getTextWidth(l.type.toUpperCase()) + 10;
+    chip(l.phase.toUpperCase(), W - M - 12 - w1, y0 + 5, C.red, C.pink);
+    chip(l.type.toUpperCase(), W - M - 18 - w1 - w2, y0 + 5, tc[0], tc[1]);
+    var yy = y0 + 22 + 16;
+    font('bold', 11.5); col(C.ink); doc.text(tl, M + 12, yy, { lineHeightFactor: 1.2 }); yy += tl.length * 14 - 2;
+    if (l.group) { font('normal', 8.5); col(C.muted); doc.text(l.group, M + 12, yy + 8); yy += 12; }
+    yy += 12;
+    /* due colonne: obiettivo | contenuti */
+    var x1 = M + 12, x2 = M + 18 + gw;
+    font('bold', 7.5); col(C.red); doc.text('OBJECTIVO', x1, yy); doc.text('CONTEÚDOS E COMPETÊNCIAS', x2, yy);
+    draw(C.line); doc.setLineWidth(0.6); doc.line(x2 - 8, yy - 6, x2 - 8, yy + Math.max(hObj, hKnow) + 4);
+    yy += 13;
+    bullets(l.obj, x1, yy, gw, 9, l.objOrig); bullets(l.know, x2, yy, gw, 9, l.knowOrig);
+    yy += Math.max(hObj, hKnow) + 4;
+    /* riga valutazione / criterio */
+    fill(C.assBg); doc.roundedRect(M + 8, yy, gw + 2, boxH, 5, 5, 'F');
+    fill(C.okBg); doc.roundedRect(x2 - 4, yy, gw + 4, boxH, 5, 5, 'F');
+    font('bold', 7); col(C.ass); doc.text('AVALIAÇÃO', x1 + 2, yy + 11);
+    font('bold', 9); col(C.ink); doc.text(aL, x1 + 2, yy + 23, { lineHeightFactor: 1.28 });
+    font('bold', 7); col(C.ok); doc.text('CRITÉRIO DE SUCESSO', x2 + 2, yy + 11);
+    font('bold', 9); col(C.ink); doc.text(sL, x2 + 2, yy + 23, { lineHeightFactor: 1.28 });
+    y = y0 + h + 12;
+  });
+
+  if (D.pending && D.lessons.length) { font('italic', 8.5); col(C.grey); doc.text('+ ' + D.pending + ' actividade(s) com plano ainda em validação.', M, y); y += 16; }
+  /* ---- 4. valutazioni del periodo ---- */
+  if (D.assessments.length) {
+    section(3, 'Avaliação do período', 'teste teórico no fim do mês', 90);
+    var rh = 22;
+    fill(C.assBg); doc.roundedRect(M, y, CW, 18 + rh * D.assessments.length + 4, 6, 6, 'F');
+    font('bold', 7.5); col(C.ass); doc.text('#', M + 12, y + 13); doc.text('DOMÍNIO', M + 32, y + 13); doc.text('INSTRUMENTO', M + CW * 0.6, y + 13); doc.text('APROVAÇÃO', M + CW * 0.85, y + 13);
+    var yy2 = y + 18;
+    D.assessments.forEach(function (a, i) {
+      draw([220, 205, 232]); doc.setLineWidth(0.6); doc.line(M + 8, yy2, W - M - 8, yy2);
+      font('bold', 9); col(C.ass); doc.text(String(i + 1), M + 12, yy2 + 15);
+      font('normal', 9); col(C.ink); doc.text(a.domain, M + 32, yy2 + 15); doc.text(a.type, M + CW * 0.6, yy2 + 15);
+      font('bold', 9.5); doc.text(a.crit, M + CW * 0.85, yy2 + 15);
+      yy2 += rh;
+    });
+    y = yy2 + 18;
+  }
+
+  /* ---- 5. priorità TOJ ---- */
+  if (D.toj.length) {
+    section(D.assessments.length ? 4 : 3, 'Prioridades TOJ', 'competências a observar no posto de trabalho', 80);
+    D.toj.forEach(function (s, i) {
+      font('normal', 9); var dl = doc.splitTextToSize(s.d, CW - 110);
+      var h = Math.max(24, dl.length * 11.5 + 12);
+      room(h + 4);
+      fill(i % 2 ? C.white : C.bg); doc.roundedRect(M, y, CW, h, 5, 5, 'F');
+      fill(C.red); doc.circle(M + 14, y + h / 2, 8, 'F');
+      font('bold', 9); col(C.white); doc.text(String(i + 1), M + 14, y + h / 2 + 3.2, { align: 'center' });
+      font('bold', 9); col(C.ink); doc.text(s.c, M + 30, y + h / 2 + 3.2);
+      font('normal', 9); col(C.ink); doc.text(dl, M + 100, y + (h - dl.length * 11.5) / 2 + 8.5, { lineHeightFactor: 1.28 });
+      y += h + 4;
+    });
+    y += 10;
+  }
+
+  /* ---- nota ---- */
+  room(26);
+  draw(C.line); doc.setLineWidth(0.6); doc.line(M, y, W - M, y); y += 12;
+  font('italic', 7.5); col(C.muted); var nl = doc.splitTextToSize(D.note, CW); doc.text(nl, M, y); y += nl.length * 9;
+  footer();
+  /* numeri di pagina «1 / N» */
+  var tot = doc.internal.getNumberOfPages();
+  for (var p = 1; p <= tot; p++) { doc.setPage(p); font('bold', 7.5); col(C.grey); doc.text(p + ' / ' + tot, W / 2, H - FOOT + 14, { align: 'center' }); }
+  return doc;
+}
+function prBuildPdf(jsPDF, D) {
+  if (D.kind === 'AREA') return prBuildAreaPdf2(jsPDF, D);
+  var land = D.kind === 'SUMMARY';
+  var doc = new jsPDF({ orientation: land ? 'landscape' : 'portrait', unit: 'pt', format: 'a4', compress: true });
+  var W = doc.internal.pageSize.getWidth(), H = doc.internal.pageSize.getHeight();
+  var M = 36, TOP = 0, A = D.assets || {};
+  var C = { red: [139, 0, 0], ink: [26, 26, 26], grey: [85, 85, 85], muted: [120, 128, 134], line: [217, 222, 226], soft: [251, 236, 236], head: [246, 236, 235], zebra: [248, 249, 250], ok: [17, 128, 74], wait: [164, 106, 0] };
+  var col = function (c) { doc.setTextColor(c[0], c[1], c[2]); };
+  var fill = function (c) { doc.setFillColor(c[0], c[1], c[2]); };
+  var draw = function (c) { doc.setDrawColor(c[0], c[1], c[2]); };
+  var font = function (st, sz) { doc.setFont('helvetica', st || 'normal'); doc.setFontSize(sz); };
+  var img = function (k, x, y, h, w) { var a = A[k]; if (!a) return 0; var ww = w || h * a.r, hh = w ? w / a.r : h; try { doc.addImage(a.d, a.t, x, y, ww, hh, k, 'FAST'); } catch (e) { return 0; } return ww; };
+  var FOOT = 58, y = 0, page = 0;
+
+  /* intestazione: striscia, logo del progetto a sinistra, sponsor a destra (solo 1.ª pagina più grande) */
+  function header(first) {
+    page++;
+    img('top', 0, 0, 0, W);
+    /* loghi adattati alla larghezza: progetto al massimo 55%, sponsor 36% della pagina utile */
+    var fit = function (k, h, maxW) { var a = A[k]; if (!a) return { h: 0, w: 0 }; var w = Math.min(h * a.r, maxW); return { h: w / a.r, w: w }; };
+    if (first) {
+      var pg = fit('progetto', 40, (W - 2 * M) * 0.55), sp = fit('sponsor', 40, (W - 2 * M) * 0.36);
+      img('progetto', M, 20 + (40 - pg.h) / 2, pg.h);
+      img('sponsor', W - M - sp.w, 20 + (40 - sp.h) / 2, sp.h);
+      y = 82;
+    } else {
+      var p2 = fit('progetto', 18, (W - 2 * M) * 0.4);
+      img('progetto', M, 14, p2.h);
+      y = 58;
+    }
+  }
+  /* piè di pagina: loghi partner a destra, striscia grigia, numero e data */
+  function footer() {
+    var pw = A.partner ? 26 * A.partner.r : 0;
+    img('partner', W - M - pw, H - FOOT + 4, 26);
+    img('bottom', 0, H - 22, 0, W);
+    font('normal', 7.5); col(C.muted);
+    doc.text('CHDCP Conecta · ' + D.stamp + ' · pág. ' + page, M, H - FOOT + 20);
+  }
+  function newPage() { footer(); doc.addPage(); header(false); }
+  function room(h) { if (y + h > H - FOOT - 8) { newPage(); return true; } return false; }
+  function title(t, sub) {
+    font('bold', land ? 22 : 18); col(C.ink); doc.text(t, M, y + 4); y += land ? 20 : 17;
+    if (sub) { font('normal', 10.5); col(C.grey); doc.text(sub, M, y + 2); y += 12; }
+    draw(C.red); doc.setLineWidth(1.2); doc.line(M, y + 2, W - M, y + 2); y += 14;
+  }
+  function section(t, need) { room(need || 34); font('bold', 10); col(C.red); doc.text(t.toUpperCase(), M, y + 8); y += 16; }
+  /* tabella con colonne in frazioni della larghezza, righe che vanno a capo, intestazione ripetuta a cambio pagina */
+  function table(cols, rows, opt) {
+    opt = opt || {};
+    var tw = W - 2 * M, fs = opt.fs || 8.5, lh = fs * 1.22, pad = 4;
+    var ws = cols.map(function (c) { return c[1] * tw; });
+    function headRow() {
+      fill(C.head); doc.rect(M, y, tw, 16, 'F');
+      font('bold', 7.5); col(C.red);
+      var x = M; cols.forEach(function (c, i) { doc.text(String(c[0]).toUpperCase(), x + pad, y + 11); x += ws[i]; });
+      y += 16;
+    }
+    room(16 + lh + 2 * pad); headRow();
+    rows.forEach(function (r, ri) {
+      font('normal', fs);
+      var cells = r.map(function (v, i) { return doc.splitTextToSize(String(v == null ? '' : v), ws[i] - 2 * pad); });
+      var h = Math.max.apply(null, cells.map(function (c) { return c.length; })) * lh + 2 * pad;
+      if (y + h > H - FOOT - 8) { newPage(); headRow(); }
+      if (ri % 2 === 1) { fill(C.zebra); doc.rect(M, y, tw, h, 'F'); }
+      draw(C.line); doc.setLineWidth(0.4); doc.line(M, y + h, M + tw, y + h);
+      var x = M;
+      cells.forEach(function (c, i) {
+        var st = opt.bold && opt.bold.indexOf(i) >= 0 ? 'bold' : 'normal';
+        font(st, fs); col(opt.colorOf ? (opt.colorOf(r, i) || C.ink) : C.ink);
+        doc.text(c, x + pad, y + pad + fs * 0.92, { lineHeightFactor: 1.22 });
+        x += ws[i];
+      });
+      y += h;
+    });
+    y += 10;
+  }
+  var stateCol = function (s) { return s === 'APROVADO' ? C.ok : s === 'EM VALIDAÇÃO' ? C.wait : C.muted; };
+  var stateTxt = function (s) { return s === 'APROVADO' ? 'Aprovado' : s === 'EM VALIDAÇÃO' ? 'Em validação' : 'Sem plano'; };
+
+  header(true);
+  if (land) {
+    title('Resumo da semana', D.monTxt + ' – ' + D.sunTxt);
+    /* riquadri con i numeri (leggeri: fondo rosa chiaro, numero rosso) */
+    var n = D.kpi.length, gap = 10, cw = (W - 2 * M - gap * (n - 1)) / n, ch = 62;
+    D.kpi.forEach(function (k, i) {
+      var x = M + i * (cw + gap);
+      fill(C.soft); draw([240, 205, 205]); doc.setLineWidth(0.6); doc.roundedRect(x, y, cw, ch, 6, 6, 'FD');
+      font('bold', 24); col(C.red); doc.text(String(k[0]), x + 12, y + 30);
+      font('normal', 8.5); col(C.grey); doc.text(doc.splitTextToSize(k[1], cw - 24), x + 12, y + 46);
+    });
+    y += ch + 18;
+    section('Por área');
+    table([['Área', 0.1], ['Actividades', 0.1], ['Aulas', 0.08], ['TOJ', 0.07], ['Detailed Plan', 0.25], ['Formadores', 0.4]],
+      D.areas.map(function (a) { return [a.area, a.acts, a.lessons, a.toj, stateTxt(a.plan) + (a.by ? '\n' + a.by : ''), a.trainers]; }),
+      { fs: 9, bold: [0], colorOf: function (r, i) { return i === 4 ? stateCol(D.areas.filter(function (a) { return a.area === r[0]; })[0].plan) : null; } });
+    if (!D.dpOk) { font('italic', 8); col(C.muted); doc.text('Detailed Plan: estado dos planos indisponível (o Hub ainda não tem DP_PLANS).', M, y); y += 12; }
+    /* dettaglio giorno per giorno, da pagina nuova */
+    newPage();
+    title('Detalhe da semana', D.monTxt + ' – ' + D.sunTxt);
+    if (!D.days.length) { font('normal', 10); col(C.grey); doc.text('Sem actividades nesta semana.', M, y + 6); y += 16; }
+    D.days.forEach(function (d) {
+      section(d.label, 70);
+      table([['Hora', 0.1], ['Área', 0.09], ['Actividade', 0.4], ['Formador', 0.21], ['Local', 0.2]], d.rows, { fs: 8.5, bold: [0] });
+    });
+  } else {
+    title('Plano de formação da semana · ' + D.area, D.monTxt + ' – ' + D.sunTxt);
+    font('normal', 9.5); col(C.ink); doc.text('Detailed Plan: ', M, y);
+    var lw = doc.getTextWidth('Detailed Plan: ');
+    font('bold', 9.5); col(stateCol(D.planState)); doc.text(stateTxt(D.planState), M + lw, y);
+    y += 12;
+    D.plans.forEach(function (p) { font('normal', 8.5); col(C.grey); var l = doc.splitTextToSize(p, W - 2 * M); doc.text(l, M, y); y += l.length * 10.5; });
+    y += 8;
+    section('Programa', 70);
+    table([['Dia', 0.15], ['Hora', 0.11], ['Actividade', 0.36], ['Local', 0.2], ['Formador', 0.18]],
+      D.prog.length ? D.prog : [['', '', 'Sem actividades.', '', '']], { fs: 8.5, bold: [0] });
+    section('Plano das aulas');
+    if (!D.lessons.length) {
+      font('normal', 9.5); col(C.grey);
+      doc.text(D.pending ? 'O plano desta semana ainda está em validação pelo ponto focal CCM.' : 'Sem Detailed Plan para as actividades desta semana.', M, y + 4); y += 18;
+    }
+    D.lessons.forEach(function (l) {
+      var iw = W - 2 * M - 24;
+      font('bold', 10.5); var tl = doc.splitTextToSize(l.title, iw);
+      var blocks = l.fields.map(function (f) { font(f.orig ? 'italic' : 'normal', 9); return { f: f, lines: doc.splitTextToSize(f.v, iw) }; });
+      var h = 14 + tl.length * 13 + 12 + blocks.reduce(function (s, b) { return s + 12 + b.lines.length * 11.2 + 4; }, 0) + 6;
+      if (h > H - FOOT - 70) h = H - FOOT - 70;
+      room(h + 8);
+      draw(C.line); doc.setLineWidth(0.6); doc.roundedRect(M, y, W - 2 * M, h, 6, 6, 'S');
+      fill(C.red); doc.rect(M, y + 8, 2.5, 18, 'F');
+      var yy = y + 18;
+      font('bold', 10.5); col(C.ink); doc.text(tl, M + 12, yy); yy += tl.length * 13;
+      font('normal', 8); col(C.muted); doc.text(l.meta, M + 12, yy); yy += 14;
+      blocks.forEach(function (b) {
+        if (yy > y + h - 10) return;
+        font('bold', 7.5); col(C.grey); doc.text(b.f.l.toUpperCase(), M + 12, yy); yy += 11;
+        font(b.f.orig ? 'italic' : 'normal', 9); col(b.f.orig ? C.grey : C.ink);
+        var max = Math.max(1, Math.floor((y + h - 6 - yy) / 11.2));
+        doc.text(b.lines.slice(0, max), M + 12, yy, { lineHeightFactor: 1.24 }); yy += Math.min(b.lines.length, max) * 11.2 + 5;
+      });
+      y += h + 10;
+    });
+    if (D.pending && D.lessons.length) { font('italic', 8.5); col(C.grey); doc.text('+ ' + D.pending + ' actividade(s) com plano ainda em validação.', M, y + 2); y += 14; }
+    if (D.toj.length) {
+      section('Prioridades TOJ');
+      D.toj.forEach(function (p) {
+        table([['Código', 0.16], ['Competência (' + p.period + ')', 0.84]], p.skills.map(function (s) { return [s.c, s.d]; }), { fs: 8.5, bold: [0] });
+      });
+    }
+    room(30);
+    font('italic', 7.5); col(C.muted);
+    var nl = doc.splitTextToSize(D.note, W - 2 * M); doc.text(nl, M, y + 4); y += nl.length * 9 + 6;
+  }
+  footer();
+  return doc;
+}
+var PR_JSPDF = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+function prSaveBlob(blob, name) {
+  var url = URL.createObjectURL(blob);
+  var inFrame = false; try { inFrame = window.top !== window; } catch (e) { inFrame = true; }
+  if (inFrame && !IS_PWA) { window.open(url, '_blank'); return; }
+  var a = document.createElement('a'); a.href = url; a.download = name; document.body.appendChild(a); a.click();
+  setTimeout(function () { a.remove(); URL.revokeObjectURL(url); }, 4000);
+}
+function prPdf(kind, area, b) {
+  var label = b ? b.innerHTML : '';
+  if (b) { b.disabled = true; b.style.opacity = '.6'; }
+  var done = function () { if (b) { b.disabled = false; b.style.opacity = ''; } };
+  toast(I18N.tr('A preparar o PDF…'));
+  Promise.all([call('apiPrintData', S.token, kind, PRW, area), window.jspdf ? Promise.resolve() : loadJs(PR_JSPDF)]).then(function (r) {
+    var D = r[0];
+    var doc = prBuildPdf(window.jspdf.jsPDF, D);
+    var name = (kind === 'AREA' ? 'Plano_semana_' + D.area : 'Resumo_semana') + '_' + D.mon.replace(/-/g, '') + '.pdf';
+    prSaveBlob(doc.output('blob'), name);
+    done();
+  }).catch(function (e) { done(); toast(isNet(e.message) ? I18N.tr('Sem ligação: tente de novo.') : e.message); });
+}
+/* ============================================================
+   v0.9.36 · CURSOS ONLINE (Skilla)
+   ============================================================ */
+function screenCourses() {
+  loadingPage('Cursos online', 'Skilla');
+  call('apiCourses', S.token).then(function (r) {
+    var h = bhead('Cursos online', r.admin ? 'Todas as áreas · ADMIN' : 'Cursos da sua área na plataforma Skilla') + '<div class="body">';
+    if (!r.courses.length) h += '<div class="empty">' + esc(I18N.tr('Nenhum curso online disponível.')) + '</div>';
+    var lastA = '', lastM = null;
+    r.courses.forEach(function (c, i) {
+      var a = c.areas.join(', ');
+      if (a !== lastA) { h += '<div class="sec">' + esc(a === 'ALL' ? I18N.tr('Todas as áreas') : a) + '</div>'; lastA = a; lastM = null; }
+      if (c.module && c.module !== lastM) { h += '<div class="small muted" style="margin:8px 2px 6px;font-weight:800">' + esc(c.module) + '</div>'; lastM = c.module; }
+      var tags = (c.req ? '<span class="tag dpv-re">' + esc(I18N.tr('Obrigatório')) + '</span> ' : '') +
+        (c.dur ? '<span class="tag">' + c.dur + ' min</span> ' : '') +
+        (c.due ? '<span class="tag ' + (c.late ? 'dpv-re' : 'dpv-todo') + '">' + esc(I18N.tr(c.late ? 'Prazo terminado' : 'Prazo')) + ' ' + esc(dmy(c.due)) + '</span> ' : '') +
+        (c.soon ? '<span class="tag">' + esc(I18N.tr('Disponível a partir de')) + ' ' + esc(dmy(c.from)) + '</span>' : '');
+      h += '<button class="hrow curow" data-i="' + i + '"><div class="t">💻 ' + esc(c.title) + '</div>' +
+        (tags ? '<div class="m">' + tags + '</div>' : '') + (c.note ? '<div class="m">' + esc(c.note) + '</div>' : '') +
+        '<div class="m" style="color:var(--brand);font-weight:800">' + esc(I18N.tr('Abrir no Skilla')) + ' ›</div></button>';
+    });
+    h += '<p class="muted small" style="margin-top:12px">' + esc(I18N.tr('Se o Skilla pedir, entre com o seu utilizador e palavra-passe Skilla.')) + '</p>';
+    page(h + '</div>');
+    Array.prototype.forEach.call(document.querySelectorAll('.curow'), function (b) { b.onclick = function () { openExt(r.courses[+b.dataset.i].link); }; });
+  }).catch(function (e) { errorPage('Cursos online', '', e.message, screenCourses); });
+}
 function msCanSee() { return !!(ALL && ALL.user && ALL.user.ms); }
 function msTodayY() { return (MSD && MSD.today) || (ALL && ALL.today) || todayYmd(); }
 function msMon(s) { var d = ymd(s), k = (d.getDay() + 6) % 7; return addDays(s, -k); }
