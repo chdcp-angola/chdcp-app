@@ -239,6 +239,7 @@ function authNow(){ var s = laSess(); if (s && s.sess) return { sess: s.sess, na
 
 var AUTH = null, CTX = null, D = null, OUTK = 'la_theory_outbox';
 function head(t, s){ $('tt').textContent = t; $('ts').textContent = s || 'Learning & Assessment'; }
+function nkey(v){ return String(v || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim(); }
 function num(v){ var s = String(v == null ? '' : v).trim().replace(',', '.'); if (s === '') return null; var n = Number(s); return isNaN(n) ? null : n; }
 function uid(){ return 'TH-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 8); }
 function outbox(){ return store(OUTK) || []; }
@@ -284,9 +285,11 @@ function draw(){
   else if (Object.keys(c.saved || {}).length) h += '<div class="banner ok">Notas já registadas: pode corrigir e guardar de novo.</div>';
   h += '<div class="two"><div><label class="field">Prova</label><input class="inp" id="tas" value="' + esc(D.assessment) + '"></div><div><label class="field">Nota máxima</label><input class="inp" id="tmx" inputmode="decimal" value="' + esc(D.max) + '"></div></div>' +
     '<p class="note" style="margin:8px 2px 10px">Aprovado com ≥ ' + esc(c.passMark) + '% (regra do Training Hub). Deixe vazio quem não fez a prova. Toque no nome para ver o perfil.</p>';
+  /* v41d: cerca per nome (filtra la lista nel telefono, le note già scritte restano) */
+  if (c.people.length > 1) h += '<div style="position:relative;margin:0 0 8px"><input class="inp" id="tq" type="text" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="🔎 Procurar por nome…" style="margin:0;padding-right:56px"><span class="note" id="tqn" style="position:absolute;right:12px;top:50%;transform:translateY(-50%)"></span></div>';
   h += '<div class="plist">' + (c.people.length ? c.people.map(function(p){
     var sub = [p.cohort, p.att === 'PRESENT' ? 'presente' : (p.att === 'ABSENT' ? 'ausente' : '')].filter(Boolean).join(' · ');
-    return '<div class="prow"><div class="nm"><a href="#" data-lanav="person:' + esc(p.id) + '">' + esc(p.name) + '</a><span>' + esc(sub) + '</span></div>' +
+    return '<div class="prow" data-n="' + esc(nkey(p.name)) + '"><div class="nm"><a href="#" data-lanav="person:' + esc(p.id) + '">' + esc(p.name) + '</a><span>' + esc(sub) + '</span></div>' +
       '<input class="score" data-p="' + esc(p.id) + '" inputmode="decimal" placeholder="—" value="' + esc(D.raw[p.id] == null ? '' : D.raw[p.id]) + '"><span class="pct" id="pc_' + esc(p.id) + '"></span></div>';
   }).join('') : '<div class="card note">Sem formandos da área ' + esc(a.area) + '.</div>') + '</div>';
   $('app').innerHTML = h;
@@ -305,6 +308,11 @@ function draw(){
     $('save').disabled = !n || bad || !max; $('save').textContent = bad ? 'Nota fora de 0–' + (max || '?') : 'Guardar notas (' + n + ')';
   };
   Array.prototype.forEach.call(document.querySelectorAll('.score'), function(el){ el.oninput = function(){ D.raw[el.getAttribute('data-p')] = el.value; paint(); }; });
+  if ($('tq')) $('tq').oninput = function(){
+    var q = nkey(this.value).split(' ').filter(Boolean), shown = 0, rows = document.querySelectorAll('.plist .prow');
+    Array.prototype.forEach.call(rows, function(r){ var n = r.getAttribute('data-n') || '', ok = q.every(function(w){ return n.indexOf(w) >= 0; }); r.style.display = ok ? '' : 'none'; if (ok) shown++; });
+    $('tqn').textContent = q.length ? shown + '/' + rows.length : '';
+  };
   $('tmx').oninput = function(){ D.max = this.value; paint(); };
   $('tas').oninput = function(){ D.assessment = this.value; };
   $('save').onclick = function(){

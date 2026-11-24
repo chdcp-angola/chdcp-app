@@ -241,6 +241,10 @@ input{font-family:inherit;font-size:16px}
 .pushcard{display:flex;align-items:center;gap:11px;background:#fff;border:1.5px solid var(--brand-line);border-radius:14px;padding:11px 12px;margin-bottom:12px}.pushcard .ic{font-size:24px}.pushcard .tx{flex:1;min-width:0}.pushcard b{display:block;color:var(--brand);font-size:14.5px}.pushcard small{display:block;font-size:12px;color:var(--muted)}.pbtn{flex:none;background:var(--brand);color:#fff;font-weight:800;font-size:13px;border-radius:10px;padding:9px 13px}
 .addpanel{border:1.5px solid var(--brand-line);border-radius:12px;background:#fff;padding:10px;margin:0 0 12px}
 .addhead{display:flex;gap:8px;align-items:center}.addhead .inp{flex:1}.addhead .minor{margin:0;flex:none}
+.guestf{border:1px dashed var(--brand-line);border-radius:10px;padding:9px;margin:4px 0 8px;display:grid;gap:7px}.guestf .inp{margin:0}
+.guestf .gr{display:grid;grid-template-columns:1fr 1fr;gap:8px}.guestf .gr label{font-size:12px;color:var(--muted);display:grid;gap:3px}
+.guestf .gb{display:flex;gap:8px;justify-content:flex-end}.guestf .gb .minor,.guestf .gb .btn{margin:0;width:auto}
+.prow.guest .nm span{color:#7a4b00}
 .addlist{max-height:46vh;overflow:auto;margin-top:8px;-webkit-overflow-scrolling:touch}
 .addlist .user{margin-bottom:6px}.addnote{margin:2px 2px 8px}
 .addplus{flex:none;font-size:20px;font-weight:800;color:var(--brand);padding:0 4px}
@@ -1102,6 +1106,24 @@ I18N.add([
   ["Abrir no Skilla", "Open in Skilla", "Apri in Skilla"],
   ["Se o Skilla pedir, entre com o seu utilizador e palavra-passe Skilla.", "If Skilla asks, sign in with your Skilla username and password.", "Se Skilla lo chiede, entra con il tuo utente e password Skilla."]
 ]);
+I18N.add([
+  /* v0.9.37 convidados e tessera TOJ */
+  ["＋ Convidado (nome livre, sem ficha)", "＋ Guest (free name, no trainee record)", "＋ Ospite (nome libero, senza scheda)"],
+  [/^＋ Adicionar «(.+)» como convidado$/, '＋ Add «$1» as guest', '＋ Aggiungi «$1» come ospite'],
+  ["Para quem participa sem papel no projecto: conta nos totais (presenças e horas), não tem ficha de formando.", "For people taking part with no role in the project: counted in totals (attendance and hours), no trainee record.", "Per chi partecipa senza ruolo nel progetto: conta nei totali (presenze e ore), non ha scheda formando."],
+  ["Nome e apelido", "First and last name", "Nome e cognome"],
+  ["Papel", "Role", "Ruolo"],
+  ["Adicionar convidado", "Add guest", "Aggiungi ospite"],
+  ["Escreva nome e apelido.", "Type first and last name.", "Scrivi nome e cognome."],
+  ["Escolha a área.", "Choose the area.", "Scegli l'area."],
+  [/^Já está na lista: (.+)$/, 'Already in the list: $1', 'Già nella lista: $1'],
+  [/^Convidado adicionado: (.+)$/, 'Guest added: $1', 'Ospite aggiunto: $1'],
+  [/^convidado · formador · (.+)$/, 'guest · trainer · $1', 'ospite · formatore · $1'],
+  [/^convidado · (.+)$/, 'guest · $1', 'ospite · $1'],
+  ["Sessão e avaliação", "Session and assessment", "Sessione e valutazione"],
+  ["No posto de trabalho", "On the job", "Sul posto di lavoro"],
+  ["Nenhuma actividade para si", "No activity for you", "Nessuna attività per te"]
+]);
 
 /*I18N:END*/
 </script>
@@ -1904,6 +1926,11 @@ busy = function (on) {
 
 /* v0.9.27: etichetta delle attività nascoste («REPORTED · NOT EXECUTED» = annullata all'ultimo momento) */
 function hidTag(a) { var st = String(a.status || ''), ex = String(a.exec || ''); return (/report/i.test(st) && /^(not|n[aã]o|non)\b/i.test(ex) ? st + ' · ' + ex : (ex || st || 'CANCELADA')).toUpperCase(); }
+/* v0.9.37: igual ao servidor (ecoGuestId_): «EXT:» + nome sem acentos nem títulos, em maiúsculas */
+function guestId(name) {
+  var k = norm(name).replace(/^(dr|dra|prof|enf|sr|sra)\.?\s+/, '').replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim();
+  return 'EXT:' + k.toUpperCase().replace(/[^A-Z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 60);
+}
 function normQ(x) { return String(x || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, ' ').trim(); }
 function uid() { return 'AG-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 8); }
 function isNet(msg) { return /TIMEOUT|NetworkError|HTTP 0|Failed to fetch|network|Sem ligação|Load failed/i.test(String(msg || '')); }
@@ -2093,7 +2120,7 @@ function eligible(k) {
 }
 function homeTiles() {
   var t = [{ k: 'AGENDA', ic: '📅', t: 'Agenda', d: 'Hoje, semana e lista' }];
-  [['ATTENDANCE', '✅', 'Presenças', 'Aulas e reuniões'], ['TOJ', '🩺', 'Avaliação TOJ', 'No posto de trabalho'], ['THEORY', '📝', 'Avaliação teórica', 'Provas escritas'],
+  [['ATTENDANCE', '✅', 'Presenças', 'Aulas e reuniões'], ['TOJ', '🩺', 'TOJ', 'Sessão e avaliação'], ['THEORY', '📝', 'Avaliação teórica', 'Provas escritas'],
     ['EVALUATION', '⭐', 'Questionário', 'Satisfação da formação']].forEach(function (x) {
     var l = eligible(x[0]);
     if (!l.length) return;
@@ -2202,7 +2229,7 @@ function renderHome() {
     return '<button class="tile" data-k="' + t.k + '"><span class="ic">' + t.ic + '</span><b>' + esc(t.t) + '</b><small>' + esc(t.d) + '</small></button>';
   }).join('') + '</div></div><div class="htoday"><div class="sec hsec">As minhas actividades de hoje · ' + esc(fmtDate(today, true)) + '</div>' +
     (mine.length ? mine.map(function (a) { return hrow(a, today); }).join('') : '<div class="noact">Sem actividades suas hoje.</div>') + '</div></div>';
-  h += '<div class="foot">CHDCP Conecta · v0.9.36' + (pushOn() ? ' · <button class="link" id="pushOff" style="margin:0">🔔 Desactivar notificações</button>' : '') + '</div></div>';
+  h += '<div class="foot">CHDCP Conecta · v0.9.37' + (pushOn() ? ' · <button class="link" id="pushOff" style="margin:0">🔔 Desactivar notificações</button>' : '') + '</div></div>';
   $('app').innerHTML = h;
   $('app').classList.remove('weekwide');
   $('app').classList.add('homewide');
@@ -2223,10 +2250,25 @@ function renderHome() {
       else if (k === 'CUR') { NAV = []; go(screenCourses); }
       else if (k === 'PRINT') { NAV = []; go(function () { screenPrint(); }); }
       else if (k === 'CAL') { NAV = []; go(screenCalFeed); }
+      else if (k === 'TOJ') { NAV = []; go(screenTojMenu); }
       else { NAV = []; go(function () { screenPick(k); }); }
     };
   });
   Array.prototype.forEach.call(document.querySelectorAll('#app .hrow'), function (b) { b.onclick = function () { openAct(findAct(b.dataset.id)); }; });
+}
+
+/* v0.9.37: tessera TOJ del menu iniziale = due pulsanti, come nella scheda (sessão + avaliação) */
+function screenTojMenu() {
+  var today = ALL.today;
+  var h = bhead('TOJ', 'No posto de trabalho') + '<div class="body"><div class="acts">' + ['TOJSESSION', 'TOJ'].map(function (k) {
+    var L = ACT_LABEL[k], l = eligible(k), nt = l.filter(function (a) { return a.date === today; }).length;
+    var info = l.length ? (nt ? nt + ' hoje · ' : '') + l.length + ' actividade(s)' : 'Nenhuma actividade para si';
+    return '<button class="abtn" data-k="' + k + '"' + (l.length ? '' : ' disabled') + '><span class="ic">' + L[0] + '</span><span><b>' + L[1] + '</b><small>' + esc(L[2]) + ' · ' + info + '</small></span><span class="go">›</span></button>';
+  }).join('') + '</div></div>';
+  page(h);
+  Array.prototype.forEach.call(document.querySelectorAll('#pg .abtn'), function (b) {
+    b.onclick = function () { var k = b.dataset.k; go(function () { screenPick(k); }); };
+  });
 }
 
 function screenPick(k) {
@@ -2429,15 +2471,20 @@ function setPlist(d, people, a) {
 var ADD_RO = ['FORMANDO', 'FORMATORE', 'PUNTO FOCALE', 'DIREZIONE', 'CONSULTA', 'ADMIN', '-'];
 var ADD_RP = { 'FORMANDO': 'Formandos', 'FORMATORE': 'Formadores', 'PUNTO FOCALE': 'Pontos focais', 'DIREZIONE': 'Direcção', 'CONSULTA': 'Consulta', 'ADMIN': 'Administração', '-': 'Sem app' };
 var ADD_RL = { 'FORMANDO': 'Formando', 'FORMATORE': 'Formador', 'PUNTO FOCALE': 'Ponto focal', 'DIREZIONE': 'Direcção', 'CONSULTA': 'Consulta', 'ADMIN': 'Administração', '-': 'sem app' };
-function bindAddPerson(a, d, onAdd) {
+function bindAddPerson(a, d, onAdd, opt) {
   var btn = $('addp');
   if (!btn) return;
+  /* v0.9.37: convidados (nome livre, sem ficha) — só nas presenças e para quem pode adicionar */
+  var guestOk = !!(opt && opt.guest && d.ctx && d.ctx.guestOk);
   var open = function () {
     d.addOpen = true;
     $('addbox').innerHTML = '<div class="addpanel"><div class="addhead"><input class="inp" id="addq" placeholder="Procurar nome ou Person ID…" autocomplete="off" value="' + esc(d.addQ || '') + '">' +
-      '<button class="minor" id="addx" aria-label="Fechar">✕</button></div><div id="addrl" class="addroles"></div><div id="addr" class="addlist"><div class="small muted">A carregar a lista…</div></div></div>';
+      '<button class="minor" id="addx" aria-label="Fechar">✕</button></div>' +
+      (guestOk ? '<button class="minor" id="addg" style="margin:6px 0 2px">＋ Convidado (nome livre, sem ficha)</button><div id="addgf"></div>' : '') +
+      '<div id="addrl" class="addroles"></div><div id="addr" class="addlist"><div class="small muted">A carregar a lista…</div></div></div>';
     btn.style.display = 'none';
     $('addx').onclick = function () { d.addOpen = false; d.addQ = ''; $('addbox').innerHTML = ''; btn.style.display = ''; };
+    if (guestOk) $('addg').onclick = function () { guestForm(); };
     var inRoster = function (id) { return d.ctx.people.some(function (x) { return x.id === id; }); };
     var row = function (p) {
       return '<button class="user" data-id="' + esc(p.id) + '" data-n="' + esc(p.name) + '"><span class="av" style="background:' + avc(p.id) + '">' + esc(ini(p.name)) + '</span>' +
@@ -2466,6 +2513,33 @@ function bindAddPerson(a, d, onAdd) {
         };
       });
     };
+    var guestForm = function () {
+      var box = $('addgf'); if (!box) return;
+      var areas = (d.ctx.areas && d.ctx.areas.length ? d.ctx.areas : [String(a.area || '').toUpperCase()]).filter(Boolean);
+      var g = d.gf = d.gf || { name: d.addQ || '', area: areas[0] || '', role: 'FORMANDO' };
+      box.innerHTML = '<div class="guestf"><div class="small muted">Para quem participa sem papel no projecto: conta nos totais (presenças e horas), não tem ficha de formando.</div>' +
+        '<input class="inp" id="gN" placeholder="Nome e apelido" autocomplete="off" value="' + esc(g.name) + '">' +
+        '<div class="gr"><label>Área<select class="inp" id="gA">' + areas.map(function (x) { return '<option' + (x === g.area ? ' selected' : '') + '>' + esc(x) + '</option>'; }).join('') + '</select></label>' +
+        '<label>Papel<select class="inp" id="gR"><option value="FORMANDO"' + (g.role === 'FORMANDO' ? ' selected' : '') + '>Formando</option><option value="FORMADOR"' + (g.role === 'FORMADOR' ? ' selected' : '') + '>Formador</option></select></label></div>' +
+        '<div class="gb"><button class="minor" id="gX">Cancelar</button><button class="btn" id="gOk">Adicionar convidado</button></div></div>';
+      $('gN').oninput = function () { g.name = this.value; };
+      $('gA').onchange = function () { g.area = this.value; };
+      $('gR').onchange = function () { g.role = this.value; };
+      $('gX').onclick = function () { d.gf = null; box.innerHTML = ''; };
+      $('gOk').onclick = function () {
+        var name = String(g.name || '').replace(/\s+/g, ' ').trim();
+        if (name.length < 3 || name.indexOf(' ') < 0) { toast('Escreva nome e apelido.'); return; }
+        if (!g.area) { toast('Escolha a área.'); return; }
+        var pid = guestId(name);
+        if (inRoster(pid)) { toast('Já está na lista: ' + name); return; }
+        d.ctx.people.push({ id: pid, name: name, src: 'GUEST', r: '', guest: { area: g.area, role: g.role } });
+        d.gf = null; d.addQ = '';
+        toast('Convidado adicionado: ' + name);
+        onAdd(pid, name);
+      };
+      setTimeout(function () { try { $('gN').focus(); } catch (e) {} }, 30);
+    };
+    if (guestOk && d.gf) guestForm();
     var draw = function () {
       if (!$('addr')) return;
       var q = norm(d.addQ || ''), all = (d.plist || []).filter(function (p) { return !inRoster(p.id); });
@@ -2482,8 +2556,10 @@ function bindAddPerson(a, d, onAdd) {
       }
       var more = shown.length > 80 ? shown.length - 80 : 0;
       $('addr').innerHTML = '<div class="small muted addnote">' + esc(note) + '</div>' +
-        (shown.length ? shown.slice(0, 80).map(row).join('') : '<div class="small muted">Ninguém encontrado.</div>') +
+        (shown.length ? shown.slice(0, 80).map(row).join('') : '<div class="small muted">Ninguém encontrado.</div>' +
+          (guestOk && q ? '<button class="minor" id="addg2">＋ Adicionar «' + esc(d.addQ) + '» como convidado</button>' : '')) +
         (more ? '<div class="small muted addnote">+ ' + more + ' · escreva mais letras para ver</div>' : '');
+      if ($('addg2')) $('addg2').onclick = function () { d.gf = null; guestForm(); };
       bindRows();
     };
     /* servidor antigo (sem lista): procura no servidor como antes */
@@ -2545,7 +2621,8 @@ function drawAttendance(a, d) {
   if (c.people.length > 5) h += '<input class="inp" id="pq" type="search" placeholder="Procurar na lista…" autocomplete="off" style="margin:8px 0" value="' + esc(d.pq || '') + '"><div class="empty" id="pq0" style="display:none">Nenhum nome encontrado.</div>';
   h += '<div class="plist">' + c.people.map(function (p) {
     var st = d.mark[p.id] || '';
-    return '<div class="prow" data-n="' + esc(normQ(p.name + ' ' + p.id)) + '"><div class="nm"><b>' + esc(p.name) + '</b><span>' + esc([p.r && p.r !== 'TRAINEE' && p.r !== 'INVITED' ? p.r : '', srcTxt[p.src] || ''].filter(Boolean).join(' · ')) + '</span></div>' +
+    var sub = p.guest ? 'convidado · ' + (p.guest.role === 'FORMADOR' ? 'formador · ' : '') + p.guest.area : [p.r && p.r !== 'TRAINEE' && p.r !== 'INVITED' ? p.r : '', srcTxt[p.src] || ''].filter(Boolean).join(' · ');
+    return '<div class="prow' + (p.guest ? ' guest' : '') + '" data-n="' + esc(normQ(p.name + ' ' + p.id)) + '"><div class="nm"><b>' + esc(p.name) + '</b><span>' + esc(sub) + '</span></div>' +
       '<div class="seg2"><button data-p="' + esc(p.id) + '" data-s="PRESENT" class="' + (st === 'PRESENT' ? 'onP' : '') + '"' + (ro ? ' disabled' : '') + '>Presente</button>' +
       '<button data-p="' + esc(p.id) + '" data-s="ABSENT" class="' + (st === 'ABSENT' ? 'onA' : '') + '"' + (ro ? ' disabled' : '') + '>Ausente</button></div></div>';
   }).join('') + '</div></div>';
@@ -2588,7 +2665,7 @@ function drawAttendance(a, d) {
   };
   if ($('pq')) { $('pq').oninput = function () { d.pq = this.value; filt(); }; filt(); }
   if ($('allp')) $('allp').onclick = function () { d.touched = true; c.people.forEach(function (p) { if (!d.mark[p.id]) d.mark[p.id] = 'PRESENT'; }); drawAttendance(a, d); };
-  bindAddPerson(a, d, function (pid) { d.touched = true; d.mark[pid] = 'PRESENT'; drawAttendance(a, d); });
+  bindAddPerson(a, d, function (pid) { d.touched = true; d.mark[pid] = 'PRESENT'; drawAttendance(a, d); }, { guest: true });
   if (!ro && !peopleCached()) loadPeople(a).catch(function () {});
   UNSAVED = function () { return !!d.touched; };
   if ($('save')) $('save').onclick = function () {
@@ -2599,6 +2676,10 @@ function drawAttendance(a, d) {
     if ((d.real.s || d.real.e) && !(rd > 0)) { toast(I18N.tr('Verifique a hora de início e de fim.')); return; }
     var payload = { clientId: d.cid, activityId: a.id, items: items };
     if (d.real.s && d.real.e) { payload.start = d.real.s; payload.end = d.real.e; }
+    /* v0.9.37: convidados marcados (nome, área, papel) */
+    var gs = {};
+    c.people.forEach(function (p) { if (p.guest && d.mark[p.id]) gs[p.id] = { name: p.name, area: p.guest.area, role: p.guest.role }; });
+    if (Object.keys(gs).length) payload.guests = gs;
     saveOrQueue('apiSaveAttendance', payload, 'Presenças · ' + c.act.title, function (r, queued) {
       busy(false); delete DR['att|' + a.id]; cxDel('att|' + a.id); cxDel('det|' + a.id); delete ST[a.id];
       var msg = queued ? 'Sem ligação: guardado no telefone, será enviado.' : (r.duplicate ? 'Já estava guardado.' : 'Presenças guardadas: ' + r.present + ' presentes, ' + r.absent + ' ausentes.');
