@@ -1291,16 +1291,15 @@ function ivHtml(){
     '<div style="display:flex;gap:8px;margin-top:8px"><div style="flex:1"><label style="font-size:.85rem;font-weight:700">'+t('iv_op1')+'</label><input id="ivO1" list="ivDL" style="'+fs+'" value="'+esc(v.op1||'')+'"></div>'+
     '<div style="flex:1"><label style="font-size:.85rem;font-weight:700">'+t('iv_op2')+'</label><input id="ivO2" list="ivDL" style="'+fs+'" value="'+esc(v.op2||'')+'"></div></div><datalist id="ivDL">'+names+'</datalist>'+
     '<div style="font-size:.85rem;font-weight:700;margin-top:8px">'+t('iv_pt')+'</div><div style="display:flex;gap:8px">'+
-    '<input id="ivPI" maxlength="6" style="'+fs+';flex:1;text-transform:uppercase" placeholder="'+t('iv_ini')+'" value="'+esc(v.pi||'')+'">'+
     '<select id="ivPA" style="'+fs+';flex:1">'+opt([['<5','< 5'],['5-18','5–18'],['>18','> 18']], v.pa, t('iv_age'))+'</select>'+
     '<select id="ivPS" style="'+fs+';flex:1">'+opt([['M','M'],['F','F']], v.ps, t('iv_sex'))+'</select></div>'+
     '<div class="banner warn" id="ivErr" style="margin-top:8px;display:none">'+t('iv_need')+'</div></div>';
 }
 function ivBind(){
   if (!$('ivBox')) return;
-  var put = function(){ S.iv = { t:ivSel(), o:$('ivO').value, op1:$('ivO1').value, op2:$('ivO2').value, pi:$('ivPI').value.toUpperCase(), pa:$('ivPA').value, ps:$('ivPS').value }; $('ivO').style.display = S.iv.t.indexOf(IV_LIST[IV_LIST.length-1]) >= 0 ? '' : 'none'; if (S.iv.t.length) $('ivErr').style.display = 'none'; save(); };
+  var put = function(){ S.iv = { t:ivSel(), o:$('ivO').value, op1:$('ivO1').value, op2:$('ivO2').value, pa:$('ivPA').value, ps:$('ivPS').value }; $('ivO').style.display = S.iv.t.indexOf(IV_LIST[IV_LIST.length-1]) >= 0 ? '' : 'none'; if (S.iv.t.length) $('ivErr').style.display = 'none'; save(); };
   $('ivT').onclick = function(e){ var b = e.target.closest('[data-iv]'); if (!b) return; var cur = ivSel().slice(), k = b.dataset.iv, i = cur.indexOf(k); if (i >= 0) cur.splice(i, 1); else cur.push(k); S.iv = S.iv || {}; S.iv.t = IV_LIST.filter(function(x){ return cur.indexOf(x) >= 0; }); var on = i < 0; b.style.background = on ? 'var(--brand)' : '#fff'; b.style.color = on ? '#fff' : ''; b.style.borderColor = on ? 'var(--brand)' : 'var(--line)'; b.textContent = (on ? '✓ ' : '') + k; put(); };
-  ['ivO','ivO1','ivO2','ivPI','ivPA','ivPS'].forEach(function(k){ $(k).oninput = put; $(k).onchange = put; });
+  ['ivO','ivO1','ivO2','ivPA','ivPS'].forEach(function(k){ $(k).oninput = put; $(k).onchange = put; });
 }
 function openReview(){
   var by = {}; skillsOfArea().forEach(function(s){ by[s.code] = s; });

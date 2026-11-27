@@ -1124,6 +1124,33 @@ I18N.add([
   ["No posto de trabalho", "On the job", "Sul posto di lavoro"],
   ["Nenhuma actividade para si", "No activity for you", "Nessuna attività per te"]
 ]);
+I18N.add([
+  /* v0.9.39 agenda da semana */
+  ["Agenda da semana", "Weekly agenda", "Agenda della settimana"],
+  ["Grelha por área e dia, formadores em Luanda · A4 horizontal, uma página", "Grid by area and day, trainers in Luanda · A4 landscape, one page", "Griglia per area e giorno, formatori a Luanda · A4 orizzontale, una pagina"]
+]);
+I18N.add([
+  /* v0.9.39 aviso de privacidade */
+  ["Aviso de privacidade", "Privacy notice", "Informativa privacy"],
+  ["Privacidade", "Privacy", "Privacy"],
+  ["Explicamos em poucas linhas que dados usamos, para quê e quem os vê.", "In a few lines: which data we use, what for and who sees it.", "In poche righe: quali dati usiamo, a cosa servono e chi li vede."],
+  ["Quem trata os dados", "Who handles the data", "Chi tratta i dati"],
+  ["A equipa do projecto de formação CHDCP – Centro Cardiologico Monzino (CCM), no âmbito do programa de capacitação em cirurgia cardíaca.", "The CHDCP – Centro Cardiologico Monzino (CCM) training project team, within the cardiac surgery capacity building programme.", "Il gruppo del progetto di formazione CHDCP – Centro Cardiologico Monzino (CCM), nel programma di capacity building in cardiochirurgia."],
+  ["Que dados", "Which data", "Quali dati"],
+  ["Nome, função e área de formação; presenças nas actividades; avaliações TOJ e notas das provas; acessos à app.", "Name, role and training area; attendance; TOJ assessments and test scores; app access.", "Nome, ruolo e area di formazione; presenze; valutazioni TOJ e voti delle prove; accessi all'app."],
+  ["O questionário de satisfação é anónimo. Nas avaliações TOJ de uma intervenção regista-se só a faixa etária e o sexo do doente, sem nome nem iniciais.", "The satisfaction questionnaire is anonymous. TOJ assessments of a surgical case record only the patient's age group and sex, with no name or initials.", "Il questionario di gradimento è anonimo. Nelle valutazioni TOJ di un intervento si registrano solo la fascia d'età e il sesso del paziente, senza nome né iniziali."],
+  ["Para quê", "What for", "A cosa servono"],
+  ["Organizar e registar a formação, acompanhar o percurso de cada formando e preparar os relatórios do projecto.", "To organise and record training, follow each trainee's progress and prepare project reports.", "Organizzare e registrare la formazione, seguire il percorso di ogni formando e preparare i report del progetto."],
+  ["Quem vê", "Who sees it", "Chi li vede"],
+  ["Cada pessoa vê os seus dados. Formadores e pontos focais vêem a sua área; a coordenação do projecto e a Direcção vêem todas as áreas. Quem vê dados de uma área ou de todo o projecto foi indicado pelo projecto nas suas instâncias de decisão.", "Each person sees their own data. Trainers and focal points see their area; project coordination and management see all areas. Those who see data of an area or of the whole project were appointed by the project through its decision-making bodies.", "Ognuno vede i propri dati. Formatori e punti focali vedono la loro area; il coordinamento del progetto e la Direzione vedono tutte le aree. Chi vede i dati di un'area o di tutto il progetto è stato indicato dal progetto nelle sue sedi decisionali."],
+  ["Onde e como", "Where and how", "Dove e come"],
+  ["Nos ficheiros do projecto em Google Workspace, geridos pelo CCM. O PIN é guardado cifrado e ninguém o vê. Não vendemos nem cedemos os dados a terceiros.", "In the project's Google Workspace files, managed by CCM. The PIN is stored encrypted and nobody can see it. We do not sell or give the data to third parties.", "Nei file del progetto in Google Workspace, gestiti dal CCM. Il PIN è salvato cifrato e nessuno lo vede. Non vendiamo né cediamo i dati a terzi."],
+  ["Por quanto tempo", "How long", "Per quanto tempo"],
+  ["Durante o projecto e até $1 anos depois; depois os dados são tornados anónimos.", "During the project and up to $1 years after; then the data are made anonymous.", "Per la durata del progetto e fino a $1 anni dopo; poi i dati vengono resi anonimi."],
+  ["Os seus direitos", "Your rights", "I suoi diritti"],
+  ["Pode pedir para ver, corrigir ou apagar os seus dados:", "You can ask to see, correct or delete your data:", "Può chiedere di vedere, correggere o cancellare i suoi dati:"],
+  ["Li e compreendi", "I have read and understood", "Ho letto e compreso"]
+]);
 
 /*I18N:END*/
 </script>
@@ -2215,8 +2242,43 @@ function bindChg() {
   });
 }
 
+/* ============================================================
+   v0.9.39 · AVISO DE PRIVACIDADE (uma vez; nova versão em CONFIG = de novo)
+   ============================================================ */
+var PRIV_ASKED = false;
+function screenPrivacy(ask) {
+  var u = S.user || (ALL && ALL.user) || {}, p = u.priv || { contact: 'operations.angola@cardiologicomonzino.it', years: 5 };
+  var T = function (x) { return esc(I18N.tr(x)); };
+  var sec = function (t, b) { return '<div class="card" style="margin:0 0 10px"><b>' + T(t) + '</b><div class="small" style="margin-top:4px;line-height:1.45">' + b + '</div></div>'; };
+  var h = bhead('Aviso de privacidade', 'CHDCP Conecta') + '<div class="body">' +
+    '<p class="small muted" style="margin:0 0 10px">' + T('Explicamos em poucas linhas que dados usamos, para quê e quem os vê.') + '</p>' +
+    sec('Quem trata os dados', T('A equipa do projecto de formação CHDCP – Centro Cardiologico Monzino (CCM), no âmbito do programa de capacitação em cirurgia cardíaca.')) +
+    sec('Que dados', T('Nome, função e área de formação; presenças nas actividades; avaliações TOJ e notas das provas; acessos à app.') + '<br>' +
+      T('O questionário de satisfação é anónimo. Nas avaliações TOJ de uma intervenção regista-se só a faixa etária e o sexo do doente, sem nome nem iniciais.')) +
+    sec('Para quê', T('Organizar e registar a formação, acompanhar o percurso de cada formando e preparar os relatórios do projecto.')) +
+    sec('Quem vê', T('Cada pessoa vê os seus dados. Formadores e pontos focais vêem a sua área; a coordenação do projecto e a Direcção vêem todas as áreas. Quem vê dados de uma área ou de todo o projecto foi indicado pelo projecto nas suas instâncias de decisão.')) +
+    sec('Onde e como', T('Nos ficheiros do projecto em Google Workspace, geridos pelo CCM. O PIN é guardado cifrado e ninguém o vê. Não vendemos nem cedemos os dados a terceiros.')) +
+    sec('Por quanto tempo', esc(I18N.tr('Durante o projecto e até $1 anos depois; depois os dados são tornados anónimos.').replace('$1', p.years))) +
+    sec('Os seus direitos', T('Pode pedir para ver, corrigir ou apagar os seus dados:') + ' <b>' + esc(p.contact) + '</b>') +
+    (ask ? '<button class="btn" id="privOk" style="margin-top:6px">' + T('Li e compreendi') + '</button>' : '') +
+    '</div>';
+  page(h);
+  if ($('privOk')) $('privOk').onclick = function () {
+    this.disabled = true;
+    call('apiPrivacyAck', S.token).then(function (r) {
+      try { LS.set('privOk', (S.user || ALL.user || {}).id + '|' + r.version); } catch (e) {}
+      if (S.user && S.user.priv) S.user.priv.need = false; if (ALL && ALL.user && ALL.user.priv) ALL.user.priv.need = false;
+      goMenu();
+    }).catch(function (e) { $('privOk').disabled = false; toast(isNet(e.message) ? I18N.tr('Sem ligação: tente de novo.') : e.message); });
+  };
+}
+
 function renderHome() {
   if (!ALL) { sync(true); return; }
+  /* v0.9.39: aviso de privacidade ainda não confirmado → uma vez por sessão */
+  var up = (S.user || ALL.user || {}).priv;
+  var uid0 = (S.user || ALL.user || {}).id;
+  if (up && up.need && !PRIV_ASKED && LS.get('privOk') !== uid0 + '|' + up.version) { PRIV_ASKED = true; setTimeout(function () { NAV = []; go(function () { screenPrivacy(true); }); }, 0); }
   var u = S.user || ALL.user, today = ALL.today;
   var vis = { FULL: 'vê tudo', AREA: 'vê a sua área', OWN: 'vê as suas' }[u.visibility] || '';
   var mine = ALL.acts.filter(function (a) { return isMine(a) && !a.hidden && a.date === today; })
@@ -2229,13 +2291,14 @@ function renderHome() {
     return '<button class="tile" data-k="' + t.k + '"><span class="ic">' + t.ic + '</span><b>' + esc(t.t) + '</b><small>' + esc(t.d) + '</small></button>';
   }).join('') + '</div></div><div class="htoday"><div class="sec hsec">As minhas actividades de hoje · ' + esc(fmtDate(today, true)) + '</div>' +
     (mine.length ? mine.map(function (a) { return hrow(a, today); }).join('') : '<div class="noact">Sem actividades suas hoje.</div>') + '</div></div>';
-  h += '<div class="foot">CHDCP Conecta · v0.9.38' + (pushOn() ? ' · <button class="link" id="pushOff" style="margin:0">🔔 Desactivar notificações</button>' : '') + '</div></div>';
+  h += '<div class="foot">CHDCP Conecta · v0.9.39 · <button class="link" id="privL" style="margin:0">🔒 ' + esc(I18N.tr('Privacidade')) + '</button>' + (pushOn() ? ' · <button class="link" id="pushOff" style="margin:0">🔔 Desactivar notificações</button>' : '') + '</div></div>';
   $('app').innerHTML = h;
   $('app').classList.remove('weekwide');
   $('app').classList.add('homewide');
   $('out').onclick = logout;
   if ($('retry')) $('retry').onclick = function () { sync(false); };
   if ($('pushOn')) $('pushOn').onclick = pushEnable;
+  if ($('privL')) $('privL').onclick = function () { NAV = []; go(function () { screenPrivacy(!!((S.user || ALL.user || {}).priv || {}).need); }); };
   if ($('pushOff')) $('pushOff').onclick = pushDisable;
   pushRefresh();
   bindChg();
@@ -3040,6 +3103,8 @@ function screenPrint(mon) {
     var h = bhead('Impressões', dmy(r.mon) + ' – ' + dmy(r.sun)) + '<div class="body">' +
       '<div class="weekswitch"><button class="minor" id="prPrev">‹ ' + esc(I18N.tr('Semana anterior')) + '</button><button class="minor" id="prNow">' + esc(I18N.tr('Esta semana')) + '</button><button class="minor" id="prNext">' + esc(I18N.tr('Semana seguinte')) + ' ›</button></div>' +
       '<button class="abtn" id="prSum"><span class="ic">📊</span><span><b>' + esc(I18N.tr('Resumo da semana')) + '</b><br><small class="muted">' + esc(I18N.tr('Síntese e detalhe · A4 horizontal')) + ' · ' + r.n + ' ' + esc(I18N.tr('actividades')) + '</small></span></button>' +
+      /* v0.9.39: agenda da semana (griglia aree × giorni + presenze dei formatori CCM) */
+      '<button class="abtn" id="prAg" style="margin-top:8px"><span class="ic">🗓️</span><span><b>' + esc(I18N.tr('Agenda da semana')) + '</b><br><small class="muted">' + esc(I18N.tr('Grelha por área e dia, formadores em Luanda · A4 horizontal, uma página')) + '</small></span></button>' +
       '<div class="sec" style="margin-top:14px">' + esc(I18N.tr('Plano da semana por área (português)')) + '</div>';
     if (!r.areas.length) h += '<div class="empty">' + esc(I18N.tr('Sem actividades nesta semana.')) + '</div>';
     r.areas.forEach(function (a) {
@@ -3055,6 +3120,7 @@ function screenPrint(mon) {
     /* v0.9.34: PDF generato nel telefono e scaricato subito */
     var open = function (kind, area, b) { prPdf(kind, area || '', b); };
     $('prSum').onclick = function () { open('SUMMARY', '', this); };
+    $('prAg').onclick = function () { open('AGENDA', '', this); };
     Array.prototype.forEach.call(document.querySelectorAll('.prarea'), function (b) { b.onclick = function () { open('AREA', b.dataset.a, b); }; });
   }).catch(function (e) { errorPage('Impressões', '', e.message, function () { screenPrint(PRW); }); });
 }
@@ -3301,8 +3367,176 @@ function prBuildAreaPdf2(jsPDF, D) {
   for (var p = 1; p <= tot; p++) { doc.setPage(p); font('bold', 7.5); col(C.grey); doc.text(p + ' / ' + tot, W / 2, H - FOOT + 14, { align: 'center' }); }
   return doc;
 }
+/* v0.9.39 · «Agenda da semana»: griglia aree × giorni (manhã / tarde) + linee di presenza dei formatori CCM.
+   Una pagina A4 orizzontale: se non entra, prima testo più piccolo e titoli su meno righe, poi pagine in più. */
+function prBuildAgendaPdf(jsPDF, D) {
+  var doc = new jsPDF({ orientation: 'landscape', unit: 'pt', format: 'a4', compress: true });
+  var W = doc.internal.pageSize.getWidth(), H = doc.internal.pageSize.getHeight();
+  var M = 18, A = D.assets || {};
+  var C = { red: [139, 0, 0], ink: [26, 26, 26], grey: [85, 85, 85], muted: [125, 133, 139], line: [214, 219, 223], cell: [246, 247, 248],
+    pink: [251, 236, 236], pinkB: [236, 196, 196], white: [255, 255, 255] };
+  var PAL = {
+    CARD: [[37, 99, 170], [229, 238, 250]], CS: [[170, 30, 38], [251, 233, 233]], 'ICU-AN': [[28, 118, 70], [228, 243, 234]],
+    'NUR-CL': [[108, 62, 160], [240, 232, 248]], 'NUR-COORD': [[0, 122, 134], [224, 243, 245]], PERF: [[190, 116, 0], [253, 242, 220]],
+    IMG: [[88, 64, 168], [236, 232, 249]], ACLS: [[200, 60, 20], [252, 236, 228]], BLS: [[200, 60, 20], [252, 236, 228]], GESTAO: [[80, 86, 92], [239, 241, 242]]
+  };
+  var TYC = { 'Teórica': null, 'Prática': [17, 128, 74], 'Avaliação': [126, 70, 160], 'Reunião': [90, 96, 102] };
+  var col = function (c) { doc.setTextColor(c[0], c[1], c[2]); };
+  var fill = function (c) { doc.setFillColor(c[0], c[1], c[2]); };
+  var draw = function (c) { doc.setDrawColor(c[0], c[1], c[2]); };
+  var font = function (st, sz) { doc.setFont('helvetica', st || 'normal'); doc.setFontSize(sz); };
+  var img = function (k, x, y, h) { var a = A[k]; if (!a) return 0; try { doc.addImage(a.d, a.t, x, y, h * a.r, h, k, 'FAST'); } catch (e) {} return h * a.r; };
+  var fit = function (k, h, maxW) { var a = A[k]; if (!a) return { h: 0, w: 0 }; var w = Math.min(h * a.r, maxW); return { h: w / a.r, w: w }; };
+  var pal = function (k) { return PAL[k] || PAL.GESTAO; };
+
+  var nd = D.days.length, LAB = 84, GX = M + LAB, GW = W - M - GX, DW = GW / nd, HW = DW / 2;
+  var FOOT = 30, TOPY = 42;
+  /* testo che entra in larghezza w su al massimo n righe (… se taglia) */
+  function lines(txt, w, n) {
+    var l = doc.splitTextToSize(String(txt || ''), w);
+    if (l.length > n) { l = l.slice(0, n); var s = l[n - 1]; while (s.length > 1 && doc.getTextWidth(s + '…') > w) s = s.slice(0, -1); l[n - 1] = s.replace(/[\s,;·–-]+$/, '') + '…'; }
+    return l;
+  }
+  /* misure con un dato corpo (fs) e righe massime del titolo (mx) */
+  function measure(fs, mx) {
+    var pad = 2.5, iw = HW - 2 * pad - 5, lh = fs * 1.13;
+    var cardH = function (it) {
+      if (it.toj) return fs + 8;
+      font('bold', fs); var tl = lines(it.ti, iw, mx);
+      return 3 + (fs - 1.2) + 1.5 + tl.length * lh + 2.5;
+    };
+    var rows = D.rows.map(function (r) {
+      var mxCell = 0, cards = {};
+      for (var d = 0; d < nd; d++) ['M', 'T'].forEach(function (h) {
+        var list = r.cells[d + h] || [], hh = pad, out = [], room = 3;
+        list.forEach(function (it, i) { if (i < room || list.length === room + 1) { var ch = cardH(it); out.push({ it: it, h: ch }); hh += ch + 2; } });
+        var more = list.length - out.length;
+        if (more > 0) hh += fs + 2;
+        cards[d + h] = { list: out, more: more };
+        if (hh > mxCell) mxCell = hh;
+      });
+      var ph = r.people.length * (fs + 5.5);
+      var lab = 10 + (doc.splitTextToSize(r.name, LAB - 12).length) * 8;
+      return { r: r, cards: cards, gridH: Math.max(mxCell + pad, r.n ? 22 : 6), h: Math.max(Math.max(mxCell + pad, r.n ? 22 : 6) + ph + 4, lab) };
+    });
+    return { fs: fs, mx: mx, rows: rows, total: rows.reduce(function (s, x) { return s + x.h + 2; }, 0) };
+  }
+  var page = 0;
+  function header() {
+    page++;
+    var t = A.top; if (t) doc.addImage(t.d, t.t, 0, 0, W, W / t.r, 'top', 'FAST');
+    var pg = fit('progetto', 22, 170); img('progetto', M, 10 + (22 - pg.h) / 2, pg.h);
+    var sp = fit('sponsor', 22, 130); img('sponsor', W - M - sp.w, 10 + (22 - sp.h) / 2, sp.h);
+    font('bold', 14); col(C.ink); doc.text('Agenda da semana', W / 2, 21, { align: 'center' });
+    font('normal', 8.5); col(C.grey); doc.text(D.week + (page > 1 ? ' · continuação' : ''), W / 2, 32, { align: 'center' });
+  }
+  function footer() {
+    var pw = A.partner ? 16 * A.partner.r : 0; img('partner', W - M - pw, H - FOOT + 2, 16);
+    var b = A.bottom; if (b) doc.addImage(b.d, b.t, 0, H - 10, W, 10, 'bottom', 'FAST');
+    font('normal', 6.5); col(C.muted);
+    var fy = H - FOOT + 10, s0 = 'CHDCP Conecta · ' + D.stamp + ' · pág. ' + page;
+    doc.text(s0, M, fy);
+    var x = M + doc.getTextWidth(s0) + 16;
+    fill([229, 238, 250]); draw([37, 99, 170]); doc.setLineWidth(0.5); doc.roundedRect(x, fy - 5.5, 18, 7, 3.5, 3.5, 'FD'); x += 22;
+    doc.text('formador CCM em Luanda (dias efectivos)', x, fy); x += doc.getTextWidth('formador CCM em Luanda (dias efectivos)') + 12;
+    fill(C.muted); doc.triangle(x, fy - 5.5, x, fy + 0.5, x + 4.5, fy - 2.5, 'F'); x += 8;
+    doc.text('chega / parte durante a semana', x, fy); x += doc.getTextWidth('chega / parte durante a semana') + 12;
+    fill([244, 245, 246]); draw(C.line); doc.roundedRect(x, fy - 5.5, 18, 7, 3.5, 3.5, 'FD'); x += 22;
+    doc.text('missão ainda prevista', x, fy); x += doc.getTextWidth('missão ainda prevista') + 14;
+    [['Teórica', null], ['Prática', TYC['Prática']], ['Avaliação', TYC['Avaliação']], ['Reunião', TYC['Reunião']]].forEach(function (t) {
+      fill(t[1] || [37, 99, 170]); doc.rect(x, fy - 6, 2, 7.5, 'F'); x += 5; doc.text(t[0] + (t[1] ? '' : ' (cor da área)'), x, fy); x += doc.getTextWidth(t[0] + (t[1] ? '' : ' (cor da área)')) + 9;
+    });
+  }
+  function kpis(y) {
+    var n = D.kpi.length, gap = 6, w = (W - 2 * M - gap * (n - 1)) / n, h = 20;
+    D.kpi.forEach(function (k, i) {
+      var x = M + i * (w + gap);
+      fill(C.pink); draw(C.pinkB); doc.setLineWidth(0.5); doc.roundedRect(x, y, w, h, 4, 4, 'FD');
+      font('bold', 12); col(C.red); var s = String(k[0]); doc.text(s, x + 8, y + 14);
+      var sw = doc.getTextWidth(s);
+      font('normal', 7.5); col(C.grey); doc.text(lines(k[1], w - sw - 20, 1)[0], x + 14 + sw, y + 13.2);
+    });
+    return y + h + 6;
+  }
+  function dayHead(y) {
+    D.days.forEach(function (d, i) {
+      var x = GX + i * DW;
+      font('bold', 10); col(C.red); doc.text(d.label, x + DW / 2, y + 9, { align: 'center' });
+      font('normal', 6); col(C.muted); doc.text('manhã', x + HW / 2, y + 17, { align: 'center' }); doc.text('tarde', x + HW + HW / 2, y + 17, { align: 'center' });
+      draw(C.red); doc.setLineWidth(0.8); doc.line(x + 2, y + 19, x + DW - 2, y + 19);
+    });
+    return y + 22;
+  }
+  /* scelta del corpo: una pagina se possibile */
+  var avail = H - FOOT - 4 - (TOPY + 26 + 22);
+  var tries = [[7.6, 3], [7.4, 3], [7.2, 3], [7, 3], [6.8, 3], [6.6, 3], [7, 2], [6.6, 2], [6.2, 2], [5.8, 2]], m = null;
+  for (var ti = 0; ti < tries.length; ti++) { m = measure(tries[ti][0], tries[ti][1]); if (m.total <= avail) break; }
+  /* non entra in una pagina neanche piccolo: meglio leggibile su più pagine */
+  if (m.total > avail) m = measure(7.2, 3);
+  var fs = m.fs, mx = m.mx, pad = 2.5, iw = HW - 2 * pad - 5, lh = fs * 1.13;
+
+  function drawRow(R, y) {
+    var r = R.r, p = pal(r.area), c0 = p[0], c1 = p[1];
+    /* etichetta dell'area */
+    fill(c0); doc.rect(M, y, 3, R.h, 'F');
+    fill([248, 248, 249]); doc.rect(M + 3, y, LAB - 7, R.h, 'F');
+    font('bold', r.area === 'GESTAO' ? 9 : 10.5); col(c0); doc.text(r.area === 'GESTAO' ? 'Gestão' : r.area, M + 8, y + 13);
+    font('normal', 6.5); col(C.grey); doc.text(doc.splitTextToSize(r.area === 'GESTAO' ? 'Procedimentos, reuniões, outras áreas' : r.name, LAB - 14), M + 8, y + 22);
+    /* celle */
+    for (var d = 0; d < nd; d++) ['M', 'T'].forEach(function (h, hi) {
+      var x = GX + d * DW + hi * HW, cell = R.cards[d + h];
+      fill(C.cell); doc.rect(x + 1, y, HW - 2, R.gridH, 'F');
+      var yy = y + pad;
+      cell.list.forEach(function (o) {
+        var it = o.it, cx = x + pad, cw = HW - 2 * pad;
+        if (it.toj) {
+          fill(c1); doc.roundedRect(cx, yy, cw, o.h, 2.5, 2.5, 'F');
+          font('bold', fs); col(c0); doc.text('TOJ no serviço' + (it.n > 1 ? ' ×' + it.n : ''), cx + cw / 2, yy + fs + 0.5, { align: 'center' });
+          font('normal', fs - 1); doc.text(it.t || 'sem hora', cx + cw / 2, yy + 2 * fs + 0.5, { align: 'center' });
+        } else {
+          fill(C.white); draw(C.line); doc.setLineWidth(0.4); doc.roundedRect(cx, yy, cw, o.h, 2, 2, 'FD');
+          var bc = TYC[it.ty] || c0; fill(bc); doc.rect(cx, yy + 0.6, 2, o.h - 1.2, 'F');
+          font('normal', fs - 1.2); col(C.muted);
+          var ty = it.ty === 'Prática' || it.ty === 'Avaliação' ? it.ty : '';
+          var cand = [it.t + (it.tag ? ' · ' + it.tag : '') + (ty ? ' · ' + ty : ''), it.t + (it.tag ? ' · ' + it.tag : ''), it.t];
+          var tline = cand.filter(function (x) { return doc.getTextWidth(x) <= cw - 7; })[0] || it.t;
+          doc.text(tline, cx + 5, yy + 2.5 + fs - 1.6);
+          font('bold', fs); col(C.ink);
+          var tl = lines(it.ti, iw, mx);
+          doc.text(tl, cx + 5, yy + 3 + fs - 1.2 + 1.5 + fs * 0.9, { lineHeightFactor: 1.13 });
+        }
+        yy += o.h + 2;
+      });
+      if (cell.more > 0) { font('italic', fs - 0.5); col(C.grey); doc.text('+ ' + cell.more + ' outra(s)', x + pad + 2, yy + fs - 0.5); }
+    });
+    /* linee di presenza */
+    var py = y + R.gridH + 2.5, ph = fs + 3.5;
+    r.people.forEach(function (pp) {
+      var x1 = GX + pp.f * DW + 2, x2 = GX + (pp.t + 1) * DW - 2;
+      fill(pp.tent ? [244, 245, 246] : c1); draw(pp.tent ? C.line : c0); doc.setLineWidth(0.6);
+      doc.roundedRect(x1, py, x2 - x1, ph, ph / 2, ph / 2, 'FD');
+      var tx = x1 + 6;
+      if (pp.arr) { fill(pp.tent ? C.muted : c0); doc.triangle(x1 + 4, py + 1.5, x1 + 4, py + ph - 1.5, x1 + 8.5, py + ph / 2, 'F'); tx = x1 + 11; }
+      if (pp.dep) { fill(pp.tent ? C.muted : c0); doc.triangle(x2 - 8.5, py + 1.5, x2 - 8.5, py + ph - 1.5, x2 - 4, py + ph / 2, 'F'); }
+      font('bold', fs - 0.6); col(pp.tent ? C.muted : c0);
+      doc.text(lines(pp.n + (pp.role ? ' · ' + pp.role : ''), x2 - tx - 10, 1)[0], tx, py + ph - 2.2);
+      py += fs + 5.5;
+    });
+  }
+
+  header(); var y = kpis(TOPY); y = dayHead(y);
+  if (!D.rows.length) { font('normal', 10); col(C.grey); doc.text('Sem actividades nesta semana.', W / 2, y + 30, { align: 'center' }); }
+  m.rows.forEach(function (R) {
+    if (y + R.h > H - FOOT - 4) { footer(); doc.addPage(); header(); y = dayHead(TOPY); }
+    drawRow(R, y); y += R.h + 2;
+  });
+  if (!D.msOk) { font('italic', 6.5); col(C.muted); doc.text('Plano de missões não disponível: sem linhas de presença.', M, Math.min(y + 8, H - FOOT - 2)); }
+  footer();
+  return doc;
+}
 function prBuildPdf(jsPDF, D) {
   if (D.kind === 'AREA') return prBuildAreaPdf2(jsPDF, D);
+  if (D.kind === 'AGENDA') return prBuildAgendaPdf(jsPDF, D);
   var land = D.kind === 'SUMMARY';
   var doc = new jsPDF({ orientation: land ? 'landscape' : 'portrait', unit: 'pt', format: 'a4', compress: true });
   var W = doc.internal.pageSize.getWidth(), H = doc.internal.pageSize.getHeight();
@@ -3473,7 +3707,7 @@ function prPdf(kind, area, b) {
   Promise.all([call('apiPrintData', S.token, kind, PRW, area), window.jspdf ? Promise.resolve() : loadJs(PR_JSPDF)]).then(function (r) {
     var D = r[0];
     var doc = prBuildPdf(window.jspdf.jsPDF, D);
-    var name = (kind === 'AREA' ? 'Plano_semana_' + D.area : 'Resumo_semana') + '_' + D.mon.replace(/-/g, '') + '.pdf';
+    var name = (kind === 'AREA' ? 'Plano_semana_' + D.area : kind === 'AGENDA' ? 'Agenda_semana' : 'Resumo_semana') + '_' + D.mon.replace(/-/g, '') + '.pdf';
     prSaveBlob(doc.output('blob'), name);
     done();
   }).catch(function (e) { done(); toast(isNet(e.message) ? I18N.tr('Sem ligação: tente de novo.') : e.message); });
